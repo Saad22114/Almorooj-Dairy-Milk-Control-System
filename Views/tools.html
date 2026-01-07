@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Data Tools</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+      min-height: 100vh;
+      padding: 24px;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+      color: #fff;
+      padding: 32px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid rgba(255,255,255,0.2);
+    }
+    .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+    .header-actions { display: flex; gap: 12px; }
+    .content { padding: 30px; }
+
+    /* Buttons */
+    .btn {
+      padding: 11px 18px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      transition: all 0.25s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.18); }
+    .btn-secondary { background: #10b981; }
+    .btn-warning { background: #f59e0b; }
+    .btn-ghost { background: #e5e7eb; color: #111827; box-shadow: none; }
+    .btn-ghost:hover { background: #d1d5db; }
+    .btn-small { padding: 7px 12px; font-size: 12px; border-radius: 8px; box-shadow: none; }
+    .btn-danger { background: #ef4444; }
+
+    /* Tools Grid */
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; margin: 20px 0; }
+    .tool-card { background: #fff; border-radius: 14px; padding: 28px; border: 1px solid #e5e7eb; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+    .tool-card h3 { font-size: 20px; font-weight: 700; color: #111827; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+    .tool-card p { font-size: 14px; color: #6b7280; margin-bottom: 20px; line-height: 1.7; }
+    .tool-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+
+    /* Backup List */
+    .backup-list { margin-top: 16px; max-height: 220px; overflow-y: auto; }
+    .backup-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: #f9fafb; border-radius: 10px; margin-bottom: 8px; font-size: 13px; border: 1px solid #e5e7eb; }
+
+    /* Duplicate List */
+    .duplicate-list { margin-top: 16px; max-height: 350px; overflow-y: auto; }
+    .duplicate-group { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+    .duplicate-group h4 { font-size: 14px; font-weight: 700; color: #92400e; margin-bottom: 12px; }
+    .duplicate-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: #fff; border-radius: 8px; margin-bottom: 8px; font-size: 13px; border: 1px solid #e5e7eb; }
+    .duplicate-item.selected { background: #dbeafe; border: 2px solid #3b82f6; }
+
+    /* Messages */
+    .msg { padding: 14px; border-radius: 10px; margin: 16px 0; font-weight: 700; text-align: center; }
+    .msg.success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .msg.error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+    /* Section Title */
+    .section-title { font-size: 16px; font-weight: 700; color: #374151; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e5e7eb; }
+
+    @media (max-width: 768px) {
+      .tools-grid { grid-template-columns: 1fr; }
+      .header { flex-direction: column; gap: 16px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div id="topNav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.12);">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <a href="/" aria-label="Home" style="display: inline-flex; align-items: center; cursor: pointer;">
+        <img src="/logo.png" alt="Logo" style="height: 100px; width: auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); background: rgba(57, 50, 50, 0.25); padding: 0;" />
+      </a>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button type="button" onclick="history.back()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">⬅ Back</button>
+        <button type="button" onclick="history.forward()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">Forward ➡</button>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <a href="/" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center;">🏠 Home</a>
+    </div>
+  </div>
+  <div style="height: 130px;"></div>
+  <div class="container">
+    <div class="header">
+      <h1>🛠️ Data Tools</h1>
+      <div class="header-actions">
+        <a href="/settings" class="btn btn-ghost">← Back to Settings</a>
+      </div>
+    </div>
+
+    <div class="content">
+      <div id="msgContainer"></div>
+
+      <div class="tools-grid">
+        <!-- Backup Tool -->
+        <div class="tool-card">
+          <h3>💾 Backup</h3>
+          <p>
+            Create a backup of all farmer data.<br>
+            You can restore data anytime from the backup file.
+          </p>
+          <div class="tool-actions">
+            <button class="btn btn-secondary" onclick="createBackup()">📥 Create Backup</button>
+            <button class="btn" onclick="downloadFullBackup()">🗄️ Backup All (ZIP)</button>
+            <button class="btn btn-warning" onclick="restoreBackup()">📤 Restore from File</button>
+          </div>
+          <div class="section-title">📋 Backup History</div>
+          <div class="backup-list" id="backupHistory">
+            <div style="text-align:center; padding:20px; color:#9ca3af;">Loading...</div>
+          </div>
+        </div>
+
+        <!-- Merge Duplicates Tool -->
+        <div class="tool-card">
+          <h3>🔄 Merge Duplicates</h3>
+          <p>
+            Find duplicate records based on name, National ID, or bank account.<br>
+            Easily manage and remove duplicate farmer entries.
+          </p>
+          <div class="tool-actions">
+            <button class="btn" onclick="findDuplicates()">🔍 Find Duplicates</button>
+          </div>
+          <div class="section-title">📋 Duplicate Records</div>
+          <div class="duplicate-list" id="duplicatesList">
+            <div style="text-align:center; padding:20px; color:#9ca3af;">Click "Find Duplicates" to start</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allFarmers = [];
+    let duplicateGroups = [];
+    let selectedForMerge = {};
+
+    // Load farmers on page load
+    async function loadFarmers() {
+      try {
+        const resp = await fetch('/api/farmers');
+        allFarmers = await resp.json();
+        renderBackupHistory();
+      } catch (e) {
+        showMsg('Error loading farmers data', 'error');
+      }
+    }
+
+    // ===== BACKUP FUNCTIONS =====
+    function createBackup() {
+      if (!allFarmers.length) return showMsg('No farmer data to backup', 'error');
+      
+      const backup = {
+        timestamp: new Date().toISOString(),
+        version: '1.0',
+        totalRecords: allFarmers.length,
+        data: allFarmers
+      };
+      
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `farmers_backup_${new Date().toISOString().slice(0,10)}_${new Date().toTimeString().slice(0,5).replace(':','-')}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      // Save to localStorage
+      const backups = JSON.parse(localStorage.getItem('farmersBackups') || '[]');
+      backups.unshift({ date: backup.timestamp, records: allFarmers.length });
+      if (backups.length > 10) backups.pop();
+      localStorage.setItem('farmersBackups', JSON.stringify(backups));
+      
+      showMsg(`✅ Backup created (${allFarmers.length} records)`, 'success');
+      renderBackupHistory();
+    }
+
+    function renderBackupHistory() {
+      const container = document.getElementById('backupHistory');
+      const backups = JSON.parse(localStorage.getItem('farmersBackups') || '[]');
+      
+      if (!backups.length) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:#9ca3af;">No saved backups</div>';
+        return;
+      }
+      
+      container.innerHTML = backups.map((b, i) => `
+        <div class="backup-item">
+          <span>📁 ${new Date(b.date).toLocaleDateString('en-US')} - ${new Date(b.date).toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'})}</span>
+          <span style="color:#6b7280;">${b.records} records</span>
+        </div>
+      `).join('');
+    }
+
+    function restoreBackup() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        try {
+          const text = await file.text();
+          const backup = JSON.parse(text);
+          
+          if (!backup.data || !Array.isArray(backup.data)) {
+            return showMsg('Invalid backup file', 'error');
+          }
+          
+          if (!confirm(`Restore ${backup.data.length} records from backup?\nCurrent data will be replaced!`)) return;
+          
+          const resp = await fetch('/api/farmers/restore', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ farmers: backup.data })
+          });
+          
+          if (resp.ok) {
+            showMsg(`✅ Successfully restored ${backup.data.length} records`, 'success');
+            await loadFarmers();
+          } else {
+            showMsg('Failed to restore backup', 'error');
+          }
+        } catch (err) {
+          showMsg('Error reading backup file', 'error');
+        }
+      };
+      input.click();
+    }
+
+    // ===== MERGE DUPLICATES FUNCTIONS =====
+    function findDuplicates() {
+      duplicateGroups = [];
+      selectedForMerge = {};
+      
+      // Find by name
+      const nameGroups = {};
+      allFarmers.forEach(f => {
+        const normName = (f.name || '').trim().toLowerCase();
+        if (normName) {
+          if (!nameGroups[normName]) nameGroups[normName] = [];
+          nameGroups[normName].push(f);
+        }
+      });
+      
+      // Find by NID
+      const nidGroups = {};
+      allFarmers.forEach(f => {
+        const nid = (f.nid || '').trim();
+        if (nid && nid.length > 5) {
+          if (!nidGroups[nid]) nidGroups[nid] = [];
+          nidGroups[nid].push(f);
+        }
+      });
+      
+      // Find by bank account
+      const bankGroups = {};
+      allFarmers.forEach(f => {
+        const acc = (f.bank_acc || '').trim();
+        if (acc && acc.length > 5) {
+          if (!bankGroups[acc]) bankGroups[acc] = [];
+          bankGroups[acc].push(f);
+        }
+      });
+      
+      const seen = new Set();
+      
+      Object.entries(nameGroups).forEach(([key, farmers]) => {
+        if (farmers.length > 1) {
+          const codes = farmers.map(f => f.code).sort().join(',');
+          if (!seen.has(codes)) {
+            seen.add(codes);
+            duplicateGroups.push({ type: 'name', key, farmers });
+          }
+        }
+      });
+      
+      Object.entries(nidGroups).forEach(([key, farmers]) => {
+        if (farmers.length > 1) {
+          const codes = farmers.map(f => f.code).sort().join(',');
+          if (!seen.has(codes)) {
+            seen.add(codes);
+            duplicateGroups.push({ type: 'nid', key, farmers });
+          }
+        }
+      });
+      
+      Object.entries(bankGroups).forEach(([key, farmers]) => {
+        if (farmers.length > 1) {
+          const codes = farmers.map(f => f.code).sort().join(',');
+          if (!seen.has(codes)) {
+            seen.add(codes);
+            duplicateGroups.push({ type: 'bank', key, farmers });
+          }
+        }
+      });
+      
+      renderDuplicates();
+    }
+
+    function renderDuplicates() {
+      const container = document.getElementById('duplicatesList');
+      
+      if (!duplicateGroups.length) {
+        container.innerHTML = '<div style="text-align:center; padding:30px; color:#10b981; font-weight:700;">✅ No duplicate records found!</div>';
+        return;
+      }
+      
+      const typeLabels = { name: '👤 Same Name', nid: '🪪 Same National ID', bank: '🏦 Same Bank Account' };
+      
+      container.innerHTML = duplicateGroups.map((group, gi) => `
+        <div class="duplicate-group">
+          <h4>${typeLabels[group.type]}: ${group.key}</h4>
+          ${group.farmers.map((f, fi) => `
+            <div class="duplicate-item ${selectedForMerge[gi] === fi ? 'selected' : ''}" onclick="selectForMerge(${gi}, ${fi})">
+              <div>
+                <strong>${f.code}</strong> - ${f.name || 'No name'}
+                <span style="color:#6b7280; margin-right:8px;">${f.center || ''} | ${f.type || ''}</span>
+              </div>
+              <div style="display:flex; gap:6px;">
+                ${selectedForMerge[gi] !== fi ? `<button class="btn btn-small btn-danger" onclick="event.stopPropagation(); deleteDuplicate('${f.code}', ${gi})">Delete</button>` : '<span style="color:#10b981; font-weight:700;">✓ Primary</span>'}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    function selectForMerge(groupIndex, farmerIndex) {
+      selectedForMerge[groupIndex] = farmerIndex;
+      renderDuplicates();
+    }
+
+    async function deleteDuplicate(code, groupIndex) {
+      if (!confirm(`Delete record ${code}?`)) return;
+      
+      try {
+        const resp = await fetch(`/api/farmers/${code}`, { method: 'DELETE' });
+        if (resp.ok) {
+          showMsg(`Record ${code} deleted successfully`, 'success');
+          await loadFarmers();
+          findDuplicates();
+        } else {
+          showMsg('Failed to delete record', 'error');
+        }
+      } catch (err) {
+        showMsg('Error deleting record', 'error');
+      }
+    }
+
+    function showMsg(text, type) {
+      const container = document.getElementById('msgContainer');
+      container.innerHTML = `<div class="msg ${type}">${text}</div>`;
+      setTimeout(() => { container.innerHTML = ''; }, 3000);
+    }
+
+    // Download full backup (farmers + milk entries + settings + redacted config)
+    function downloadFullBackup() {
+      showMsg('Preparing full backup download...', 'success');
+      window.location.href = '/api/backup/all';
+    }
+
+    // Initialize
+    loadFarmers();
+  </script>
+</body>
+</html>

@@ -1,0 +1,2078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almorooj Dairy - Data Collection</title>
+    <link rel="icon" type="image/png" href="/logo.png">
+    <style>
+        :root {
+            /* Keep the same fixed top bar spacing used across other pages */
+            --topbar-height: 130px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            /* Make room for the fixed top bar */
+            padding-top: var(--topbar-height);
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+        }
+        
+        .navbar h1 {
+            font-size: 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .nav-links a {
+            color: #f9f7f7;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            background: rgba(57, 55, 55, 0.2);
+            font-size: 16px;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - var(--topbar-height));
+        }
+        
+        .main-row {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .main-content {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-right {
+            width: 50%;
+            background: white;
+            border-left: 1px solid #e0e0e0;
+            padding: 15px;
+            overflow: hidden;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .card h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 6px;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: #555;
+            font-size: 12px;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        input[readonly] {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-size: 15px;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-success {
+            background: #c3b585;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #45a049;
+        }
+        
+        .reading-card {
+            background: linear-gradient(135deg, #8e8e66 0%, #ada996 100%);
+            color: white;
+            padding: 8px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 70px;
+            height: 70px;
+        }
+        
+        .reading-title {
+            font-size: 9px;
+            opacity: 0.9;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+        
+        .reading-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .reading-unit {
+            font-size: 8px;
+            opacity: 0.8;
+        }
+        
+        /* Grid for readings */
+        .readings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 8px;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 15px;
+        }
+        
+        .sidebar-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 6px;
+            font-size: 13px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 12px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        .empty-sidebar {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .empty-sidebar p {
+            font-size: 14px;
+        }
+        
+        .msg {
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .msg.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .msg.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        
+        @media (max-width: 1200px) {
+            .main-row {
+                flex-direction: column;
+            }
+            .main-content, .sidebar-right {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="navbar">
+        <h1 style="display: flex; align-items: center; gap: 10px;">
+            <a href="/" aria-label="Home" style="display: inline-flex; align-items: center; cursor: pointer;">
+                <img src="/logo.png" alt="Logo" style="height: 100px; width: auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); background: rgba(57, 50, 50, 0.25); padding: 0;" />
+            </a>
+            <span>ALMOROOJ DAIRY (MILK MANAGEMENT SYSTEM)</span>
+        </h1>
+        <div class="nav-links">
+            <a href="/reports">📊 Reports</a>
+            <a href="/settings">⚙️ Settings</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="main-row">
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Farmer Lookup Card -->
+            <div class="card">
+                <div id="msgContainer" style="position: fixed; top: calc(var(--topbar-height) + 10px); left: auto; right: auto; width: auto; max-width: 400px; z-index: 1000; margin: 0 auto;"></div>
+                <h2>Farmer Lookup</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <div class="form-group" style="margin-bottom: 5px;">
+                        <label style="font-size: 10px; margin-bottom: 2px;">Farmer Code</label>
+                        <input type="text" id="farmerCode" placeholder="Enter farmer code..." autocomplete="off" tabindex="1" style="padding: 5px; font-size: 11px;" disabled />
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 5px;">
+                        <label style="font-size: 10px; margin-bottom: 2px;">Name</label>
+                        <input type="text" id="farmerName" readonly style="padding: 5px; font-size: 11px;" />
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 5px;">
+                        <label style="font-size: 10px; margin-bottom: 2px;">Milk Type</label>
+                        <input type="text" id="farmerType" readonly style="padding: 5px; font-size: 11px;" />
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 5px;">
+                        <label style="font-size: 10px; margin-bottom: 2px;">Center</label>
+                        <input type="text" id="farmerCenter" readonly style="padding: 5px; font-size: 11px;" />
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 5px;">
+                        <label style="font-size: 10px; margin-bottom: 2px;">Expected Daily Qty</label>
+                        <input type="number" id="farmerExpectedQty" readonly style="padding: 5px; font-size: 11px;" />
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 5px;">
+                        <label style="font-size: 10px; margin-bottom: 2px;">Maximum Daily Qty</label>
+                        <input type="number" id="farmerMaxQty" readonly style="padding: 5px; font-size: 11px;" />
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Milk Quantity & Quality Card -->
+            <div class="card">
+                <h2>Milk Quantity & Quality</h2>
+                
+                <div id="manualQuantityGroup" style="display: none; margin-bottom: 12px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Quantity (Liters)</label>
+                        <input type="number" id="manualQuantity" placeholder="Enter quantity in liters..." step="0.01" min="0" tabindex="2" style="padding: 8px; font-size: 13px;" />
+                    </div>
+                </div>
+                
+                <div id="manualQualityGroup" style="display: none; margin-bottom: 12px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>FAT (%)</label>
+                            <input type="number" id="manualFat" placeholder="Enter FAT %" step="0.01" min="0" max="100" tabindex="3" style="padding: 8px; font-size: 13px;" />
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>SNF (%)</label>
+                            <input type="number" id="manualSNF" placeholder="Enter SNF %" step="0.01" min="0" max="100" tabindex="4" style="padding: 8px; font-size: 13px;" />
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>PROTEIN (%)</label>
+                            <input type="number" id="manualProtein" placeholder="Enter PROTEIN %" step="0.01" min="0" max="100" tabindex="5" style="padding: 8px; font-size: 13px;" />
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>ADDED WATER (%)</label>
+                            <input type="number" id="manualWater" placeholder="Enter WATER %" step="0.01" min="0" max="100" tabindex="6" style="padding: 8px; font-size: 13px;" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="readings-grid">
+                    <div class="reading-card">
+                        <div class="reading-title">QTY</div>
+                        <div class="reading-value" id="quantityValue">-</div>
+                        <div class="reading-unit">L</div>
+                    </div>
+                    
+                    <div class="reading-card">
+                        <div class="reading-title">FAT</div>
+                        <div class="reading-value" id="sensorFat">-</div>
+                        <div class="reading-unit">%</div>
+                    </div>
+                    
+                    <div class="reading-card">
+                        <div class="reading-title">SNF</div>
+                        <div class="reading-value" id="sensorSNF">-</div>
+                        <div class="reading-unit">%</div>
+                    </div>
+                    
+                    <div class="reading-card">
+                        <div class="reading-title">PROTEIN</div>
+                        <div class="reading-value" id="sensorProtein">-</div>
+                        <div class="reading-unit">%</div>
+                    </div>
+                    
+                    <div class="reading-card">
+                        <div class="reading-title">ADDED WATER</div>
+                        <div class="reading-value" id="sensorWater">-</div>
+                        <div class="reading-unit">%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quality Reference Guide -->
+            <div class="card" style="background: #f8f9fa; border: 1px solid #ddd; padding: 12px;">
+                <p style="margin: 0; font-size: 16px; font-weight: 600; color: #667eea; margin-bottom: 8px;">📋 Quality Standards (Reference Only)</p>
+                <div id="qualityStandardsText" style="font-size: 12px; line-height: 1.6; color: #333;">
+                    <p style="margin: 4px 0;"><strong>🐄 Cow milk (average):</strong> Fat 3.4–4.0%, SNF 8.3–8.5%, Protein 3.2–3.5%</p>
+                </div>
+            </div>
+            
+            <!-- Save Button -->
+            <div class="card">
+                <button class="btn btn-success" onclick="saveMilkData()" tabindex="7">Save Data</button>
+            </div>
+            </div>
+            
+            <!-- Right Sidebar -->
+            <div class="sidebar-right">
+                <!-- Top Section: Saved Records (2/3) -->
+                <div style="height: 66%; display: flex; flex-direction: column; border-bottom: 2px solid #ddd; padding-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="font-size: 14px; color: #080808; margin: 0;">Saved Records</h3>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <select id="filterCenter" style="padding: 4px 6px; font-size: 11px; border: 1px solid #ddd; border-radius: 4px; min-width: 80px;">
+                                <option value="">-- Select Center --</option>
+                            </select>
+                            <input type="date" id="filterDate" style="padding: 4px 6px; font-size: 11px; border: 1px solid #ddd; border-radius: 4px;" />
+                            <select id="periodSelect" style="padding: 4px 6px; font-size: 11px; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="MORNING">Morning</option>
+                                <option value="EVENING">Evening</option>
+                            </select>
+                            <select id="acceptedMilkType" style="padding: 4px 6px; font-size: 11px; border: 1px solid #ddd; border-radius: 4px; min-width: 80px; background: #667eea; color: white; font-weight: 600;">
+                                <option value="COW">COW</option>
+                                <option value="CAMEL">CAMEL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="border-bottom: 1px solid #ddd; margin-bottom: 8px;"></div>
+                    <div id="savedRecords" style="font-size: 11px; overflow-x: auto; overflow-y: scroll; flex: 1; border: 1px solid #ddd; border-radius: 4px;">
+                        <p style="color: #999; font-size: 12px; text-align: center; padding: 20px;">No records saved yet</p>
+                    </div>
+                </div>
+                
+                <!-- Bottom Section: Summary (1/3) -->
+                <div style="height: 34%; display: flex; flex-direction: column; padding-top: 10px;">
+                    <h3 style="font-size: 14px; color: #070707; margin: 0 0 8px 0;">Summary</h3>
+                    <div id="summaryContent" style="font-size: 10px; overflow-x: auto; overflow-y: auto; flex: 1; border: 1px solid #ddd; border-radius: 4px; padding: 8px;">
+                        <p style="color: #999; font-size: 11px; text-align: center; padding: 15px;">No data to summarize</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedFarmer = null;
+        let sensorReadings = {};
+        let quantityReading = 0;
+        let quantityMode = 'automatic'; // Default mode (will be loaded from settings)
+        let sensorMode = 'automatic'; // Default mode (will be loaded from settings)
+        let lastSaveTime = 0; // Track last save time to ignore old sensor data
+        let savedRecordsList = [];
+
+        function parseSampleNoFromNotes(notes) {
+            if (!notes) return null;
+            const m = String(notes).match(/SAMPLE_NO\s*:\s*(\d+)/i);
+            if (!m) return null;
+            const n = parseInt(m[1], 10);
+            return Number.isFinite(n) && n > 0 ? n : null;
+        }
+
+        function getRecordGroupKey(record) {
+            const center = String(record?.farmer?.center || '').trim().toUpperCase();
+            const date = String(record?.entryDate || '').trim();
+            const period = String(record?.period || '').trim().toUpperCase();
+            const milkType = String(record?.farmer?.type || 'COW').trim().toUpperCase();
+            return `${center}__${date}__${period}__${milkType}`;
+        }
+
+        function getNextSampleNoForRecord(record) {
+            const key = getRecordGroupKey(record);
+            let maxNo = 0;
+            savedRecordsList.forEach(r => {
+                if (getRecordGroupKey(r) !== key) return;
+                const n = typeof r.sampleNo === 'number' ? r.sampleNo : parseInt(r.sampleNo, 10);
+                if (Number.isFinite(n) && n > maxNo) maxNo = n;
+            });
+            return maxNo + 1;
+        }
+
+        function backfillMissingSampleNos() {
+            const groups = new Map();
+            savedRecordsList.forEach(r => {
+                const key = getRecordGroupKey(r);
+                if (!groups.has(key)) groups.set(key, []);
+                groups.get(key).push(r);
+            });
+
+            groups.forEach(records => {
+                const used = new Set();
+                records.forEach(r => {
+                    const n = typeof r.sampleNo === 'number' ? r.sampleNo : parseInt(r.sampleNo, 10);
+                    if (Number.isFinite(n) && n > 0) used.add(n);
+                });
+
+                // deterministic assignment: oldest first, fill smallest available positive integers
+                const missing = records
+                    .filter(r => !(typeof r.sampleNo === 'number' && r.sampleNo > 0) && !(Number.isFinite(parseInt(r.sampleNo, 10)) && parseInt(r.sampleNo, 10) > 0))
+                    .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
+                let candidate = 1;
+                missing.forEach(r => {
+                    while (used.has(candidate)) candidate++;
+                    r.sampleNo = candidate;
+                    used.add(candidate);
+                    candidate++;
+                });
+            });
+        }
+        
+        // ==================== LOAD DATA FROM DATABASE ON PAGE LOAD ====================
+        async function loadMilkEntriesFromDatabaseOnStart() {
+            console.log('🔄 Starting to load milk entries from database...');
+            try {
+                // Build farmerCode -> center map so center filtering works after reload
+                const farmerCenterMap = new Map();
+                try {
+                    const farmersResp = await fetch('/api/farmers');
+                    const farmers = await farmersResp.json();
+                    if (Array.isArray(farmers)) {
+                        farmers.forEach(f => {
+                            const code = (f?.code?.toString?.() ?? '').trim();
+                            const center = (f?.center?.toString?.() ?? '').trim();
+                            if (code) farmerCenterMap.set(code, center);
+                        });
+                    }
+                    console.log(`📍 Loaded farmer centers: ${farmerCenterMap.size}`);
+                } catch (e) {
+                    console.warn('⚠️ Could not load farmers centers map:', e);
+                }
+
+                const resp = await fetch('/api/milk-entries');
+                const result = await resp.json();
+                
+                console.log('✅ API Response received:', result);
+                console.log(`📊 Response entries count: ${result.entries?.length || 0}`);
+                
+                if (result.success && result.entries && result.entries.length > 0) {
+                    console.log(`✅ Found ${result.entries.length} entries in database`);
+                    
+                    // Clear and populate savedRecordsList
+                    savedRecordsList = [];
+                    
+                    result.entries.forEach((entry, idx) => {
+                        const farmerCode = String(entry.farmer_code ?? entry.farmerCode ?? '').trim();
+                        const farmerName = String(entry.farmer_name ?? entry.farmerName ?? '').trim();
+                        const milkTypeRaw = entry.milk_type ?? entry.milkType ?? 'COW';
+                        const entryDateTimeRaw = entry.entry_date_time ?? entry.entryDateTime ?? entry.created_at ?? entry.createdAt;
+                        const ts = new Date(entryDateTimeRaw || Date.now());
+                        const shiftMatch = entry?.notes ? String(entry.notes).match(/SHIFT\s*:\s*(MORNING|EVENING)/i) : null;
+                        const shift = shiftMatch ? shiftMatch[1].toUpperCase() : (ts.getHours() < 12 ? 'MORNING' : 'EVENING');
+                        const sampleNo = parseSampleNoFromNotes(entry?.notes);
+                        const centerFromFarmers = (farmerCenterMap.get(String(farmerCode)) || '').trim();
+                        const record = {
+                            farmer: {
+                                code: farmerCode,
+                                name: farmerName,
+                                type: String(milkTypeRaw).toUpperCase() || 'COW',
+                                center: (centerFromFarmers || entry.center || '-').toString().trim()
+                            },
+                            quality: { fat: 0, snf: 0, density: entry.density || 0, water: 0, protein: 0 },
+                            quantity: entry.quantity,
+                            timestamp: ts,
+                            period: shift,
+                            quantityMode: 'automatic',
+                            entryDate: ts.toLocaleDateString('en-CA'),
+                            sampleNo: sampleNo
+                        };
+                        
+                        if (entry.notes) {
+                            const fatMatch = entry.notes.match(/FAT: ([\d.]+)%/);
+                            const snfMatch = entry.notes.match(/SNF: ([\d.]+)%/);
+                            const proteinMatch = entry.notes.match(/Protein: ([\d.]+)%/);
+                            const waterMatch = entry.notes.match(/Water: ([\d.]+)%/);
+                            
+                            if (fatMatch) record.quality.fat = parseFloat(fatMatch[1]);
+                            if (snfMatch) record.quality.snf = parseFloat(snfMatch[1]);
+                            if (proteinMatch) record.quality.protein = parseFloat(proteinMatch[1]);
+                            if (waterMatch) record.quality.water = parseFloat(waterMatch[1]);
+                        }
+                        
+                        savedRecordsList.push(record);
+                        console.log(`  📋 Entry ${idx + 1}: ${farmerName} (${farmerCode}) - ${entry.quantity}L - Period: ${record.period}`);
+                    });
+
+                    // Fill sample numbers for old records that don't have SAMPLE_NO in notes
+                    backfillMissingSampleNos();
+                    
+                    console.log(`✅ Total records loaded into savedRecordsList: ${savedRecordsList.length}`);
+                    console.log('🔍 Full savedRecordsList:', savedRecordsList);
+                    
+                    // Reset filters to show all data
+                    console.log('🔄 Resetting filters to show all records...');
+                    tableFilters.date = '';
+                    tableFilters.period = '';
+                    tableFilters.center = '';
+                    tableFilters.milkType = '';
+                    console.log('✅ Filters reset:', tableFilters);
+                    
+                    // Update UI after loading
+                    console.log('📡 About to call updateSavedRecords()...');
+                    updateSavedRecords();
+                    console.log('✅ updateSavedRecords() completed');
+                    
+                    console.log('📡 About to call updateSummaryTab()...');
+                    updateSummaryTab();
+                    console.log('✅ updateSummaryTab() completed');
+                    
+                    console.log('🎉 All data loaded and UI updated successfully!');
+                    return true;
+                } else {
+                    console.log('⚠️ No entries found in database');
+                    savedRecordsList = [];
+                    // Still update UI to clear any stale data
+                    updateSavedRecords();
+                    updateSummaryTab();
+                    return false;
+                }
+            } catch (e) {
+                console.error('❌ Error loading from database:', e);
+                console.error('❌ Error stack:', e.stack);
+                return false;
+            }
+        }
+        // ================================================================================
+        
+        function updateInputFieldsVisibility() {
+            const manualQuantityGroup = document.getElementById('manualQuantityGroup');
+            const manualQualityGroup = document.getElementById('manualQualityGroup');
+            
+            console.log('updateInputFieldsVisibility - Quantity:', quantityMode, 'Sensor:', sensorMode);
+            
+            if (quantityMode === 'manual') {
+                console.log('Showing manual quantity group');
+                manualQuantityGroup.style.display = 'block';
+            } else {
+                console.log('Hiding manual quantity group');
+                manualQuantityGroup.style.display = 'none';
+            }
+            
+            if (sensorMode === 'manual') {
+                console.log('Showing manual quality group');
+                manualQualityGroup.style.display = 'block';
+            } else {
+                console.log('Hiding manual quality group');
+                manualQualityGroup.style.display = 'none';
+            }
+            
+            setupManualInputListeners();
+        }
+        
+        // Load quantity and sensor modes from API settings
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔄 DOMContentLoaded event fired');
+            
+            // Load data from database first
+            loadMilkEntriesFromDatabaseOnStart().then(loaded => {
+                console.log('Database load completed:', loaded);
+                
+                // Then load settings
+                fetch('/api/settings')
+                    .then(r => r.json())
+                    .then(data => {
+                        quantityMode = data.quantity_mode || 'automatic';
+                        sensorMode = data.sensor_mode || 'automatic';
+                        
+                        console.log('✅ Settings loaded - Quantity:', quantityMode, 'Sensor:', sensorMode);
+                        
+                        localStorage.setItem('milk_price_cow', data.milk_price_cow || '0');
+                        localStorage.setItem('milk_price_camel', data.milk_price_camel || '0');
+                        localStorage.setItem('currency', data.currency || 'OMR');
+                        
+                        updateInputFieldsVisibility();
+                    })
+                    .catch(e => {
+                        console.error('❌ Error loading settings:', e);
+                        updateInputFieldsVisibility();
+                    });
+            });
+            
+            // Load centers immediately
+            console.log('Calling loadCenters from DOMContentLoaded...');
+            loadCenters();
+        });
+        
+        function setupManualInputListeners() {
+            // Update quantity display when manual quantity changes
+            const manualQuantity = document.getElementById('manualQuantity');
+            if (manualQuantity && !manualQuantity.hasListener) {
+                manualQuantity.hasListener = true;
+                manualQuantity.addEventListener('input', (e) => {
+                    document.getElementById('quantityValue').textContent = e.target.value || '-';
+                });
+            }
+            
+            // Update quality displays when manual quality inputs change
+            const qualityInputs = ['manualFat', 'manualSNF', 'manualProtein', 'manualWater'];
+            const qualityDisplays = {
+                manualFat: 'sensorFat',
+                manualSNF: 'sensorSNF',
+                manualProtein: 'sensorProtein',
+                manualWater: 'sensorWater'
+            };
+            
+            qualityInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input && !input.hasListener) {
+                    input.hasListener = true;
+                    input.addEventListener('input', (e) => {
+                        const displayId = qualityDisplays[inputId];
+                        const value = parseFloat(e.target.value);
+                        document.getElementById(displayId).textContent = isNaN(value) ? '-' : value.toFixed(2);
+                    });
+                }
+            });
+        }
+        
+        // Search farmer by code
+        document.getElementById('farmerCode').addEventListener('input', async (e) => {
+            const code = e.target.value.trim();
+            
+            if (!code) {
+                // Clear fields when code is empty
+                selectedFarmer = null;
+                document.getElementById('farmerName').value = '';
+                document.getElementById('farmerType').value = '';
+                document.getElementById('farmerCenter').value = '';
+                document.getElementById('farmerExpectedQty').value = '';
+                document.getElementById('farmerMaxQty').value = '';
+                return;
+            }
+            
+            try {
+                const resp = await fetch('/api/farmers');
+                const farmers = await resp.json();
+                const farmer = farmers.find(f => f.code === code);
+                
+                if (farmer) {
+                    // Check farmer status
+                    if (farmer.status && farmer.status !== 'active') {
+                        showMsg(`⚠️ Farmer status is ${farmer.status} - Cannot accept milk`, 'error');
+                        selectedFarmer = null;
+                        document.getElementById('farmerName').value = '';
+                        document.getElementById('farmerType').value = '';
+                        document.getElementById('farmerCenter').value = '';
+                        document.getElementById('farmerExpectedQty').value = '';
+                        document.getElementById('farmerMaxQty').value = '';
+                        return;
+                    }
+                    
+                    // Check if farmer center matches the selected filter center (if any)
+                    const selectedCenter = document.getElementById('filterCenter').value;
+                    if (selectedCenter && farmer.center !== selectedCenter) {
+                        showMsg(`❌ Farmer ${farmer.name} is registered in center "${farmer.center}" not in "${selectedCenter}". Cannot accept in this center!`, 'error');
+                        selectedFarmer = null;
+                        document.getElementById('farmerName').value = '';
+                        document.getElementById('farmerType').value = '';
+                        document.getElementById('farmerCenter').value = '';
+                        document.getElementById('farmerExpectedQty').value = '';
+                        document.getElementById('farmerMaxQty').value = '';
+                        return;
+                    }
+                    
+                    selectedFarmer = farmer;
+                    document.getElementById('farmerName').value = farmer.name || '';
+                    document.getElementById('farmerType').value = farmer.type || '';
+                    document.getElementById('farmerCenter').value = farmer.center || '';
+                    document.getElementById('farmerExpectedQty').value = farmer.expected_qty || '';
+                    document.getElementById('farmerMaxQty').value = farmer.maximum || '';
+                    
+                    updateSidebar();
+                } else {
+                    selectedFarmer = null;
+                    // Clear fields when farmer not found
+                    document.getElementById('farmerName').value = '';
+                    document.getElementById('farmerType').value = '';
+                    document.getElementById('farmerCenter').value = '';
+                    document.getElementById('farmerExpectedQty').value = '';
+                    document.getElementById('farmerMaxQty').value = '';
+                    showMsg('Farmer not found', 'error');
+                }
+            } catch (e) {
+                console.error('Error fetching farmers:', e);
+            }
+        });
+        
+        // Poll sensor data
+        async function pollSensorData() {
+            try {
+                const resp = await fetch('/api/data');
+                const data = await resp.json();
+                const currentTime = Date.now();
+                
+                console.log('API Response:', data); // for debugging
+                
+                // Handle quality sensor data
+                // Ignore old data (saved before last save)
+                if (data.data && data.data.length > 0) {
+                    const latest = data.data[data.data.length - 1];
+                    console.log('Latest parsed data:', latest.parsed); // for debugging
+                    
+                    // Ignore old data that arrived before last save
+                    if (latest.parsed && currentTime - lastSaveTime > 1000) {
+                        sensorReadings = latest.parsed;
+                        updateSensorDisplay();
+                    } else if (currentTime - lastSaveTime <= 1000) {
+                        console.log('Ignoring old sensor data - recently saved');
+                    }
+                }
+                
+                // Handle quantity sensor data
+                // Ignore old scale data as well
+                if (data.quantity_data && data.quantity_data.parsed !== null && currentTime - lastSaveTime > 1000) {
+                    quantityReading = data.quantity_data.parsed;
+                    console.log('Quantity reading:', quantityReading); // for debugging
+                    if (quantityMode !== 'manual') {
+                        document.getElementById('quantityValue').textContent = quantityReading ? quantityReading.toFixed(2) : '-';
+                    }
+                }
+            } catch (e) {
+                console.error('Error polling sensor data:', e);
+            }
+        }
+        
+        // Poll sensor data every 500ms
+        setInterval(pollSensorData, 500);
+        
+        function updateSensorDisplay() {
+            // In manual mode, show manual input values if they exist
+            // In automatic mode, always show sensor readings
+            
+            // Always update from sensor if data exists (for reference)
+            if (sensorReadings && Object.keys(sensorReadings).length > 0) {
+                const fat = sensorReadings.fat || sensorReadings.FAT;
+                const snf = sensorReadings.snf || sensorReadings.SNF;
+                const density = sensorReadings.density || sensorReadings.DENSITY;
+                const water = sensorReadings.added_water || sensorReadings.ADDED_WATER;
+                const protein = sensorReadings.protein || sensorReadings.PROTEIN;
+                
+                console.log('Sensor Readings:', sensorReadings);
+                console.log('Water value:', water);
+                
+                // In automatic mode, display sensor readings directly
+                if (sensorMode === 'automatic') {
+                    document.getElementById('sensorFat').textContent = fat ? (typeof fat === 'string' ? fat : fat.toFixed(2)) : '-';
+                    document.getElementById('sensorSNF').textContent = snf ? (typeof snf === 'string' ? snf : snf.toFixed(2)) : '-';
+                    document.getElementById('sensorDensity').textContent = density || '-';
+                    document.getElementById('sensorWater').textContent = water ? (typeof water === 'string' ? water : water.toFixed(2)) : '-';
+                    document.getElementById('sensorProtein').textContent = protein ? (typeof protein === 'string' ? protein : protein.toFixed(2)) : '-';
+                }
+                // In manual mode, still show sensor readings but don't clear manual input
+            } else if (sensorMode === 'automatic') {
+                // No sensor data in automatic mode
+                document.getElementById('sensorFat').textContent = '-';
+                document.getElementById('sensorSNF').textContent = '-';
+                document.getElementById('sensorDensity').textContent = '-';
+                document.getElementById('sensorWater').textContent = '-';
+                document.getElementById('sensorProtein').textContent = '-';
+            }
+        }
+        
+        function updateSidebar() {
+            if (!selectedFarmer) {
+                document.getElementById('sidebarContent').innerHTML = '<p>Select a farmer to view summary data</p>';
+                return;
+            }
+            
+            const sidebarHTML = `
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Farmer Info</div>
+                    <div class="info-row">
+                        <span class="info-label">Code:</span>
+                        <span class="info-value">${selectedFarmer.code}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value">${selectedFarmer.name}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Type:</span>
+                        <span class="info-value">${selectedFarmer.type}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Center:</span>
+                        <span class="info-value">${selectedFarmer.center}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value" style="font-weight: 600; color: ${selectedFarmer.status === 'active' ? '#10b981' : selectedFarmer.status === 'standby' ? '#f59e0b' : '#ef4444'};">${selectedFarmer.status === 'active' ? '✓ Active' : selectedFarmer.status === 'standby' ? '⏸ Standby' : '✕ Inactive'}</span>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Quality Data</div>
+                    <div class="info-row">
+                        <span class="info-label">Fat:</span>
+                        <span class="info-value">${(sensorReadings.fat || sensorReadings.FAT) ? (typeof (sensorReadings.fat || sensorReadings.FAT) === 'string' ? (sensorReadings.fat || sensorReadings.FAT) : (sensorReadings.fat || sensorReadings.FAT).toFixed(2)) : '-'} %</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">SNF:</span>
+                        <span class="info-value">${(sensorReadings.snf || sensorReadings.SNF) ? (typeof (sensorReadings.snf || sensorReadings.SNF) === 'string' ? (sensorReadings.snf || sensorReadings.SNF) : (sensorReadings.snf || sensorReadings.SNF).toFixed(2)) : '-'} %</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Density:</span>
+                        <span class="info-value">${sensorReadings.density || sensorReadings.DENSITY || '-'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Protein:</span>
+                        <span class="info-value">${(sensorReadings.protein || sensorReadings.PROTEIN) ? (typeof (sensorReadings.protein || sensorReadings.PROTEIN) === 'string' ? (sensorReadings.protein || sensorReadings.PROTEIN) : (sensorReadings.protein || sensorReadings.PROTEIN).toFixed(2)) : '-'} %</span>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Quantity Info</div>
+                    <div class="info-row">
+                        <span class="info-label">Current:</span>
+                        <span class="info-value">${quantityReading} L</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Expected:</span>
+                        <span class="info-value">${selectedFarmer.expected_qty} L</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Maximum:</span>
+                        <span class="info-value">${selectedFarmer.maximum} L</span>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('sidebarContent').innerHTML = sidebarHTML;
+        }
+        
+        function saveMilkData() {
+            if (!selectedFarmer) {
+                showMsg('Please select a farmer first', 'error');
+                return;
+            }
+            
+            // Check if center is selected
+            const selectedCenter = document.getElementById('filterCenter').value;
+            if (!selectedCenter) {
+                showMsg('❌ Please select a center first!', 'error');
+                return;
+            }
+            
+            // Check if farmer's center matches the selected center
+            if (selectedFarmer.center !== selectedCenter) {
+                showMsg(`❌ Farmer ${selectedFarmer.name} is registered in center "${selectedFarmer.center}", not in "${selectedCenter}". Cannot record milk for this center!`, 'error');
+                return;
+            }
+            
+            // Get the date from the filterDate (from Saved Records section)
+            const filterDateInput = document.getElementById('filterDate');
+            let recordDate = new Date();
+            let selectedDate = null;
+            
+            // If filterDate is provided, use it for date comparison
+            if (filterDateInput && filterDateInput.value) {
+                selectedDate = filterDateInput.value;
+                const [year, month, day] = selectedDate.split('-');
+                recordDate = new Date(year, parseInt(month) - 1, day);
+            } else {
+                // If no date selected, show error
+                showMsg('❌ Please select a date from Saved Records section!', 'error');
+                return;
+            }
+            
+            // Check if farmer already submitted milk in this shift
+            const farmerCode = selectedFarmer.code;
+            const recordDateStr = recordDate.toLocaleDateString('en-CA'); // YYYY-MM-DD format
+            const periodSelect = document.getElementById('periodSelect');
+            const period = periodSelect ? periodSelect.value : 'MORNING';
+
+            // Keep the selected date, but use the actual current time-of-day.
+            // This makes the displayed time accurate while reports still group by the selected date.
+            const now = new Date();
+            recordDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+            
+            const existingSubmission = savedRecordsList.find(record => {
+                const recordDateString = record.entryDate || new Date(record.timestamp).toLocaleDateString('en-CA');
+                return record.farmer.code === farmerCode && 
+                       recordDateString === recordDateStr && 
+                       record.period === period;
+            });
+            
+            if (existingSubmission) {
+                showMsg(`⚠️ Farmer ${selectedFarmer.name} (${farmerCode}) already submitted milk in ${period} shift on ${recordDateStr}!`, 'error');
+                return;
+            }
+            
+            // Verify that the farmer provides the selected milk type
+            const acceptedMilkTypeSelect = document.getElementById('acceptedMilkType');
+            const acceptedMilkType = acceptedMilkTypeSelect ? acceptedMilkTypeSelect.value.toUpperCase() : 'COW';
+            const farmerMilkType = (selectedFarmer.type || 'COW').toUpperCase();
+            
+            if (farmerMilkType !== acceptedMilkType) {
+                showMsg(`❌ Farmer ${selectedFarmer.name} provides ${farmerMilkType} milk, but you selected ${acceptedMilkType} for this session!`, 'error');
+                return;
+            }
+            
+            // Get quality data - use manual input if entered, otherwise use sensor readings
+            let fat, snf, density, water, protein;
+            
+            if (sensorMode === 'manual') {
+                // In manual mode: user must enter manual values only
+                const manualFatVal = parseFloat(document.getElementById('manualFat').value);
+                const manualSNFVal = parseFloat(document.getElementById('manualSNF').value);
+                const manualProteinVal = parseFloat(document.getElementById('manualProtein').value);
+                const manualWaterVal = parseFloat(document.getElementById('manualWater').value);
+                
+                // In manual mode, use only manual values (no sensor fallback)
+                fat = manualFatVal || 0;
+                snf = manualSNFVal || 0;
+                density = 0; // Not needed for manual input
+                water = !isNaN(manualWaterVal) ? manualWaterVal : 0;
+                protein = manualProteinVal || 0;
+            } else {
+                // Automatic mode - use sensor readings
+                fat = sensorReadings.fat || sensorReadings.FAT || 0;
+                snf = sensorReadings.snf || sensorReadings.SNF || 0;
+                density = sensorReadings.density || sensorReadings.DENSITY || 0;
+                water = sensorReadings.added_water || sensorReadings.ADDED_WATER || 0;
+                protein = sensorReadings.protein || sensorReadings.PROTEIN || 0;
+            }
+            
+            // Get quantity based on mode (automatic or manual)
+            let quantity = 0;
+            
+            if (quantityMode === 'manual') {
+                // In manual quantity mode: must enter manual value only
+                const manualQty = parseFloat(document.getElementById('manualQuantity').value);
+                quantity = manualQty || 0;
+            } else {
+                // Automatic mode - use sensor data
+                quantity = quantityReading || 0;
+            }
+            
+            // Verify quantity does not exceed maximum
+            const maxQty = parseFloat(selectedFarmer.maximum) || 0;
+            if (maxQty > 0 && quantity > maxQty) {
+                showMsg(`⚠️ Quantity (${quantity}L) exceeds maximum for farmer ${selectedFarmer.name} (${maxQty}L)!`, 'error');
+                return;
+            }
+            
+            // Verify required values
+            if (!fat || fat <= 0) {
+                if (sensorMode === 'manual') {
+                    showMsg('❌ FAT is REQUIRED in Manual Mode! Please enter a valid FAT percentage in the input field.', 'error');
+                } else {
+                    showMsg('❌ FAT value is required! Please enter a valid FAT percentage or connect the sensor.', 'error');
+                }
+                return;
+            }
+            
+            if (!snf || snf <= 0) {
+                if (sensorMode === 'manual') {
+                    showMsg('❌ SNF is REQUIRED in Manual Mode! Please enter a valid SNF percentage in the input field.', 'error');
+                } else {
+                    showMsg('❌ SNF value is required! Please enter a valid SNF percentage or connect the sensor.', 'error');
+                }
+                return;
+            }
+            
+            if (!quantity || quantity <= 0) {
+                if (quantityMode === 'manual') {
+                    showMsg('❌ Quantity (Scale) is REQUIRED in Manual Mode! Please enter a valid quantity in the input field.', 'error');
+                } else {
+                    showMsg('❌ Quantity (Scale) is required! Please enter a valid quantity or connect the scale.', 'error');
+                }
+                return;
+            }
+            
+            // Create record
+            const record = {
+                farmer: selectedFarmer,
+                quality: { fat, snf, density, water, protein },
+                quantity: quantity,
+                timestamp: recordDate,
+                period: period,
+                quantityMode: quantityMode,
+                entryDate: selectedDate // Store the entry date
+            };
+
+            // Stable sample number per (center + date + shift + milk type)
+            record.sampleNo = getNextSampleNoForRecord(record);
+            
+            // Add to saved records list
+            savedRecordsList.unshift(record);
+            
+            // Update filters to show current date records
+            tableFilters.date = selectedDate;
+            
+            // Update display
+            updateSavedRecords();
+            updateSummaryTab(); // Update summary when new data is saved
+            
+            // Record save time to ignore old sensor data
+            lastSaveTime = Date.now();
+            
+            // Clear all quality and quantity values (both manual and automatic modes)
+            sensorReadings = {}; // Clear sensor data
+            quantityReading = 0; // Clear scale reading
+            
+            // Clear manual quantity field
+            document.getElementById('manualQuantity').value = '';
+            
+            // Clear manual quality input values
+            document.getElementById('manualFat').value = '';
+            document.getElementById('manualSNF').value = '';
+            document.getElementById('manualProtein').value = '';
+            document.getElementById('manualWater').value = '';
+            
+            // Clear all values for next farmer
+            document.getElementById('farmerCode').value = '';
+            document.getElementById('farmerName').value = '';
+            document.getElementById('farmerType').value = '';
+            document.getElementById('farmerCenter').value = '';
+            document.getElementById('farmerExpectedQty').value = '';
+            document.getElementById('farmerMaxQty').value = '';
+            
+            // Clear milk values (display) - only if elements exist
+            const quantityValueEl = document.getElementById('quantityValue');
+            const sensorFatEl = document.getElementById('sensorFat');
+            const sensorSNFEl = document.getElementById('sensorSNF');
+            const sensorProteinEl = document.getElementById('sensorProtein');
+            const sensorWaterEl = document.getElementById('sensorWater');
+            const sensorDensityEl = document.getElementById('sensorDensity');
+            
+            if (quantityValueEl) quantityValueEl.textContent = '-';
+            if (sensorFatEl) sensorFatEl.textContent = '-';
+            if (sensorSNFEl) sensorSNFEl.textContent = '-';
+            if (sensorProteinEl) sensorProteinEl.textContent = '-';
+            if (sensorWaterEl) sensorWaterEl.textContent = '-';
+            if (sensorDensityEl) sensorDensityEl.textContent = '-';
+            
+            // Clear selected farmer
+            selectedFarmer = null;
+            
+            // Send data to backend for persistent storage
+            sendMilkDataToBackend(record);
+        }
+        
+        // Send milk entry data to backend API
+        async function sendMilkDataToBackend(record) {
+            try {
+                // Log full record for debugging
+                console.log('=== FULL RECORD DEBUG ===');
+                console.log('record:', record);
+                console.log('record.farmer:', record?.farmer);
+                console.log('record.farmer.code:', record?.farmer?.code);
+                console.log('record.quantity:', record?.quantity);
+                console.log('selectedFarmer:', selectedFarmer);
+                console.log('========================');
+                
+                // Validate record data
+                if (!record || !record.farmer) {
+                    console.error('Invalid record:', record);
+                    showMsg('❌ Error: Missing farmer data', 'error');
+                    return;
+                }
+                
+                if (!record.farmer.code || record.farmer.code.trim() === '') {
+                    console.error('Missing farmer code:', record.farmer);
+                    showMsg('❌ Error: Farmer code is missing', 'error');
+                    return;
+                }
+                
+                if (!record.quantity || record.quantity <= 0) {
+                    console.error('Missing quantity:', record.quantity);
+                    showMsg('❌ Error: Quantity is missing', 'error');
+                    return;
+                }
+                
+                const payload = {
+                    farmer_code: record.farmer.code.toString().trim(),
+                    farmer_name: record.farmer.name ? record.farmer.name.trim() : '',
+                    milk_type: (record.farmer.type || 'cow').toLowerCase(),
+                    quantity: parseFloat(record.quantity),
+                    temperature: parseFloat(record.quality.density || 0),
+                    density: parseFloat(record.quality.density || 0),
+                    quality: 4,
+                    notes: `SAMPLE_NO: ${record.sampleNo || ''} | SHIFT: ${record.period} | CENTER: ${record.farmer.center || ''} | FAT: ${record.quality.fat}%, SNF: ${record.quality.snf}%, Protein: ${record.quality.protein}%, Water: ${record.quality.water}%`,
+                    device: `web-${quantityMode}-${sensorMode}`,
+                    entry_date_time: new Date(record.timestamp).toISOString()
+                };
+                
+                console.log('=== PAYLOAD BEING SENT ===');
+                console.log('Payload:', payload);
+                console.log('========================');
+                
+                const response = await fetch('/api/milk-entries', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                console.log('Response status:', response.status);
+                console.log('Response data:', result);
+                
+                if (response.ok && result.success) {
+                    showMsg('✅ Data saved successfully for ' + record.farmer.name, 'success');
+                    console.log('Backend save successful:', result);
+                } else {
+                    showMsg('❌ Save failed: ' + (result.message || 'Unknown error'), 'error');
+                    console.error('Backend save failed:', result);
+                }
+            } catch (error) {
+                showMsg('❌ Connection error: ' + error.message, 'error');
+                console.error('Backend connection error:', error);
+            }
+        }
+        
+        let tableFilters = {
+            time: '',
+            code: '',
+            name: '',
+            qty: '',
+            fat: '',
+            snf: '',
+            pro: '',
+            h2o: '',
+            date: '',
+            period: '',  // Changed from 'MORNING' to '' to show all records on page load
+            center: '',
+            milkType: ''
+        };
+        
+        function updateSummaryTab() {
+            const container = document.getElementById('summaryContent');
+
+            // Require center selection (Select Center mode): don't show mixed-center data
+            if (!tableFilters.center || String(tableFilters.center).trim() === '') {
+                container.innerHTML = `<p style="color: #999; font-size: 11px; text-align: center; padding: 15px;">Please select a center to view summary</p>`;
+                return;
+            }
+            
+            if (savedRecordsList.length === 0) {
+                // Show empty table with headers
+                let html = `
+                    <table style="width: 100%; font-size: 11px; margin-top: 10px; position: relative; border-spacing: 0; table-layout: auto;">
+                        <thead style="position: sticky; top: 0; z-index: 100;">
+                            <tr style="background: #667eea; color: white;">
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: left; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Milk Type</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Members (NOS)</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Qty(Ltr.)</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Avg FAT(%)</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Avg SNF(%)</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Avg PROTEIN(%)</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: right; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Amount(OMR)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="7" style="text-align: center; padding: 20px; color: #999;">No data to summarize</td></tr>
+                        </tbody>
+                    </table>
+                `;
+                container.innerHTML = html;
+                return;
+            }
+            
+            // Filter records (same filters as Saved Records tab)
+            let filteredRecords = savedRecordsList.filter(record => {
+                const recordDate = (record.entryDate || new Date(record.timestamp).toLocaleDateString('en-CA')).toString();
+                
+                // Date filter - show all dates if no filter is set
+                if (tableFilters.date && tableFilters.date !== '' && recordDate !== tableFilters.date) {
+                    return false;
+                }
+                
+                // Period filter - show all periods if no filter is set
+                if (tableFilters.period && tableFilters.period !== '') {
+                    const filterPeriod = String(tableFilters.period).trim().toUpperCase();
+                    const recordPeriod = String(record.period || '').trim().toUpperCase();
+                    if (recordPeriod !== filterPeriod) return false;
+                }
+                
+                // Center filter - show all centers if no filter is set
+                if (tableFilters.center && tableFilters.center !== '') {
+                    const filterCenter = String(tableFilters.center).trim().toUpperCase();
+                    const recordCenter = String(record?.farmer?.center || '').trim().toUpperCase();
+                    if (recordCenter !== filterCenter) return false;
+                }
+                
+                // Milk Type filter - only apply if explicitly set
+                if (tableFilters.milkType && tableFilters.milkType !== '' && (record.farmer.type || 'COW').toUpperCase() !== tableFilters.milkType.toUpperCase()) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            if (filteredRecords.length === 0) {
+                // Show empty table with headers
+                let html = `
+                    <table style="width: 100%; font-size: 11px; margin-top: 10px; position: relative; border-spacing: 0; table-layout: auto;">
+                        <thead style="position: sticky; top: 0; z-index: 100;">
+                            <tr style="background: #667eea; color: white;">
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: left; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Milk Type</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Members (NOS)</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Qty(Ltr.)</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Avg FAT(%)</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Avg SNF(%)</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Avg PROTEIN(%)</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: right; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Amount(OMR)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="7" style="text-align: center; padding: 20px; color: #999;">No matching data to summarize</td></tr>
+                        </tbody>
+                    </table>
+                `;
+                container.innerHTML = html;
+                return;
+            }
+            
+            // Group by milk type
+            const summaryByType = {};
+            filteredRecords.forEach(record => {
+                const milkType = (record.farmer.type || 'COW').toUpperCase();
+                
+                if (!summaryByType[milkType]) {
+                    summaryByType[milkType] = {
+                        type: milkType,
+                        farmers: new Set(),
+                        qty: 0,
+                        amount: 0,
+                        fatTotal: 0,
+                        snfTotal: 0,
+                        proteinTotal: 0,
+                        count: 0
+                    };
+                }
+                
+                summaryByType[milkType].farmers.add(record.farmer.code);
+                summaryByType[milkType].qty += record.quantity;
+                summaryByType[milkType].count += 1;
+                
+                // Add quality values for average calculation
+                const fat = typeof record.quality.fat === 'number' ? record.quality.fat : parseFloat(record.quality.fat) || 0;
+                const snf = typeof record.quality.snf === 'number' ? record.quality.snf : parseFloat(record.quality.snf) || 0;
+                const protein = typeof record.quality.protein === 'number' ? record.quality.protein : parseFloat(record.quality.protein) || 0;
+                
+                summaryByType[milkType].fatTotal += fat;
+                summaryByType[milkType].snfTotal += snf;
+                summaryByType[milkType].proteinTotal += protein;
+                
+                // Calculate amount
+                let pricePerLiter = 0;
+                if (milkType === 'COW') {
+                    pricePerLiter = parseFloat(localStorage.getItem('milk_price_cow') || '0');
+                } else if (milkType === 'CAMEL') {
+                    pricePerLiter = parseFloat(localStorage.getItem('milk_price_camel') || '0');
+                }
+                summaryByType[milkType].amount += (record.quantity * pricePerLiter);
+            });
+            
+            // Create summary table
+            let html = `
+                <table style="width: 100%; font-size: 11px; margin-top: 10px; position: relative; border-spacing: 0; table-layout: auto;">
+                    <thead style="position: sticky; top: 0; z-index: 100;">
+                        <tr style="background: #667eea; color: white;">
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Milk Type</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Members (NOS)</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Qty(Ltr.)</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Avg FAT(%)</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Avg SNF(%)</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Avg PROTEIN(%)</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: right; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Amount(OMR)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            let totalFarmers = 0;
+            let totalQty = 0;
+            let totalAmount = 0;
+            let totalFat = 0;
+            let totalSnf = 0;
+            let totalProtein = 0;
+            let totalRecords = 0;
+            
+            Object.keys(summaryByType).sort().forEach(type => {
+                const summary = summaryByType[type];
+                const farmerCount = summary.farmers.size;
+                const qty = summary.qty.toFixed(2);
+                const amount = summary.amount.toFixed(2);
+                
+                // Calculate averages
+                const avgFat = (summary.fatTotal / summary.count).toFixed(2);
+                const avgSnf = (summary.snfTotal / summary.count).toFixed(2);
+                const avgProtein = (summary.proteinTotal / summary.count).toFixed(2);
+                
+                totalFarmers += farmerCount;
+                totalQty += summary.qty;
+                totalAmount += summary.amount;
+                totalFat += summary.fatTotal;
+                totalSnf += summary.snfTotal;
+                totalProtein += summary.proteinTotal;
+                totalRecords += summary.count;
+                
+                html += `
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 8px; border: 1px solid #ddd; font-weight: 600;">${type}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${farmerCount}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${qty}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${avgFat}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${avgSnf}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${avgProtein}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center; color: #4CAF50; font-weight: 600;">${amount}</td>
+                    </tr>
+                `;
+            });
+            
+            // Total row
+            const overallAvgFat = totalRecords > 0 ? (totalFat / totalRecords).toFixed(2) : '0.00';
+            const overallAvgSnf = totalRecords > 0 ? (totalSnf / totalRecords).toFixed(2) : '0.00';
+            const overallAvgProtein = totalRecords > 0 ? (totalProtein / totalRecords).toFixed(2) : '0.00';
+            
+            html += `
+                    <tr style="background: #e8f5e9; font-weight: 600;">
+                        <td style="padding: 8px; border: 1px solid #ddd;">Total</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${totalFarmers}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${totalQty.toFixed(2)}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${overallAvgFat}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${overallAvgSnf}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${overallAvgProtein}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center; color: #2e7d32; font-weight: 700;">${totalAmount.toFixed(2)}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = html;
+        }
+        
+        let sortConfig = {
+            column: null,
+            direction: 'asc' // 'asc' or 'desc'
+        };
+        
+        function sortRecords(column) {
+            if (sortConfig.column === column) {
+                // Toggle direction
+                sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortConfig.column = column;
+                sortConfig.direction = 'asc';
+            }
+            
+            savedRecordsList.sort((a, b) => {
+                let valA, valB;
+                
+                switch(column) {
+                    case 'time':
+                        valA = a.timestamp;
+                        valB = b.timestamp;
+                        break;
+                    case 'sampleNo':
+                        valA = typeof a.sampleNo === 'number' ? a.sampleNo : parseInt(a.sampleNo, 10) || 0;
+                        valB = typeof b.sampleNo === 'number' ? b.sampleNo : parseInt(b.sampleNo, 10) || 0;
+                        break;
+                    case 'code':
+                        valA = a.farmer.code;
+                        valB = b.farmer.code;
+                        break;
+                    case 'name':
+                        valA = a.farmer.name;
+                        valB = b.farmer.name;
+                        break;
+                    case 'qty':
+                        valA = a.quantity;
+                        valB = b.quantity;
+                        break;
+                    case 'fat':
+                        valA = typeof a.quality.fat === 'number' ? a.quality.fat : parseFloat(a.quality.fat) || 0;
+                        valB = typeof b.quality.fat === 'number' ? b.quality.fat : parseFloat(b.quality.fat) || 0;
+                        break;
+                    case 'snf':
+                        valA = typeof a.quality.snf === 'number' ? a.quality.snf : parseFloat(a.quality.snf) || 0;
+                        valB = typeof b.quality.snf === 'number' ? b.quality.snf : parseFloat(b.quality.snf) || 0;
+                        break;
+                    case 'pro':
+                        valA = typeof a.quality.protein === 'number' ? a.quality.protein : parseFloat(a.quality.protein) || 0;
+                        valB = typeof b.quality.protein === 'number' ? b.quality.protein : parseFloat(b.quality.protein) || 0;
+                        break;
+                    case 'h2o':
+                        valA = typeof a.quality.water === 'number' ? a.quality.water : parseFloat(a.quality.water) || 0;
+                        valB = typeof b.quality.water === 'number' ? b.quality.water : parseFloat(b.quality.water) || 0;
+                        break;
+                }
+                
+                if (typeof valA === 'string') {
+                    valA = valA.toLowerCase();
+                    valB = valB.toLowerCase();
+                }
+                
+                if (sortConfig.direction === 'asc') {
+                    return valA > valB ? 1 : valA < valB ? -1 : 0;
+                } else {
+                    return valA < valB ? 1 : valA > valB ? -1 : 0;
+                }
+            });
+            
+            updateSavedRecords();
+        }
+
+        function parseMultiValueFilter(raw) {
+            if (raw === undefined || raw === null) return [];
+            const s = String(raw);
+            if (s.trim() === '') return [];
+            // Support English comma "," and Arabic comma "،"; allow multiple separators.
+            return s
+                .split(/[\s]*[,\u060C]+[\s]*/g)
+                .map(t => String(t).trim())
+                .filter(t => t !== '');
+        }
+
+        function matchesAnyFilterToken(value, filterRaw, opts) {
+            const options = opts || {};
+            const caseInsensitive = options.caseInsensitive !== false;
+
+            const tokens = parseMultiValueFilter(filterRaw);
+            if (tokens.length === 0) return true;
+
+            const v = value === undefined || value === null ? '' : String(value);
+            const vv = caseInsensitive ? v.toLowerCase() : v;
+
+            for (let i = 0; i < tokens.length; i++) {
+                const token = caseInsensitive ? tokens[i].toLowerCase() : tokens[i];
+                if (token === '') continue;
+                if (vv.indexOf(token) !== -1) return true;
+            }
+            return false;
+        }
+        
+        function updateSavedRecords() {
+            const container = document.getElementById('savedRecords');
+
+            // Preserve focus/caret for filter inputs across re-render.
+            const activeEl = document.activeElement;
+            const focusState = (activeEl && container && container.contains(activeEl) &&
+                                (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA') &&
+                                activeEl.id && activeEl.id.indexOf('filter_') === 0)
+                ? {
+                    id: activeEl.id,
+                    selectionStart: typeof activeEl.selectionStart === 'number' ? activeEl.selectionStart : null,
+                    selectionEnd: typeof activeEl.selectionEnd === 'number' ? activeEl.selectionEnd : null
+                }
+                : null;
+
+            // Require center selection (Select Center mode): don't show mixed-center data
+            if (!tableFilters.center || String(tableFilters.center).trim() === '') {
+                container.innerHTML = `<p style="color: #999; font-size: 12px; text-align: center; padding: 20px;">Please select a center to view records</p>`;
+                return;
+            }
+            
+            console.log('🔄 updateSavedRecords() called');
+            console.log(`  Total records in savedRecordsList: ${savedRecordsList.length}`);
+            console.log(`  Current filters:`, JSON.stringify(tableFilters, null, 2));
+            
+            // Filter records
+            let filteredRecords = savedRecordsList.filter(record => {
+                const time = new Date(record.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                const recordDate = (record.entryDate || new Date(record.timestamp).toLocaleDateString('en-CA')).toString(); // YYYY-MM-DD
+                const qty = record.quantity.toFixed(2);
+                const fat = typeof record.quality.fat === 'number' ? record.quality.fat.toFixed(2) : record.quality.fat.toString();
+                const snf = typeof record.quality.snf === 'number' ? record.quality.snf.toFixed(2) : record.quality.snf.toString();
+                const pro = typeof record.quality.protein === 'number' ? record.quality.protein.toFixed(2) : record.quality.protein.toString();
+                const h2o = typeof record.quality.water === 'number' ? record.quality.water.toFixed(2) : record.quality.water.toString();
+                
+                // Date filter - show all dates if no filter is set
+                if (tableFilters.date && tableFilters.date !== '' && recordDate !== tableFilters.date) {
+                    console.log(`  ❌ Filtered out by date: ${record.farmer.name} (record: ${recordDate}, filter: ${tableFilters.date})`);
+                    return false;
+                }
+                
+                // Period (Shift) filter - show all periods if no filter is set
+                // Only apply if filter is explicitly set to MORNING or EVENING
+                if (tableFilters.period && tableFilters.period !== '') {
+                    const filterPeriod = String(tableFilters.period).trim().toUpperCase();
+                    const recordPeriod = String(record.period || '').trim().toUpperCase();
+                    if (recordPeriod !== filterPeriod) {
+                        console.log(`  ❌ Filtered out by period: ${record.farmer.name} (record: ${recordPeriod}, filter: ${filterPeriod})`);
+                        return false;
+                    }
+                }
+                
+                // Center filter - show all centers if no filter is set
+                if (tableFilters.center && tableFilters.center !== '') {
+                    const filterCenter = String(tableFilters.center).trim().toUpperCase();
+                    const recordCenter = String(record?.farmer?.center || '').trim().toUpperCase();
+                    if (recordCenter !== filterCenter) {
+                        return false;
+                    }
+                }
+                
+                // Milk Type filter - only apply if explicitly set
+                if (tableFilters.milkType && tableFilters.milkType !== '' && (record.farmer.type || 'COW').toUpperCase() !== tableFilters.milkType.toUpperCase()) {
+                    return false;
+                }
+                
+                  return matchesAnyFilterToken(time, tableFilters.time) &&
+                      matchesAnyFilterToken(record.farmer.code, tableFilters.code) &&
+                      matchesAnyFilterToken(record.farmer.name, tableFilters.name) &&
+                      matchesAnyFilterToken(qty, tableFilters.qty, { caseInsensitive: false }) &&
+                      matchesAnyFilterToken(fat, tableFilters.fat, { caseInsensitive: false }) &&
+                      matchesAnyFilterToken(snf, tableFilters.snf, { caseInsensitive: false }) &&
+                      matchesAnyFilterToken(pro, tableFilters.pro, { caseInsensitive: false }) &&
+                      matchesAnyFilterToken(h2o, tableFilters.h2o, { caseInsensitive: false });
+            });
+            
+            console.log(`✅ Filtered records count: ${filteredRecords.length}`);
+            
+            // Create table
+            const getSortArrow = (col) => {
+                if (sortConfig.column !== col) return ' ⇅';
+                return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';
+            };
+            
+            // Calculate total (only for filtered records)
+            let totalAmount = 0;
+            filteredRecords.forEach(record => {
+                const milkType = record.farmer.type || 'COW';
+                let pricePerLiter = 0;
+                if (milkType.toUpperCase() === 'COW') {
+                    pricePerLiter = parseFloat(localStorage.getItem('milk_price_cow') || '0');
+                } else if (milkType.toUpperCase() === 'CAMEL') {
+                    pricePerLiter = parseFloat(localStorage.getItem('milk_price_camel') || '0');
+                }
+                totalAmount += (record.quantity * pricePerLiter);
+            });
+            
+            let html = `
+                <table style="width: 100%; font-size: 10px; position: relative; border-spacing: 0; table-layout: auto;">
+                    <thead style="position: sticky; top: 0; z-index: 100;">
+                        <tr style="background: #667eea; color: white;">
+                            <th onclick="sortRecords('time')" style="padding: 4px 2px; text-align: center; border: 1px solid #ddd; cursor: pointer; user-select: none; min-width: 60px; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">TIME${getSortArrow('time')}</th>
+                            <th onclick="sortRecords('sampleNo')" style="padding: 4px 2px; text-align: center; border: 1px solid #ddd; cursor: pointer; user-select: none; min-width: 55px; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">Sample NO.${getSortArrow('sampleNo')}</th>
+                            <th onclick="sortRecords('code')" style="padding: 4px 2px; text-align: left; border: 1px solid #ddd; cursor: pointer; user-select: none; min-width: 50px; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">CODE${getSortArrow('code')}</th>
+                            <th onclick="sortRecords('name')" style="padding: 4px 2px; text-align: left; border: 1px solid #ddd; cursor: pointer; user-select: none; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">NAME${getSortArrow('name')}</th>
+                            <th style="padding: 4px 2px; text-align: center; border: 1px solid #ddd; min-width: 50px; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">CENTER</th>
+                            <th onclick="sortRecords('fat')" style="padding: 4px 2px; text-align: center; border: 1px solid #ddd; cursor: pointer; user-select: none; min-width: 45px; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">FAT${getSortArrow('fat')}</th>
+                            <th onclick="sortRecords('snf')" style="padding: 4px 2px; text-align: center; border: 1px solid #ddd; cursor: pointer; user-select: none; min-width: 45px; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">SNF${getSortArrow('snf')}</th>
+                            <th onclick="sortRecords('pro')" style="padding: 4px 2px; text-align: center; border: 1px solid #ddd; cursor: pointer; user-select: none; min-width: 55px; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">PROTEIN${getSortArrow('pro')}</th>
+                            <th onclick="sortRecords('qty')" style="padding: 4px 2px; text-align: center; border: 1px solid #ddd; cursor: pointer; user-select: none; min-width: 50px; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">QTY${getSortArrow('qty')}</th>
+                            <th style="padding: 4px 2px; text-align: center; border: 1px solid #ddd; min-width: 60px; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">SHIFT</th>
+                            <th style="padding: 4px 2px; text-align: center; border: 1px solid #ddd; min-width: 60px; background: #667eea; color: white; position: sticky; top: 0; z-index: 101;">AMOUNT</th>
+                        </tr>
+                        <tr style="background: #f0f0f0;">
+                            <th style="padding: 2px; border: 1px solid #ddd;"><input type="text" id="filter_time" placeholder="..." style="width: 100%; padding: 2px; font-size: 9px; border: 1px solid #ccc;" /></th>
+                            <th style="padding: 2px; border: 1px solid #ddd;"></th>
+                            <th style="padding: 2px; border: 1px solid #ddd;"><input type="text" id="filter_code" placeholder="..." style="width: 100%; padding: 2px; font-size: 9px; border: 1px solid #ccc;" /></th>
+                            <th style="padding: 2px; border: 1px solid #ddd;"><input type="text" id="filter_name" placeholder="..." style="width: 100%; padding: 2px; font-size: 9px; border: 1px solid #ccc;" /></th>
+                            <th style="padding: 2px; border: 1px solid #ddd;"></th>
+                            <th style="padding: 2px; border: 1px solid #ddd;"><input type="text" id="filter_fat" placeholder="..." style="width: 100%; padding: 2px; font-size: 9px; border: 1px solid #ccc;" /></th>
+                            <th style="padding: 2px; border: 1px solid #ddd;"><input type="text" id="filter_snf" placeholder="..." style="width: 100%; padding: 2px; font-size: 9px; border: 1px solid #ccc;" /></th>
+                            <th style="padding: 2px; border: 1px solid #ddd;"><input type="text" id="filter_pro" placeholder="..." style="width: 100%; padding: 2px; font-size: 9px; border: 1px solid #ccc;" /></th>
+                            <th style="padding: 2px; border: 1px solid #ddd;"><input type="text" id="filter_qty" placeholder="..." style="width: 100%; padding: 2px; font-size: 9px; border: 1px solid #ccc;" /></th>
+                            <th style="padding: 2px; border: 1px solid #ddd;"></th>
+                            <th style="padding: 2px; border: 1px solid #ddd;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            if (filteredRecords.length === 0) {
+                html += `<tr><td colspan="11" style="text-align: center; padding: 20px; color: #999;">No matching records</td></tr>`;
+            } else {
+                filteredRecords.forEach((record, index) => {
+                    const dateObj = new Date(record.timestamp);
+                    const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                    const sampleNo = record.sampleNo ?? '-';
+                    const bgColor = index % 2 === 0 ? '#f8f9fa' : 'white';
+                    const shiftText = record.period === 'MORNING' ? 'MORNING' : 'EVENING';
+                    
+                    // Calculate price based on milk type
+                    const milkType = record.farmer.type || 'COW';
+                    let pricePerLiter = 0;
+                    if (milkType.toUpperCase() === 'COW') {
+                        pricePerLiter = parseFloat(localStorage.getItem('milk_price_cow') || '0');
+                    } else if (milkType.toUpperCase() === 'CAMEL') {
+                        pricePerLiter = parseFloat(localStorage.getItem('milk_price_camel') || '0');
+                    }
+                    const totalPrice = (record.quantity * pricePerLiter).toFixed(2);
+                    
+                    html += `
+                        <tr style="background: ${bgColor};">
+                            <td style="padding: 3px 2px; border: 1px solid #ddd; text-align: center; font-size: 9px;">${time}</td>
+                            <td style="padding: 3px 2px; border: 1px solid #ddd; text-align: center; font-size: 9px; font-weight: 600;">${sampleNo}</td>
+                            <td style="padding: 3px 2px; border: 1px solid #ddd; font-weight: 600; text-align: center;">${record.farmer.code}</td>
+                            <td style="padding: 3px 2px; border: 1px solid #ddd; font-size: 9px;">
+                                <div>${record.farmer.name}</div>
+                                <div style="color: #666;">(${milkType})</div>
+                            </td>
+                            <td style="padding: 3px 2px; border: 1px solid #ddd; text-align: center; font-size: 9px; font-weight: 600;">${record.farmer.center || '-'}</td>
+                            <td style="padding: 3px 2px; border: 1px solid #ddd; text-align: center; font-size: 9px;">${typeof record.quality.fat === 'number' ? record.quality.fat.toFixed(2) : record.quality.fat}</td>
+                            <td style="padding: 3px 2px; border: 1px solid #ddd; text-align: center; font-size: 9px;">${typeof record.quality.snf === 'number' ? record.quality.snf.toFixed(2) : record.quality.snf}</td>
+                            <td style="padding: 3px 2px; border: 1px solid #ddd; text-align: center; font-size: 9px;">${typeof record.quality.protein === 'number' ? record.quality.protein.toFixed(2) : record.quality.protein}</td>
+                            <td style="padding: 3px 2px; border: 1px solid #ddd; text-align: center; font-size: 9px;">${record.quantity.toFixed(2)}</td>
+                            <td style="padding: 3px 2px; border: 1px solid #ddd; text-align: center; font-size: 9px; font-weight: 600;">${shiftText}</td>
+                            <td style="padding: 3px 2px; border: 1px solid #ddd; text-align: center; font-weight: 600; color: #4CAF50; font-size: 9px;">${totalPrice}</td>
+                        </tr>
+                    `;
+                });
+                
+                // Add report/total row
+                html += `
+                    <tr style="background: #e8f5e9; font-weight: 600; border-top: 2px solid #667eea;">
+                        <td colspan="9" style="padding: 4px 2px; border: 1px solid #ddd; text-align: right;">TOTAL AMOUNT:</td>
+                        <td style="padding: 4px 2px; border: 1px solid #ddd; text-align: center; color: #2e7d32; font-size: 11px;">${totalAmount.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+            
+            html += `
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = html;
+            
+            // Attach filter event listeners
+            ['time', 'code', 'name', 'qty', 'fat', 'snf', 'pro'].forEach(field => {
+                const input = document.getElementById('filter_' + field);
+                if (input) {
+                    input.value = tableFilters[field];
+                    input.addEventListener('input', (e) => {
+                        tableFilters[field] = e.target.value;
+                        scheduleUpdateSavedRecords();
+                    });
+                }
+            });
+
+            // Restore focus after re-render (only if focus was inside the filters).
+            if (focusState && focusState.id) {
+                const el = document.getElementById(focusState.id);
+                if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) {
+                    try {
+                        el.focus({ preventScroll: true });
+                    } catch {
+                        el.focus();
+                    }
+                    if (typeof focusState.selectionStart === 'number' && typeof focusState.selectionEnd === 'number') {
+                        const len = (el.value || '').length;
+                        const start = Math.max(0, Math.min(focusState.selectionStart, len));
+                        const end = Math.max(0, Math.min(focusState.selectionEnd, len));
+                        try {
+                            el.setSelectionRange(start, end);
+                        } catch { }
+                    }
+                }
+            }
+            
+            // Date filter
+            const dateInput = document.getElementById('filterDate');
+            if (dateInput) {
+                dateInput.addEventListener('change', (e) => {
+                    tableFilters.date = e.target.value;
+                    updateSavedRecords();
+                    updateSummaryTab(); // Update summary when date changes
+                });
+            }
+        }
+
+        // Debounced re-render for Saved Records filters (prevents focus loss while typing fast)
+        let _savedRecordsUpdateTimer = null;
+        function scheduleUpdateSavedRecords() {
+            if (_savedRecordsUpdateTimer) {
+                clearTimeout(_savedRecordsUpdateTimer);
+            }
+            _savedRecordsUpdateTimer = setTimeout(() => {
+                _savedRecordsUpdateTimer = null;
+                updateSavedRecords();
+            }, 150);
+        }
+        
+        function showMsg(text, type) {
+            const container = document.getElementById('msgContainer');
+            container.innerHTML = `<div class="msg ${type}">${text}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+
+        // ==================== SESSION UI PREFS (do not persist after browser close) ====================
+        const SESSION_UI_PREFS_KEY = 'session_ui_prefs_v1';
+
+        function safeJsonParse(text) {
+            try { return JSON.parse(text); } catch { return null; }
+        }
+
+        function readUiPrefs() {
+            const raw = sessionStorage.getItem(SESSION_UI_PREFS_KEY);
+            if (!raw) return {};
+            return safeJsonParse(raw) || {};
+        }
+
+        function writeUiPrefs(prefs) {
+            sessionStorage.setItem(SESSION_UI_PREFS_KEY, JSON.stringify(prefs || {}));
+        }
+
+        function updateUiPrefs(partial) {
+            const current = readUiPrefs();
+            const next = { ...current, ...(partial || {}), updatedAt: new Date().toISOString() };
+            writeUiPrefs(next);
+        }
+        
+        // ==================== LOAD CENTERS FROM FARMERS ====================
+        async function loadCenters() {
+            try {
+                console.log('🔄 [loadCenters] Starting to load centers...');
+                
+                const centerSelect = document.getElementById('filterCenter');
+                console.log('🔍 [loadCenters] filterCenter element:', centerSelect);
+                
+                if (!centerSelect) {
+                    console.error('❌ [loadCenters] filterCenter element NOT FOUND!');
+                    return;
+                }
+                
+                console.log('📡 [loadCenters] Fetching farmers from API...');
+                const resp = await fetch('/api/farmers');
+                console.log('📡 [loadCenters] API Response status:', resp.status);
+                
+                const farmers = await resp.json();
+                console.log('📡 [loadCenters] Farmers data received, count:', farmers.length);
+                console.log('📡 [loadCenters] First few farmers:', farmers.slice(0, 3));
+                
+                const centersSet = new Set();
+                
+                farmers.forEach((farmer, idx) => {
+                    if (farmer.center) {
+                        console.log(`  Farmer ${idx}: ${farmer.name} - Center: ${farmer.center}`);
+                        centersSet.add(farmer.center);
+                    }
+                });
+                
+                const centersArray = Array.from(centersSet).sort();
+                console.log('✅ [loadCenters] Unique centers found:', centersArray);
+                console.log('✅ [loadCenters] Total unique centers:', centersArray.length);
+                
+                if (centersArray.length === 0) {
+                    console.warn('⚠️  [loadCenters] No centers found in farmers data!');
+                }
+                
+                // Clear existing options except the first one
+                const optionsToRemove = centerSelect.querySelectorAll('option:not(:first-child)');
+                optionsToRemove.forEach(opt => opt.remove());
+                console.log('🗑️  [loadCenters] Cleared existing options');
+                
+                // Add centers to select
+                centersArray.forEach((center, idx) => {
+                    const option = document.createElement('option');
+                    option.value = center;
+                    option.textContent = center;
+                    centerSelect.appendChild(option);
+                    console.log(`  ✅ Added option ${idx + 1}: ${center}`);
+                });
+                
+                console.log('✅ [loadCenters] All centers added to select');
+                console.log('📊 [loadCenters] Final select options count:', centerSelect.options.length);
+                
+                // Add event listener for center filter changes
+                centerSelect.addEventListener('change', (e) => {
+                    console.log('🎯 [Center Change] Selected center:', e.target.value);
+                    tableFilters.center = e.target.value;
+
+                    // Persist selection for this session
+                    updateUiPrefs({
+                        center: e.target.value,
+                        date: document.getElementById('filterDate')?.value || '',
+                        period: document.getElementById('periodSelect')?.value || '',
+                        milkType: document.getElementById('acceptedMilkType')?.value || ''
+                    });
+
+                    // In Select Center mode, also apply date + shift filters
+                    if (e.target.value) {
+                        const dateInput = document.getElementById('filterDate');
+                        const periodSelect = document.getElementById('periodSelect');
+                        const milkTypeSelect = document.getElementById('acceptedMilkType');
+                        tableFilters.date = dateInput?.value || '';
+                        tableFilters.period = periodSelect?.value || '';
+                        tableFilters.milkType = milkTypeSelect?.value || '';
+                        console.log('🎯 [Center Change] Applied date/shift filters:', { date: tableFilters.date, period: tableFilters.period });
+                        console.log('🎯 [Center Change] Applied milk type filter:', tableFilters.milkType);
+                    }
+
+                    updateSavedRecords();
+                    updateSummaryTab();
+                    
+                    // Enable/Disable farmerCode input based on center selection
+                    const farmerCodeInput = document.getElementById('farmerCode');
+                    if (e.target.value) {
+                        farmerCodeInput.disabled = false;
+                        farmerCodeInput.style.backgroundColor = '#fff';
+                        farmerCodeInput.style.cursor = 'text';
+                        console.log('✅ [Center Change] farmerCode input ENABLED');
+                    } else {
+                        farmerCodeInput.disabled = true;
+                        farmerCodeInput.value = '';
+                        farmerCodeInput.style.backgroundColor = '#f0f0f0';
+                        farmerCodeInput.style.cursor = 'not-allowed';
+                        selectedFarmer = null;
+                        document.getElementById('farmerName').value = '';
+                        document.getElementById('farmerType').value = '';
+                        document.getElementById('farmerCenter').value = '';
+                        document.getElementById('farmerExpectedQty').value = '';
+                        document.getElementById('farmerMaxQty').value = '';
+                        console.log('✅ [Center Change] farmerCode input DISABLED');
+                    }
+                });
+
+                // Restore last selected center for this session (after options are populated)
+                const prefs = readUiPrefs();
+                const savedCenter = (prefs?.center || '').toString().trim();
+                if (savedCenter) {
+                    const hasCenter = Array.from(centerSelect.options).some(o => o.value === savedCenter);
+                    if (hasCenter) {
+                        centerSelect.value = savedCenter;
+                        // Trigger same logic as manual selection
+                        centerSelect.dispatchEvent(new Event('change'));
+                        console.log('✅ [loadCenters] Restored session center:', savedCenter);
+                    }
+                }
+                
+                console.log('✅ [loadCenters] Change listener attached');
+                console.log('✅ [loadCenters] COMPLETED SUCCESSFULLY');
+                
+            } catch (e) {
+                console.error('❌ [loadCenters] Error:', e);
+                console.error('❌ [loadCenters] Error stack:', e.stack);
+            }
+        }
+        // ========================================================================
+        
+        // Initialize
+        window.addEventListener('load', function() {
+            console.log('⏳ Page load event fired - initializing...');
+
+            // Restore session UI preferences early (center is restored inside loadCenters)
+            const sessionPrefs = readUiPrefs();
+            
+            // Load centers
+            console.log('Calling loadCenters from window.load...');
+            loadCenters();
+            
+            // Set date picker to today's date automatically BUT DON'T FILTER BY IT on page load
+            const dateInput = document.getElementById('filterDate');
+            const periodSelect = document.getElementById('periodSelect');
+            if (dateInput) {
+                const savedDate = (sessionPrefs?.date || '').toString().trim();
+                if (savedDate) {
+                    dateInput.value = savedDate;
+                    console.log('✅ Restored session date:', savedDate);
+                } else {
+                    const today = new Date();
+                    const year = today.getFullYear();
+                    const month = String(today.getMonth() + 1).padStart(2, '0');
+                    const day = String(today.getDate()).padStart(2, '0');
+                    dateInput.value = `${year}-${month}-${day}`;
+                }
+                // IMPORTANT: Don't set tableFilters.date here - let it stay null to show ALL records
+                console.log('Date input set to today, but NOT filtering on page load');
+
+                // Apply date filter when user changes it
+                dateInput.addEventListener('change', (e) => {
+                    tableFilters.date = e.target.value || '';
+                    updateUiPrefs({ date: tableFilters.date });
+                    console.log('Date filter changed to:', tableFilters.date);
+                    updateSavedRecords();
+                    updateSummaryTab();
+                });
+            }
+            
+            // Update tables after a small delay to ensure data is loaded
+            console.log('Scheduling table update...');
+            setTimeout(() => {
+                console.log(`📊 Final update - savedRecordsList length: ${savedRecordsList.length}`);
+                console.log('Current filters:', tableFilters);
+                console.log('Calling updateSavedRecords and updateSummaryTab...');
+                updateSavedRecords();
+                updateSummaryTab();
+                console.log('✅ Tables updated');
+            }, 1000); // Increased delay to ensure database load completes
+            
+            // Auto-select period selector visually BUT DON'T FILTER on page load
+            if (periodSelect) {
+                const savedPeriod = (sessionPrefs?.period || '').toString().trim();
+                if (savedPeriod) {
+                    periodSelect.value = savedPeriod;
+                    console.log('✅ Restored session period:', savedPeriod);
+                } else {
+                    const hour = new Date().getHours();
+                    const defaultPeriod = hour < 12 ? 'MORNING' : 'EVENING';
+                    periodSelect.value = defaultPeriod;
+                }
+                // IMPORTANT: Don't set tableFilters.period here - keep it empty to show ALL records
+                console.log('Period selector set to ' + periodSelect.value + ', but NOT filtering on page load');
+                periodSelect.addEventListener('change', (e) => {
+                    tableFilters.period = e.target.value;
+                    updateUiPrefs({ period: tableFilters.period });
+                    console.log('Period filter changed to:', e.target.value);
+                    updateSavedRecords();
+                    updateSummaryTab(); // Update summary when period changes
+                });
+            }
+            
+            // Milk type filter
+            const milkTypeSelect = document.getElementById('acceptedMilkType');
+            if (milkTypeSelect) {
+                const savedMilkType = (sessionPrefs?.milkType || '').toString().trim();
+                if (savedMilkType) {
+                    milkTypeSelect.value = savedMilkType;
+                    console.log('✅ Restored session milk type:', savedMilkType);
+                }
+
+                // Update quality standards when milk type changes
+                function updateQualityStandards() {
+                    const selectedMilkType = milkTypeSelect.value;
+                    const standardsElement = document.getElementById('qualityStandardsText');
+                    
+                    if (selectedMilkType === 'CAMEL') {
+                        standardsElement.innerHTML = '<p style="margin: 4px 0;"><strong>🐫 Camel milk (average):</strong> Fat 2.9–4.0%, SNF 8.5–11.3%, Protein 2.8–3.5%</p>';
+                    } else {
+                        standardsElement.innerHTML = '<p style="margin: 4px 0;"><strong>🐄 Cow milk (average):</strong> Fat 3.4–4.0%, SNF 8.3–8.5%, Protein 3.2–3.5%</p>';
+                    }
+                }
+                
+                // Initial update
+                updateQualityStandards();
+                
+                milkTypeSelect.addEventListener('change', (e) => {
+                    tableFilters.milkType = e.target.value;
+                    updateUiPrefs({ milkType: tableFilters.milkType });
+                    updateQualityStandards(); // Update standards when milk type changes
+                    updateSavedRecords();
+                    updateSummaryTab(); // Update summary when milk type changes
+                });
+            }
+            
+            // Start polling sensor data
+            pollSensorData(); // Initial poll
+            setInterval(pollSensorData, 500);
+        });
+        pollSensorData();
+    </script>
+</body>
+</html>
