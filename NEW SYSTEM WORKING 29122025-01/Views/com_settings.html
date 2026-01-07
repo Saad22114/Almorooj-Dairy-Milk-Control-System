@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>COM Settings</title>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .header {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    .header h1 {
+      color: #333;
+      font-size: 26px;
+    }
+    .btn-back {
+      background: #2196F3;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-back:hover {
+      background: #0b7dda;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+    .card h2 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 18px;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+    .settings-group {
+      margin-bottom: 20px;
+    }
+    .settings-group h3 {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #555;
+      font-size: 13px;
+    }
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+    }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-save {
+      background: #4CAF50;
+      color: white;
+      width: 100%;
+    }
+    .btn-save:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(76,175,80,0.3);
+    }
+    .btn-connect {
+      background: #667eea;
+      color: white;
+    }
+    .btn-connect:hover {
+      background: #5568d3;
+    }
+    .btn-disconnect {
+      background: #f44336;
+      color: white;
+    }
+    .btn-disconnect:hover {
+      background: #da190b;
+    }
+    .status {
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    .status.connected {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .status.disconnected {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .data-log {
+      background: #000;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 15px;
+      height: 250px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #00ff00;
+      flex-shrink: 0;
+    }
+    .data-log-entry {
+      padding: 5px 0;
+      border-bottom: 1px solid #1a1a1a;
+      word-break: break-all;
+      color: #00ff00;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .controls button {
+      flex: 1;
+      padding: 10px;
+    }
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+    .info-box p {
+      margin: 5px 0;
+      font-size: 13px;
+      color: #1565c0;
+    }
+  </style>
+</head>
+<body>
+  <div id="topNav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.12);">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <a href="/" aria-label="Home" style="display: inline-flex; align-items: center; cursor: pointer;">
+        <img src="/logo.png" alt="Logo" style="height: 100px; width: auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); background: rgba(57, 50, 50, 0.25); padding: 0;" />
+      </a>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button type="button" onclick="history.back()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">⬅ Back</button>
+        <button type="button" onclick="history.forward()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">Forward ➡</button>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <a href="/" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center;">🏠 Home</a>
+    </div>
+  </div>
+  <div style="height: 130px;"></div>
+  <div class="container">
+    <div class="header">
+      <h1>⚙️ COM Settings</h1>
+    </div>
+    
+    <!-- Milk Sensor COM -->
+    <div class="card">
+      <h2>Milk Sensor (Analyzer) - COM Port Settings</h2>
+      
+      <div class="info-box" style="background: #fff3e0; border-left-color: #ff9800;">
+        <p>⚠️ <strong>Troubleshooting Guide:</strong></p>
+        <p>1. Click "Refresh Ports" to see all available COM ports on your system</p>
+        <p>2. Make sure your sensor device is physically connected to your computer</p>
+        <p>3. If you still don't see the port, check Device Manager on Windows</p>
+        <p>4. Try a different COM port if the first one fails</p>
+      </div>
+      
+      <div class="settings-group">
+        <h3>Sensor 1: Milk Quality Analyzer</h3>
+        
+        <div class="info-box">
+          <p>📊 Reads: FAT, SNF, DENSITY, ADDED WATER, PROTEIN</p>
+        </div>
+        
+        <div class="status" id="sensorStatus" style="background: #fff3e0; border-left: 4px solid #ff9800; color: #e65100;">
+          🟠 Not Connected - Click "Refresh Ports" then select a port and click "Connect"
+        </div>
+        
+        <div class="form-row" style="grid-template-columns: 1fr 1fr 1fr;">
+          <div>
+            <label>COM Port</label>
+            <select id="sensorPort">
+              <option value="COM1">COM1</option>
+              <option value="COM2">COM2</option>
+              <option value="COM3">COM3</option>
+              <option value="COM4">COM4</option>
+              <option value="COM5">COM5</option>
+            </select>
+          </div>
+          <div>
+            <label>Baud Rate</label>
+            <select id="sensorBaud">
+              <option value="9600">9600</option>
+              <option value="2400">2400</option>
+              <option value="4800">4800</option>
+              <option value="19200">19200</option>
+              <option value="38400">38400</option>
+            </select>
+          </div>
+          <div>
+            <label>Device</label>
+            <select id="sensorDevice">
+              <option value="everest">Everest</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="controls">
+          <button class="btn btn-connect" onclick="connectSensor()">Connect</button>
+          <button class="btn btn-disconnect" onclick="disconnectSensor()">Disconnect</button>
+          <button class="btn" onclick="loadAvailablePorts()" style="background: #FF9800;">Refresh Ports</button>
+        </div>
+        
+        <div class="form-row" style="margin-top: 15px;">
+          <div style="flex: 1;">
+            <label>Input Mode</label>
+            <select id="sensorMode">
+              <option value="automatic">Automatic (from sensor)</option>
+              <option value="manual">Manual (user input)</option>
+            </select>
+          </div>
+        </div>
+        
+        <div>
+          <label>Raw Data Log</label>
+          <div class="data-log" id="sensorLog" style="height: 100px;"></div>
+        </div>
+        
+        <div class="info-box" style="margin-top: 15px;">
+          <p><strong>Reading Count:</strong> <span id="sensorReadingCount">0</span></p>
+        </div>
+        
+        <div>
+          <label>Parsed Values LOG</label>
+          <div class="data-log" id="sensorValuesLog" style="background: #000; max-height: 250px;"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Milk Quantity COM -->
+    <div class="card">
+      <h2>Milk Quantity Sensor - COM Port Settings</h2>
+      
+      <div class="settings-group">
+        <h3>Sensor 2: Milk Quantity Meter (Scale/Weight)</h3>
+        
+        <div class="info-box">
+          <p>ℹ️ Connect a scale or weight meter to measure milk quantity</p>
+        </div>
+        
+        <div class="status" id="quantityStatus">
+          🔴 Not Connected
+        </div>
+        
+        <div class="form-row">
+          <div>
+            <label>COM Port</label>
+            <select id="quantityPort">
+              <option value="">Select Port...</option>
+              <option value="COM1">COM1</option>
+              <option value="COM2">COM2</option>
+              <option value="COM3">COM3</option>
+              <option value="COM4">COM4</option>
+              <option value="COM5">COM5</option>
+              <option value="COM6">COM6</option>
+              <option value="COM7">COM7</option>
+              <option value="COM8">COM8</option>
+            </select>
+          </div>
+          <div>
+            <label>Baud Rate</label>
+            <select id="quantityBaud">
+              <option value="9600">9600</option>
+              <option value="2400">2400</option>
+              <option value="4800">4800</option>
+              <option value="19200">19200</option>
+              <option value="38400">38400</option>
+              <option value="115200">115200</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row" style="margin-top: 15px;">
+          <div style="flex: 1;">
+            <label>Input Mode</label>
+            <select id="quantityMode">
+              <option value="automatic">Automatic (from sensor)</option>
+              <option value="manual">Manual (user input)</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="controls">
+          <button class="btn btn-connect" onclick="connectQuantity()">Connect</button>
+          <button class="btn btn-disconnect" onclick="disconnectQuantity()">Disconnect</button>
+        </div>
+        
+        <div>
+          <label>Raw Data Log</label>
+          <div class="data-log" id="quantityLog" style="height: 100px;"></div>
+        </div>
+        
+        <div class="info-box" style="margin-top: 15px;">
+          <p><strong>Reading Count:</strong> <span id="quantityReadingCount">0</span></p>
+        </div>
+        
+        <div>
+          <label>Readings LOG</label>
+          <div class="data-log" id="quantityValuesLog" style="background: #000; max-height: 250px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Milk Pricing</h2>
+      <div class="form-row">
+        <div>
+          <label>Cow Milk Price</label>
+          <input type="number" step="0.001" min="0" id="milkPriceCow" placeholder="Price per liter (COW)" />
+        </div>
+        <div>
+          <label>Camel Milk Price</label>
+          <input type="number" step="0.001" min="0" id="milkPriceCamel" placeholder="Price per liter (CAMEL)" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div>
+          <label>Currency</label>
+          <input type="text" id="currency" placeholder="e.g. OMR" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Save Settings -->
+    <div class="card">
+      <button class="btn btn-save" onclick="saveSettings()">Save Settings</button>
+    </div>
+  </div>
+  
+  <script>
+    let sensorLogs = [];
+    let quantityLogs = [];
+    let sensorReadingCount = 0;
+    let quantityReadingCount = 0;
+    let sensorValuesLogs = [];
+    let quantityValuesLogs = [];
+    let lastProcessedSensorIndex = -1;
+    let lastProcessedQuantityTime = null;
+
+    const COM_SETTINGS_DRAFT_KEY = 'session_com_settings_draft_v1';
+
+    function safeJsonParse(text) {
+      try { return JSON.parse(text); } catch { return null; }
+    }
+
+    function readComSettingsDraft() {
+      const raw = sessionStorage.getItem(COM_SETTINGS_DRAFT_KEY);
+      if (!raw) return null;
+      return safeJsonParse(raw);
+    }
+
+    function writeComSettingsDraft(draft) {
+      sessionStorage.setItem(COM_SETTINGS_DRAFT_KEY, JSON.stringify(draft));
+    }
+
+    function setSelectValue(selectEl, value) {
+      if (!selectEl || value === undefined || value === null) return;
+      const v = String(value);
+      const has = Array.from(selectEl.options || []).some(o => o.value === v);
+      if (!has) {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = v;
+        selectEl.appendChild(opt);
+      }
+      selectEl.value = v;
+    }
+
+    function captureComSettingsDraftFromUI() {
+      const draft = {
+        sensorPort: document.getElementById('sensorPort')?.value ?? 'COM1',
+        sensorBaud: document.getElementById('sensorBaud')?.value ?? '2400',
+        sensorMode: document.getElementById('sensorMode')?.value ?? 'automatic',
+        sensorDevice: document.getElementById('sensorDevice')?.value ?? 'everest',
+        quantityPort: document.getElementById('quantityPort')?.value ?? '',
+        quantityBaud: document.getElementById('quantityBaud')?.value ?? '9600',
+        quantityMode: document.getElementById('quantityMode')?.value ?? 'automatic',
+        milkPriceCow: document.getElementById('milkPriceCow')?.value ?? '',
+        milkPriceCamel: document.getElementById('milkPriceCamel')?.value ?? '',
+        currency: document.getElementById('currency')?.value ?? 'OMR',
+        updatedAt: new Date().toISOString()
+      };
+      writeComSettingsDraft(draft);
+    }
+
+    function applyComSettingsDraftToUI() {
+      const draft = readComSettingsDraft();
+      if (!draft) return;
+
+      setSelectValue(document.getElementById('sensorPort'), draft.sensorPort);
+      setSelectValue(document.getElementById('sensorBaud'), draft.sensorBaud);
+      setSelectValue(document.getElementById('sensorMode'), draft.sensorMode);
+      setSelectValue(document.getElementById('sensorDevice'), draft.sensorDevice);
+      setSelectValue(document.getElementById('quantityPort'), draft.quantityPort);
+      setSelectValue(document.getElementById('quantityBaud'), draft.quantityBaud);
+      setSelectValue(document.getElementById('quantityMode'), draft.quantityMode);
+
+      const cow = document.getElementById('milkPriceCow');
+      const camel = document.getElementById('milkPriceCamel');
+      const cur = document.getElementById('currency');
+      if (cow && draft.milkPriceCow !== undefined) cow.value = draft.milkPriceCow;
+      if (camel && draft.milkPriceCamel !== undefined) camel.value = draft.milkPriceCamel;
+      if (cur && draft.currency !== undefined) cur.value = draft.currency;
+    }
+
+    function wireComSettingsDraftListeners() {
+      const ids = [
+        'sensorPort','sensorBaud','sensorMode','sensorDevice',
+        'quantityPort','quantityBaud','quantityMode',
+        'milkPriceCow','milkPriceCamel','currency'
+      ];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('change', captureComSettingsDraftFromUI);
+        el.addEventListener('input', captureComSettingsDraftFromUI);
+      });
+    }
+    
+    async function loadSettings() {
+      try {
+        const resp = await fetch('/api/settings');
+        const data = await resp.json();
+        document.getElementById('sensorPort').value = data.port || 'COM1';
+        document.getElementById('sensorBaud').value = data.baud_rate || 2400;
+        document.getElementById('sensorMode').value = data.sensor_mode || 'automatic';
+        document.getElementById('quantityPort').value = data.port_quantity || '';
+        document.getElementById('quantityBaud').value = data.baud_rate_quantity || 9600;
+        document.getElementById('quantityMode').value = data.quantity_mode || 'automatic';
+        document.getElementById('milkPriceCow').value = data.milk_price_cow ?? '';
+        document.getElementById('milkPriceCamel').value = data.milk_price_camel ?? '';
+        document.getElementById('currency').value = data.currency || 'OMR';
+
+        // UI-only preference (not stored on server)
+        const savedDevice = localStorage.getItem('com_settings_sensor_device');
+        const deviceEl = document.getElementById('sensorDevice');
+        if (deviceEl) deviceEl.value = savedDevice || 'everest';
+
+        // Apply any unsaved in-session draft after server values
+        applyComSettingsDraftToUI();
+      } catch (e) {
+        console.error('Error loading settings:', e);
+      }
+    }
+
+    // Persist device selection locally (UI-only)
+    window.addEventListener('load', () => {
+      const deviceEl = document.getElementById('sensorDevice');
+      if (!deviceEl) return;
+      deviceEl.addEventListener('change', () => {
+        localStorage.setItem('com_settings_sensor_device', deviceEl.value);
+      });
+    });
+    
+    async function loadAvailablePorts() {
+      try {
+        const resp = await fetch('/api/ports');
+        const data = await resp.json();
+        
+        if (data.ports && data.ports.length > 0) {
+          // Update sensor port dropdown
+          const sensorPort = document.getElementById('sensorPort');
+          const currentValue = sensorPort.value;
+          sensorPort.innerHTML = '';
+          
+          data.ports.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.port;
+            option.textContent = p.port + ' - ' + p.description;
+            sensorPort.appendChild(option);
+          });
+          
+          // Add manual entry option
+          const manualOption = document.createElement('option');
+          manualOption.value = 'MANUAL';
+          manualOption.textContent = '--- Custom Port ---';
+          sensorPort.appendChild(manualOption);
+          
+          sensorPort.value = currentValue;
+          
+          // Update quantity port dropdown similarly
+          const quantityPort = document.getElementById('quantityPort');
+          const currentQtyValue = quantityPort.value;
+          quantityPort.innerHTML = '<option value="">None</option>';
+          
+          data.ports.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.port;
+            option.textContent = p.port + ' - ' + p.description;
+            quantityPort.appendChild(option);
+          });
+          
+          quantityPort.value = currentQtyValue;
+        }
+
+        // Re-apply in-session draft after ports refresh (options list changes)
+        applyComSettingsDraftToUI();
+      } catch (e) {
+        console.error('Error loading available ports:', e);
+      }
+    }
+    
+    function connectSensor() {
+      const port = document.getElementById('sensorPort').value;
+      const baud = document.getElementById('sensorBaud').value;
+      const device = document.getElementById('sensorDevice')?.value || 'everest';
+      
+      fetch('/api/connect', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          port: port,
+          baud_rate: parseInt(baud),
+          device: device
+        })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('sensorStatus').className = 'status connected';
+          document.getElementById('sensorStatus').textContent = '🟢 Connected (' + port + ' @ ' + baud + ' baud) - Device: ' + device;
+          addLog('Connected to ' + port + ' at ' + baud + ' baud (Device: ' + device + ')', true);
+        } else {
+          document.getElementById('sensorStatus').className = 'status disconnected';
+          document.getElementById('sensorStatus').textContent = '🔴 Connection Failed: ' + (data.message || 'Unknown error');
+          addLog('Connection failed: ' + (data.message || 'Unknown error'), true);
+        }
+      })
+      .catch(e => {
+        console.error('Connection error:', e);
+        addLog('Connection error: ' + e.message, true);
+      });
+    }
+    
+    function disconnectSensor() {
+      fetch('/api/disconnect', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('sensorStatus').className = 'status disconnected';
+        document.getElementById('sensorStatus').textContent = '🔴 Disconnected';
+        addLog('Disconnected', true);
+      })
+      .catch(e => {
+        console.error('Disconnect error:', e);
+        addLog('Disconnect error: ' + e.message, true);
+      });
+    }
+    
+    function connectQuantity() {
+      const port = document.getElementById('quantityPort').value;
+      const baud = document.getElementById('quantityBaud').value;
+      
+      if (!port) {
+        alert('Please select a COM port');
+        return;
+      }
+      
+      fetch('/api/connect_quantity', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          port_quantity: port,
+          baud_rate_quantity: parseInt(baud)
+        })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('quantityStatus').className = 'status connected';
+          document.getElementById('quantityStatus').textContent = '🟢 Connected (' + port + ' @ ' + baud + ' baud)';
+          addLog('Connected to ' + port + ' at ' + baud + ' baud', false);
+        } else {
+          alert('Connection failed: ' + data.message);
+          document.getElementById('quantityStatus').className = 'status disconnected';
+          document.getElementById('quantityStatus').textContent = '🔴 Connection Failed';
+        }
+      })
+      .catch(e => {
+        console.error('Error:', e);
+        alert('Connection error: ' + e.message);
+      });
+    }
+    
+    function disconnectQuantity() {
+      fetch('/api/disconnect_quantity', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('quantityStatus').className = 'status disconnected';
+        document.getElementById('quantityStatus').textContent = '🔴 Disconnected';
+        addLog('Disconnected', false);
+      })
+      .catch(e => console.error('Error:', e));
+    }
+    
+    function addLog(message, isSensor) {
+      const timestamp = new Date().toLocaleTimeString();
+      const entry = `[${timestamp}] ${message}`;
+      
+      if (isSensor) {
+        sensorLogs.push(entry);
+        if (sensorLogs.length > 50) sensorLogs.shift();
+        document.getElementById('sensorLog').innerHTML = sensorLogs.map(l => 
+          `<div class="data-log-entry">${l}</div>`
+        ).join('');
+        document.getElementById('sensorLog').scrollTop = document.getElementById('sensorLog').scrollHeight;
+      } else {
+        quantityLogs.push(entry);
+        if (quantityLogs.length > 50) quantityLogs.shift();
+        document.getElementById('quantityLog').innerHTML = quantityLogs.map(l => 
+          `<div class="data-log-entry">${l}</div>`
+        ).join('');
+        document.getElementById('quantityLog').scrollTop = document.getElementById('quantityLog').scrollHeight;
+      }
+    }
+    
+    async function saveSettings() {
+      const port = document.getElementById('sensorPort').value;
+      const baud = document.getElementById('sensorBaud').value;
+      const sensorMode = document.getElementById('sensorMode').value;
+      const device = document.getElementById('sensorDevice')?.value || 'everest';
+      const portQuantity = document.getElementById('quantityPort').value;
+      const baudQuantity = document.getElementById('quantityBaud').value;
+      const quantityMode = document.getElementById('quantityMode').value;
+      const milkPriceCow = document.getElementById('milkPriceCow').value;
+      const milkPriceCamel = document.getElementById('milkPriceCamel').value;
+      const currency = document.getElementById('currency').value;
+
+      // Always persist UI draft for this browser session
+      captureComSettingsDraftFromUI();
+
+      localStorage.setItem('com_settings_sensor_device', device);
+      
+      try {
+        const resp = await fetch('/api/settings', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            port: port,
+            baud_rate: parseInt(baud),
+            sensor_mode: sensorMode,
+            device: device,
+            port_quantity: portQuantity,
+            baud_rate_quantity: parseInt(baudQuantity),
+            quantity_mode: quantityMode,
+            milk_price_cow: milkPriceCow ? parseFloat(milkPriceCow) : undefined,
+            milk_price_camel: milkPriceCamel ? parseFloat(milkPriceCamel) : undefined,
+            currency: currency || undefined
+          })
+        });
+        const data = await resp.json();
+        if (data.success) {
+          alert('Settings saved successfully!');
+        }
+      } catch (e) {
+        console.error('Error saving settings:', e);
+        alert('Error saving settings');
+      }
+    }
+    
+    // Load settings and available ports on page load
+    wireComSettingsDraftListeners();
+    loadSettings();
+    loadAvailablePorts();
+    
+    // Fetch real data from server
+    setInterval(() => {
+      fetch('/api/data')
+        .then(r => r.json())
+        .then(data => {
+          console.log('API Data received:', data);
+          
+          // Update Sensor data - Merge consecutive data into one row
+          if (data.connected && data.data && Array.isArray(data.data) && data.data.length > 0) {
+            // Process only new data
+            for (let i = lastProcessedSensorIndex + 1; i < data.data.length; i++) {
+              const latestData = data.data[i];
+              
+              // Combine consecutive data (arriving in same second) into one row
+              let combinedData = latestData.raw_data;
+              let nextIndex = i + 1;
+              
+              while (nextIndex < data.data.length) {
+                const nextData = data.data[nextIndex];
+                const currentTime = new Date(latestData.time).getTime();
+                const nextTime = new Date(nextData.time).getTime();
+                
+                // If time difference is less than a second, merge it
+                if (nextTime - currentTime < 1000) {
+                  combinedData += nextData.raw_data;
+                  nextIndex++;
+                } else {
+                  break;
+                }
+              }
+              
+              // Add the merged row
+              const time = new Date(latestData.time).toLocaleTimeString();
+              const logEntry = `[${time}] ${combinedData}`;
+              sensorValuesLogs.push(logEntry);
+              
+              sensorReadingCount++;
+              document.getElementById('sensorReadingCount').textContent = sensorReadingCount;
+              
+              // Move to the next different data
+              i = nextIndex - 1;
+            }
+            
+            lastProcessedSensorIndex = data.data.length - 1;
+            
+            // Update display
+            if (sensorValuesLogs.length > 50) sensorValuesLogs = sensorValuesLogs.slice(-50);
+            document.getElementById('sensorValuesLog').innerHTML = sensorValuesLogs.map(l => 
+              `<div class="data-log-entry">${l}</div>`
+            ).join('');
+            document.getElementById('sensorValuesLog').scrollTop = document.getElementById('sensorValuesLog').scrollHeight;
+          }
+          
+          // Update Quantity data - Merge consecutive data into one row
+          if (data.connected_quantity && data.quantity_data && data.quantity_data.raw_data) {
+            const currentTime = data.quantity_data.time;
+            
+            // Count only if data changed
+            if (lastProcessedQuantityTime !== currentTime) {
+              lastProcessedQuantityTime = currentTime;
+              quantityReadingCount++;
+              document.getElementById('quantityReadingCount').textContent = quantityReadingCount;
+            }
+            
+            const time = new Date(currentTime).toLocaleTimeString();
+            const logEntry = `[${time}] ${data.quantity_data.raw_data}`;
+            
+            // Avoid duplication
+            if (quantityValuesLogs.length === 0 || !quantityValuesLogs[quantityValuesLogs.length - 1].includes(data.quantity_data.raw_data)) {
+              quantityValuesLogs.push(logEntry);
+              if (quantityValuesLogs.length > 50) quantityValuesLogs = quantityValuesLogs.slice(-50);
+              document.getElementById('quantityValuesLog').innerHTML = quantityValuesLogs.map(l => 
+                `<div class="data-log-entry">${l}</div>`
+              ).join('');
+              document.getElementById('quantityValuesLog').scrollTop = document.getElementById('quantityValuesLog').scrollHeight;
+            }
+          }
+        })
+        .catch(e => console.error('Error fetching data:', e));
+    }, 1000);
+    
+    
+    
+    // Simulate sensor readings for demo (can be removed if real data works)
+    /* Uncomment for testing without hardware
+    setInterval(() => {
+      if (document.getElementById('sensorStatus').textContent.includes('Connected')) {
+        sensorReadingCount++;
+        document.getElementById('sensorReadingCount').textContent = sensorReadingCount;
+      }
+    }, 2000);
+    */
+  </script>
+</body>
+</html>

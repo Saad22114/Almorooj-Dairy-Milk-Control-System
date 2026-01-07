@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milk Analyzer - Data Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .navbar h1 {
+            font-size: 24px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            display: flex;
+            height: calc(100vh - 65px);
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .sidebar {
+            width: 350px;
+            background: white;
+            border-left: 1px solid #e0e0e0;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.05);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #555;
+            font-size: 13px;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        input[readonly] {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #45a049;
+        }
+        
+        .reading-card {
+            background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .reading-title {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .reading-value {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        .reading-unit {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        .empty-sidebar {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .empty-sidebar p {
+            font-size: 14px;
+        }
+        
+        .msg {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .msg.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .msg.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #e0e0e0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="topNav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.12);">
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <button type="button" onclick="history.back()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">⬅ Back</button>
+            <button type="button" onclick="history.forward()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">Forward ➡</button>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <a href="/" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center;">🏠 Home</a>
+        </div>
+    </div>
+    <div style="height: 64px;"></div>
+    <!-- Navigation -->
+    <div class="navbar">
+        <h1>🥛 Milk Analyzer</h1>
+        <div class="nav-links">
+            <a href="/settings">Settings</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="card">
+                <h2>Farmer Lookup</h2>
+                <div id="msgContainer"></div>
+                
+                <div class="form-group">
+                    <label>Farmer Code</label>
+                    <input type="text" id="farmerCode" placeholder="Enter farmer code..." />
+                </div>
+                
+                <div id="farmerDetails" style="display: none;">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="farmerName" readonly />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Milk Type</label>
+                        <input type="text" id="farmerType" readonly />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Center</label>
+                        <input type="text" id="farmerCenter" readonly />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Expected Daily Quantity</label>
+                        <input type="number" id="farmerExpectedQty" readonly />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Maximum Daily Quantity</label>
+                        <input type="number" id="farmerMaxQty" readonly />
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Milk Sensor Readings</h2>
+                
+                <div class="reading-card">
+                    <div class="reading-title">FAT</div>
+                    <div class="reading-value" id="sensorFat">-</div>
+                    <div class="reading-unit">%</div>
+                </div>
+                
+                <div class="reading-card">
+                    <div class="reading-title">SNF</div>
+                    <div class="reading-value" id="sensorSNF">-</div>
+                    <div class="reading-unit">%</div>
+                </div>
+                
+                <div class="reading-card">
+                    <div class="reading-title">DENSITY</div>
+                    <div class="reading-value" id="sensorDensity">-</div>
+                    <div class="reading-unit">g/cm³</div>
+                </div>
+                
+                <div class="reading-card">
+                    <div class="reading-title">ADDED WATER</div>
+                    <div class="reading-value" id="sensorWater">-</div>
+                    <div class="reading-unit">%</div>
+                </div>
+                
+                <div class="reading-card">
+                    <div class="reading-title">PROTEIN</div>
+                    <div class="reading-value" id="sensorProtein">-</div>
+                    <div class="reading-unit">%</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Milk Quantity Readings</h2>
+                
+                <div class="reading-card">
+                    <div class="reading-title">QUANTITY</div>
+                    <div class="reading-value" id="quantityValue">-</div>
+                    <div class="reading-unit">Liters</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <button class="btn btn-success" onclick="saveMilkData()">Save Data</button>
+            </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div id="sidebarContent" class="empty-sidebar">
+                <p>👈 Select a farmer to view data</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedFarmer = null;
+        let sensorReadings = {};
+        let quantityReading = 0;
+        
+        // Search farmer by code
+        document.getElementById('farmerCode').addEventListener('input', async (e) => {
+            const code = e.target.value.trim();
+            
+            if (!code) {
+                document.getElementById('farmerDetails').style.display = 'none';
+                selectedFarmer = null;
+                return;
+            }
+            
+            try {
+                const resp = await fetch('/api/farmers');
+                const farmers = await resp.json();
+                const farmer = farmers.find(f => f.code === code);
+                
+                if (farmer) {
+                    selectedFarmer = farmer;
+                    document.getElementById('farmerName').value = farmer.name || '';
+                    document.getElementById('farmerType').value = farmer.type || '';
+                    document.getElementById('farmerCenter').value = farmer.center || '';
+                    document.getElementById('farmerExpectedQty').value = farmer.expected_qty || '';
+                    document.getElementById('farmerMaxQty').value = farmer.maximum || '';
+                    document.getElementById('farmerDetails').style.display = 'block';
+                    
+                    updateSidebar();
+                } else {
+                    selectedFarmer = null;
+                    document.getElementById('farmerDetails').style.display = 'none';
+                    showMsg('Farmer not found', 'error');
+                }
+            } catch (e) {
+                console.error('Error fetching farmers:', e);
+            }
+        });
+        
+        // Poll sensor data
+        async function pollSensorData() {
+            try {
+                const resp = await fetch('/api/data');
+                const data = await resp.json();
+                
+                if (data.data && data.data.length > 0) {
+                    const latest = data.data[data.data.length - 1];
+                    if (latest.parsed) {
+                        sensorReadings = latest.parsed;
+                        updateSensorDisplay();
+                    }
+                }
+            } catch (e) {
+                console.error('Error polling sensor data:', e);
+            }
+        }
+        
+        function updateSensorDisplay() {
+            document.getElementById('sensorFat').textContent = sensorReadings.fat ? sensorReadings.fat.toFixed(2) : '-';
+            document.getElementById('sensorSNF').textContent = sensorReadings.snf ? sensorReadings.snf.toFixed(2) : '-';
+            document.getElementById('sensorDensity').textContent = sensorReadings.density || '-';
+            document.getElementById('sensorWater').textContent = sensorReadings.added_water ? sensorReadings.added_water.toFixed(2) : '-';
+            document.getElementById('sensorProtein').textContent = sensorReadings.protein ? sensorReadings.protein.toFixed(2) : '-';
+        }
+        
+        function updateSidebar() {
+            if (!selectedFarmer) {
+                document.getElementById('sidebarContent').innerHTML = '<p>👈 Select a farmer to view data</p>';
+                return;
+            }
+            
+            document.getElementById('sidebarContent').innerHTML = `
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Farmer Information</div>
+                    <div class="info-row">
+                        <span class="info-label">Code:</span>
+                        <span class="info-value">${selectedFarmer.code}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value">${selectedFarmer.name}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Type:</span>
+                        <span class="info-value">${selectedFarmer.type}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Center:</span>
+                        <span class="info-value">${selectedFarmer.center}</span>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Milk Quality Data</div>
+                    <div class="info-row">
+                        <span class="info-label">Fat:</span>
+                        <span class="info-value">${sensorReadings.fat ? sensorReadings.fat.toFixed(2) : '-'} %</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">SNF:</span>
+                        <span class="info-value">${sensorReadings.snf ? sensorReadings.snf.toFixed(2) : '-'} %</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Density:</span>
+                        <span class="info-value">${sensorReadings.density || '-'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Protein:</span>
+                        <span class="info-value">${sensorReadings.protein ? sensorReadings.protein.toFixed(2) : '-'} %</span>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Milk Quantity</div>
+                    <div class="info-row">
+                        <span class="info-label">Quantity:</span>
+                        <span class="info-value">${quantityReading} L</span>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function saveMilkData() {
+            if (!selectedFarmer) {
+                showMsg('Please select a farmer first', 'error');
+                return;
+            }
+            
+            showMsg('Data saved successfully for ' + selectedFarmer.name, 'success');
+            // Data saving logic will be added later
+        }
+        
+        function showMsg(text, type) {
+            const container = document.getElementById('msgContainer');
+            container.innerHTML = `<div class="msg ${type}">${text}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+        
+        // Initialize
+        setInterval(pollSensorData, 500);
+        pollSensorData();
+    </script>
+</body>
+</html>
