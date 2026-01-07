@@ -1,0 +1,4 @@
+cd "C:\DATA NEW SYSTEM  10%\NEW SYSTEM WORKING 29122025"; dotnet run --project .\FarmersApp.csproj
+
+
+cd 'c:\DATA NEW SYSTEM  10%\NEW SYSTEM WORKING 29122025-01\NEW SYSTEM WORKING 29122025-01'; $env:ASPNETCORE_URLS='http://localhost:5000'; dotnet run --project FarmersApp.csproj

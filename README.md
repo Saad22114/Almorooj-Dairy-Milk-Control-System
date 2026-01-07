@@ -1,3 +1,4 @@
+
 # FarmersApp - Milk & Farmers Management System
 
 C# ASP.NET Core web application for controlling milk sensors and managing farmer data.
@@ -45,7 +46,7 @@ Open browser: **http://localhost:5000**
 
 ## Project Structure
 
-```
+
 FarmersApp/
 ├── Controllers/       # API and page handlers
 ├── Models/           # Data models
@@ -54,12 +55,12 @@ FarmersApp/
 ├── Program.cs        # Application entry point
 ├── FarmersApp.csproj # Project file
 └── appsettings.json  # Configuration
-```
+
 
 ## API Endpoints
 
-### Connection
-```
+ Connection
+
 POST   /api/connect              # Connect to sensor
 POST   /api/disconnect           # Disconnect
 POST   /api/connect_quantity     # Connect to weight sensor
@@ -93,3 +94,7 @@ POST   /api/farmers/restore      # Restore from backup
 
 ## License
 All rights reserved
+=======
+# Almorooj-Dairy-Milk-Control-System
+Almorooj Dairy Milk Control System
+ a1218676590f3611ec26d7f7931482ea30ba96cc

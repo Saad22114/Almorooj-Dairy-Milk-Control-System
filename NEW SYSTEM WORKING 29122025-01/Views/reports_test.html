@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reports Test</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+      min-height: 100vh;
+      padding: 24px;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+      color: #fff;
+      padding: 32px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header h1 { font-size: 28px; font-weight: 700; }
+    .content { padding: 30px; }
+    .btn {
+      padding: 11px 18px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      background: #667eea;
+      color: white;
+      margin: 5px;
+    }
+    .btn:hover { background: #5568d3; }
+    .filters-section { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+    .filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px; }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; }
+    .filter-group label { font-size: 12px; font-weight: 700; color: #6b7280; }
+    .filter-group input, .filter-group select { padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; }
+    .report-container { margin-top: 24px; }
+    .msg { padding: 14px; border-radius: 10px; margin: 16px 0; font-weight: 700; text-align: center; background: #dbeafe; color: #1e40af; }
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 16px 0; }
+    .summary-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; }
+    .summary-label { font-size: 12px; color: #6b7280; font-weight: 600; text-transform: uppercase; margin-bottom: 6px; }
+    .summary-value { font-size: 26px; font-weight: 800; color: #111827; }
+    .summary-unit { font-size: 12px; color: #9ca3af; margin-top: 4px; }
+    .report-header { background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%); color: #fff; padding: 20px; border-radius: 12px; margin-bottom: 16px; }
+    .report-header h2 { font-size: 18px; margin-bottom: 8px; }
+    .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; margin: 16px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead { background: #f3f4f6; }
+    th { text-align: left; padding: 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #e5e7eb; }
+    td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+    tbody tr:hover { background: #f8fafc; }
+    .total-row { background: #f0f4ff; font-weight: 700; }
+    .chart-card { background: #fff; border-radius: 12px; padding: 16px; border: 1px solid #e5e7eb; margin: 20px 0; }
+    .chart-container { position: relative; height: 250px; }
+    .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+    .badge-success { background: #d1fae5; color: #065f46; }
+  </style>
+</head>
+<body>
+  <div id="topNav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.12);">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <a href="/" aria-label="Home" style="display: inline-flex; align-items: center; cursor: pointer;">
+        <img src="/logo.png" alt="Logo" style="height: 100px; width: auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); background: rgba(57, 50, 50, 0.25); padding: 0;" />
+      </a>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button type="button" onclick="history.back()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">⬅ Back</button>
+        <button type="button" onclick="history.forward()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">Forward ➡</button>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <a href="/" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center;">🏠 Home</a>
+    </div>
+  </div>
+  <div style="height: 130px;"></div>
+  <div class="container">
+    <div class="header">
+      <h1>📊 Reports</h1>
+      <div>
+        <a href="/settings" style="color: white; text-decoration: none;">← Back to Settings</a>
+      </div>
+    </div>
+
+    <div class="content">
+      <div id="msgContainer"></div>
+
+      <div class="filters-section">
+        <h3>📋 Filter & Generate Report</h3>
+        <div class="filters-grid">
+          <div class="filter-group">
+            <label>From Date</label>
+            <input type="date" id="dateFrom" />
+          </div>
+          <div class="filter-group">
+            <label>To Date</label>
+            <input type="date" id="dateTo" />
+          </div>
+        </div>
+        <button class="btn" onclick="generateReport()">Generate Report</button>
+      </div>
+
+      <div class="report-container" id="reportContainer">
+        <div class="msg">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allFarmers = [];
+    let settings = {};
+
+    async function loadData() {
+      try {
+        console.log('Loading farmers...');
+        const farmersResp = await fetch('/api/farmers');
+        allFarmers = await farmersResp.json();
+        console.log('Farmers:', allFarmers);
+
+        console.log('Loading settings...');
+        const settingsResp = await fetch('/api/settings');
+        settings = await settingsResp.json();
+        console.log('Settings:', settings);
+
+        generateReport();
+      } catch (e) {
+        console.error('Error:', e);
+        document.getElementById('msgContainer').innerHTML = '<div class="msg">Error: ' + e.message + '</div>';
+      }
+    }
+
+    function generateReport() {
+      const dateFrom = document.getElementById('dateFrom').value;
+      const dateTo = document.getElementById('dateTo').value;
+
+      const today = new Date();
+      const fromDate = dateFrom ? new Date(dateFrom) : today;
+      const toDate = dateTo ? new Date(dateTo) : today;
+
+      const container = document.getElementById('reportContainer');
+      const currency = settings.currency || 'OMR';
+
+      let totalQuantity = 0;
+      let totalValue = 0;
+
+      allFarmers.forEach(farmer => {
+        totalQuantity += parseFloat(farmer.expected_qty) || 0;
+        const priceKey = farmer.type === 'COW' ? 'milk_price_cow' : 'milk_price_camel';
+        const price = parseFloat(settings[priceKey]) || 0;
+        totalValue += (parseFloat(farmer.expected_qty) || 0) * price;
+      });
+
+      let html = `
+        <div class="report-header">
+          <h2>📊 Daily Report</h2>
+          <p>Total Farmers: ${allFarmers.length}</p>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">Total Quantity</div>
+            <div class="summary-value">${totalQuantity.toFixed(1)}</div>
+            <div class="summary-unit">Liters</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Total Value</div>
+            <div class="summary-value">${totalValue.toFixed(2)}</div>
+            <div class="summary-unit">${currency}</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Number of Farmers</div>
+            <div class="summary-value">${allFarmers.length}</div>
+            <div class="summary-unit">Farmers</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Average Price</div>
+            <div class="summary-value">${totalQuantity > 0 ? (totalValue / totalQuantity).toFixed(2) : '0.00'}</div>
+            <div class="summary-unit">${currency}/L</div>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Farmer Name</th>
+                <th>Type</th>
+                <th>Center</th>
+                <th>Expected Qty</th>
+                <th>Unit Price</th>
+                <th>Total Value</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      allFarmers.forEach(farmer => {
+        const qty = parseFloat(farmer.expected_qty) || 0;
+        const priceKey = farmer.type === 'COW' ? 'milk_price_cow' : 'milk_price_camel';
+        const price = parseFloat(settings[priceKey]) || 0;
+        const value = qty * price;
+
+        html += `
+          <tr>
+            <td><strong>${farmer.code}</strong></td>
+            <td>${farmer.name}</td>
+            <td><span class="badge badge-success">${farmer.type}</span></td>
+            <td>${farmer.center}</td>
+            <td style="text-align: right;">${qty.toFixed(1)} L</td>
+            <td style="text-align: right;">${price.toFixed(2)} ${currency}</td>
+            <td style="text-align: right; font-weight: bold;">${value.toFixed(2)} ${currency}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    window.addEventListener('load', function() {
+      const today = new Date();
+      document.getElementById('dateFrom').value = today.toISOString().split('T')[0];
+      document.getElementById('dateTo').value = today.toISOString().split('T')[0];
+      loadData();
+    });
+  </script>
+</body>
+</html>

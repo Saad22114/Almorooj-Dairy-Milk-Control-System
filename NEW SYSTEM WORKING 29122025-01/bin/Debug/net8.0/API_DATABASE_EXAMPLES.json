@@ -1,0 +1,408 @@
+{
+  "api_documentation": {
+    "title": "Milk Collection System - REST API with Database Integration",
+    "version": "1.0",
+    "base_url": "http://localhost:5000/api",
+    "database_design": "SQL Server Normalized 3NF",
+    "created": "2025-12-22",
+    "endpoints": [
+      {
+        "name": "Get Farmer Details with Statistics",
+        "method": "GET",
+        "endpoint": "/farmers/{farmerId}",
+        "description": "Get farmer info with last 7 days and last 30 days statistics",
+        "source": "Stored Procedure: sp_GetFarmerWithStats",
+        "example_request": {
+          "method": "GET",
+          "url": "http://localhost:5000/api/farmers/1"
+        },
+        "example_response": {
+          "status": 200,
+          "data": {
+            "farmerId": 1,
+            "farmerCode": "F001",
+            "fullName": "Ahmed Al-Mansouri",
+            "phoneNumber": "+968-1234567",
+            "email": "ahmed@example.com",
+            "farmType": "COW",
+            "registrationArea": "Muscat",
+            "status": "ACTIVE",
+            "averageQualityScore": 4.2,
+            "lastSevenDaysEntries": 15,
+            "lastSevenDaysQuantity": 750.5,
+            "lastThirtyDaysAverageQuality": 4.15
+          }
+        },
+        "database_query": "EXEC [dbo].[sp_GetFarmerWithStats] @FarmerID = 1"
+      },
+      {
+        "name": "Insert Milk Entry with Validation",
+        "method": "POST",
+        "endpoint": "/milk-entries",
+        "description": "Add new milk entry with automatic calculations and validation",
+        "source": "Stored Procedure: sp_InsertMilkEntry",
+        "example_request": {
+          "method": "POST",
+          "url": "http://localhost:5000/api/milk-entries",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "farmerId": 1,
+            "entryDate": "2025-12-22",
+            "entryTime": "08:30:00",
+            "milkType": "COW",
+            "quantityLiters": 50.25,
+            "unitPrice": 2.5,
+            "temperature": 5.2,
+            "density": 1.0328,
+            "qualityScore": 4,
+            "collectorName": "Ibrahim",
+            "deviceId": "SENSOR001",
+            "notes": "Good quality milk"
+          }
+        },
+        "example_response": {
+          "status": 201,
+          "data": {
+            "milkEntryId": 1000001,
+            "farmerId": 1,
+            "entryDateTime": "2025-12-22T08:30:00Z",
+            "milkType": "COW",
+            "quantityLiters": 50.25,
+            "unitPrice": 2.5,
+            "totalPrice": 125.625,
+            "temperature": 5.2,
+            "density": 1.0328,
+            "qualityScore": 4,
+            "qualityStatus": "PENDING",
+            "entryStatus": "SUBMITTED",
+            "createdDate": "2025-12-22T08:30:00Z"
+          }
+        },
+        "database_operations": [
+          "INSERT INTO MilkEntries (...) VALUES (...)",
+          "Automatic calculation of TotalPrice",
+          "Automatic CreatedDate (GETUTCDATE())",
+          "UPDATE Farmers SET LastActivityDate",
+          "All in single transaction with error handling"
+        ]
+      },
+      {
+        "name": "Get Daily Summary for Farmer",
+        "method": "GET",
+        "endpoint": "/farmers/{farmerId}/daily-summary",
+        "description": "Get pre-calculated daily collection summary",
+        "source": "Stored Procedure: sp_GetFarmerDailySummary",
+        "query_parameters": {
+          "date": "2025-12-22 (optional, defaults to today)"
+        },
+        "example_request": {
+          "method": "GET",
+          "url": "http://localhost:5000/api/farmers/1/daily-summary?date=2025-12-22"
+        },
+        "example_response": {
+          "status": 200,
+          "data": {
+            "farmerId": 1,
+            "summaryDate": "2025-12-22",
+            "totalQuantity": 150.75,
+            "cowQuantity": 150.75,
+            "camelQuantity": 0,
+            "goatQuantity": 0,
+            "totalEntries": 3,
+            "approvedEntries": 3,
+            "rejectedEntries": 0,
+            "averageQualityScore": 4.0,
+            "totalAmount": 376.875,
+            "paidAmount": 0,
+            "pendingAmount": 376.875
+          }
+        },
+        "performance": "< 1ms (pre-calculated from DailyCollectionSummary table)"
+      },
+      {
+        "name": "Get All Active Farmers",
+        "method": "GET",
+        "endpoint": "/farmers",
+        "description": "List all active farmers with today's statistics",
+        "source": "View: vw_ActiveFarmersSummary",
+        "query_parameters": {
+          "page": "1 (optional)",
+          "pageSize": "50 (optional)"
+        },
+        "example_request": {
+          "method": "GET",
+          "url": "http://localhost:5000/api/farmers?page=1&pageSize=20"
+        },
+        "example_response": {
+          "status": 200,
+          "total": 250,
+          "page": 1,
+          "pageSize": 20,
+          "data": [
+            {
+              "farmerId": 1,
+              "farmerCode": "F001",
+              "fullName": "Ahmed Al-Mansouri",
+              "phoneNumber": "+968-1234567",
+              "email": "ahmed@example.com",
+              "farmType": "COW",
+              "registrationArea": "Muscat",
+              "status": "ACTIVE",
+              "averageQualityScore": 4.2,
+              "todayEntries": 2,
+              "todayQuantity": 100.5,
+              "createdDate": "2025-01-01T00:00:00Z",
+              "lastActivityDate": "2025-12-22T08:30:00Z"
+            },
+            {
+              "farmerId": 2,
+              "farmerCode": "F002",
+              "fullName": "Fatima Al-Balushi",
+              "phoneNumber": "+968-9876543",
+              "email": "fatima@example.com",
+              "farmType": "CAMEL",
+              "registrationArea": "Salalah",
+              "status": "ACTIVE",
+              "averageQualityScore": 3.8,
+              "todayEntries": 1,
+              "todayQuantity": 35.25,
+              "createdDate": "2025-02-15T00:00:00Z",
+              "lastActivityDate": "2025-12-22T07:15:00Z"
+            }
+          ]
+        },
+        "performance": "< 100ms for 1000 farmers (indexed by Status)"
+      },
+      {
+        "name": "Get Recent Milk Entries with Details",
+        "method": "GET",
+        "endpoint": "/milk-entries",
+        "description": "Get recent milk entries with farmer information",
+        "source": "View: vw_RecentMilkEntriesWithDetails",
+        "query_parameters": {
+          "days": "7 (last N days)",
+          "milkType": "COW (optional filter)",
+          "status": "APPROVED (optional filter)",
+          "page": "1",
+          "pageSize": "50"
+        },
+        "example_request": {
+          "method": "GET",
+          "url": "http://localhost:5000/api/milk-entries?days=7&milkType=COW&page=1&pageSize=20"
+        },
+        "example_response": {
+          "status": 200,
+          "total": 420,
+          "page": 1,
+          "pageSize": 20,
+          "data": [
+            {
+              "milkEntryId": 1000001,
+              "farmerId": 1,
+              "farmerCode": "F001",
+              "farmerName": "Ahmed Al-Mansouri",
+              "phoneNumber": "+968-1234567",
+              "farmType": "COW",
+              "entryDateTime": "2025-12-22T08:30:00Z",
+              "milkType": "COW",
+              "quantityLiters": 50.25,
+              "unitPrice": 2.5,
+              "totalPrice": 125.625,
+              "temperature": 5.2,
+              "density": 1.0328,
+              "qualityScore": 4,
+              "qualityStatus": "APPROVED",
+              "entryStatus": "VERIFIED",
+              "collectorName": "Ibrahim",
+              "deviceId": "SENSOR001"
+            }
+          ]
+        },
+        "performance": "< 50ms (indexed by EntryDate, MilkType, Status)"
+      },
+      {
+        "name": "Get Quality Control Dashboard",
+        "method": "GET",
+        "endpoint": "/dashboard/quality-control",
+        "description": "Get daily quality statistics for dashboard",
+        "source": "View: vw_QualityControlDashboard",
+        "query_parameters": {
+          "startDate": "2025-12-15 (optional)",
+          "endDate": "2025-12-22 (optional)"
+        },
+        "example_request": {
+          "method": "GET",
+          "url": "http://localhost:5000/api/dashboard/quality-control?startDate=2025-12-15&endDate=2025-12-22"
+        },
+        "example_response": {
+          "status": 200,
+          "data": [
+            {
+              "date": "2025-12-22",
+              "totalEntries": 450,
+              "approvedCount": 435,
+              "rejectedCount": 15,
+              "averageQualityScore": 4.1,
+              "adulteratedCount": 2,
+              "totalQuantity": 2250.5
+            },
+            {
+              "date": "2025-12-21",
+              "totalEntries": 420,
+              "approvedCount": 410,
+              "rejectedCount": 10,
+              "averageQualityScore": 4.0,
+              "adulteratedCount": 1,
+              "totalQuantity": 2100.25
+            }
+          ]
+        },
+        "performance": "< 10ms (pre-calculated aggregates)"
+      },
+      {
+        "name": "Update Milk Entry Quality Assessment",
+        "method": "PATCH",
+        "endpoint": "/milk-entries/{entryId}/quality",
+        "description": "Update quality assessment and approval status",
+        "example_request": {
+          "method": "PATCH",
+          "url": "http://localhost:5000/api/milk-entries/1000001/quality",
+          "body": {
+            "qualityStatus": "APPROVED",
+            "qualityScore": 5,
+            "qualityRemarks": "Excellent quality, well refrigerated",
+            "verifiedBy": "QA_Officer_001"
+          }
+        },
+        "example_response": {
+          "status": 200,
+          "data": {
+            "milkEntryId": 1000001,
+            "qualityStatus": "APPROVED",
+            "qualityScore": 5,
+            "qualityRemarks": "Excellent quality, well refrigerated",
+            "verificationDate": "2025-12-22T09:00:00Z",
+            "verifiedBy": "QA_Officer_001"
+          }
+        },
+        "database_operations": [
+          "UPDATE MilkEntries SET QualityStatus, QualityScore, ...",
+          "Automatic UpdatedDate and UpdatedBy",
+          "Audit log entry created automatically"
+        ]
+      },
+      {
+        "name": "Record Payment",
+        "method": "POST",
+        "endpoint": "/payments",
+        "description": "Record farmer payment transaction",
+        "example_request": {
+          "method": "POST",
+          "url": "http://localhost:5000/api/payments",
+          "body": {
+            "farmerId": 1,
+            "paymentDate": "2025-12-22",
+            "paymentAmount": 5000.00,
+            "paymentMethod": "BANK_TRANSFER",
+            "transactionId": "TXN20251222001",
+            "referenceNumber": "REF001",
+            "periodStartDate": "2025-12-01",
+            "periodEndDate": "2025-12-22"
+          }
+        },
+        "example_response": {
+          "status": 201,
+          "data": {
+            "paymentId": 50001,
+            "farmerId": 1,
+            "farmerCode": "F001",
+            "paymentDate": "2025-12-22",
+            "paymentAmount": 5000.00,
+            "paymentMethod": "BANK_TRANSFER",
+            "transactionId": "TXN20251222001",
+            "paymentStatus": "COMPLETED",
+            "periodStartDate": "2025-12-01",
+            "periodEndDate": "2025-12-22"
+          }
+        },
+        "database_operations": [
+          "INSERT INTO PaymentRecords",
+          "Link to milk entries via period dates",
+          "Calculate amount based on approved entries"
+        ]
+      }
+    ],
+    "error_responses": {
+      "400": {
+        "status": 400,
+        "error": "Bad Request",
+        "example": {
+          "code": "VALIDATION_ERROR",
+          "message": "QuantityLiters must be greater than 0",
+          "field": "quantityLiters"
+        }
+      },
+      "404": {
+        "status": 404,
+        "error": "Not Found",
+        "example": {
+          "code": "FARMER_NOT_FOUND",
+          "message": "Farmer with ID 999 not found"
+        }
+      },
+      "500": {
+        "status": 500,
+        "error": "Database Error",
+        "example": {
+          "code": "DATABASE_ERROR",
+          "message": "Failed to insert milk entry",
+          "details": "Foreign key violation: FarmerID does not exist"
+        }
+      }
+    },
+    "database_indexes_used": {
+      "farmers_queries": [
+        "IDX_Farmers_FarmerCode - for lookups by code",
+        "IDX_Farmers_Status - for active/inactive filtering",
+        "IDX_Farmers_Active - for listing active farmers"
+      ],
+      "milk_entries_queries": [
+        "IDX_MilkEntries_FarmerID - primary lookup by farmer",
+        "IDX_MilkEntries_EntryDate - date range queries",
+        "IDX_MilkEntries_Status - quality filtering",
+        "IDX_MilkEntries_FarmerDate - combined farmer+date lookups"
+      ],
+      "summary_queries": [
+        "IDX_DailyCollectionSummary_Unique - fast summary retrieval"
+      ]
+    },
+    "performance_expectations": {
+      "list_farmers_1000": "50-100ms",
+      "get_farmer_stats": "5-10ms",
+      "list_entries_last_7_days": "50-100ms",
+      "daily_summary": "< 1ms",
+      "quality_dashboard_30_days": "10-20ms",
+      "insert_milk_entry": "50-100ms (includes validation)",
+      "update_quality_assessment": "20-50ms"
+    },
+    "c_sharp_integration": {
+      "connection_string": "Server=(localdb)\\mssqllocaldb;Database=MilkCollectionSystemDb;Trusted_Connection=true;",
+      "example_usage": {
+        "get_farmer_stats": "var farmer = await _db.Farmers.AsNoTracking().FirstOrDefaultAsync(f => f.FarmerID == id);",
+        "insert_entry": "var result = await _db.sp_InsertMilkEntry(farmerId, date, time, type, qty, price);",
+        "get_daily_summary": "var summary = await _db.sp_GetFarmerDailySummary(farmerId, date).ToListAsync();"
+      }
+    },
+    "notes": {
+      "normalization": "3NF - fully normalized for data integrity",
+      "foreign_keys": "All relationships constrained at DB level",
+      "audit_trail": "All changes logged in AuditLog table",
+      "calculations": "TotalPrice calculated at DB, not in code",
+      "soft_delete": "IsDeleted flag enables safe recovery",
+      "performance": "Strategic indexing for sub-second queries",
+      "scalability": "Designed for 100M+ records"
+    }
+  }
+}

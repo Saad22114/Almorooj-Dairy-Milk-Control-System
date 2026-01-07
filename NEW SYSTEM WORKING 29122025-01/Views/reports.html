@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reports</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+      min-height: 100vh;
+      padding: 24px;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+      color: #fff;
+      padding: 32px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid rgba(255,255,255,0.2);
+    }
+    .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+    .header-actions { display: flex; gap: 12px; }
+    .content { padding: 30px; }
+
+    .btn {
+      padding: 11px 18px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      transition: all 0.25s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%);
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.18); }
+    .btn-secondary { background: #10b981; }
+    .btn-warning { background: #f59e0b; }
+    .btn-ghost { background: #e5e7eb; color: #111827; box-shadow: none; }
+    .btn-ghost:hover { background: #d1d5db; }
+
+    .filters-section { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+    .filters-title { font-size: 16px; font-weight: 700; color: #374151; margin-bottom: 16px; }
+    .filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px; }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; }
+    .filter-group label { font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase; }
+    .filter-group input, .filter-group select { padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; }
+    .filter-group input:focus, .filter-group select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+    .filter-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .report-type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .report-type-btn { padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; background: #fff; cursor: pointer; text-align: center; transition: all 0.2s; font-weight: 600; font-size: 13px; }
+    .report-type-btn:hover { border-color: #667eea; background: #f0f4ff; }
+    .report-type-btn.active { border-color: #667eea; background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%); color: #fff; }
+
+    .report-container { margin-top: 24px; }
+    .report-header { background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%); color: #fff; padding: 20px; border-radius: 12px; margin-bottom: 16px; }
+    .report-header h2 { font-size: 18px; margin-bottom: 8px; }
+    .report-header p { font-size: 13px; opacity: 0.9; }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 16px 0; }
+    .summary-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; }
+    .summary-label { font-size: 12px; color: #6b7280; font-weight: 600; text-transform: uppercase; margin-bottom: 6px; }
+    .summary-value { font-size: 26px; font-weight: 800; color: #111827; }
+    .summary-unit { font-size: 12px; color: #9ca3af; margin-top: 4px; }
+
+    .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 4px 16px rgba(0,0,0,0.06); background: #fff; margin: 16px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead { background: linear-gradient(90deg, #f3f4f6 0%, #ffffff 100%); }
+    th { text-align: left; padding: 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid #e5e7eb; white-space: nowrap; color: #111827; }
+    td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #374151; }
+    tbody tr:hover { background: #f8fafc; }
+    .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+    .badge-success { background: #d1fae5; color: #065f46; }
+    .badge-info { background: #dbeafe; color: #1e40af; }
+
+    .msg { padding: 14px; border-radius: 10px; margin: 16px 0; font-weight: 700; text-align: center; }
+    .msg.success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .msg.error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .msg.info { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+
+    .loading { text-align: center; padding: 40px; color: #9ca3af; }
+    .spinner { width: 40px; height: 40px; border: 4px solid #e5e7eb; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin: 20px 0; }
+    .chart-card { background: #fff; border-radius: 12px; padding: 16px; border: 1px solid #e5e7eb; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+    .chart-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #374151; }
+    .chart-container { position: relative; height: 250px; }
+
+    .text-right { text-align: right; }
+    .font-bold { font-weight: 700; }
+    .total-row { background: #f0f4ff; font-weight: 700; }
+
+    @media (max-width: 768px) {
+      .filters-grid { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .charts-grid { grid-template-columns: 1fr; }
+      .header { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="topNav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.12);">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <a href="/" aria-label="Home" style="display: inline-flex; align-items: center; cursor: pointer;">
+        <img src="/logo.png" alt="Logo" style="height: 100px; width: auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); background: rgba(57, 50, 50, 0.25); padding: 0;" />
+      </a>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button type="button" onclick="history.back()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">⬅ Back</button>
+        <button type="button" onclick="history.forward()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">Forward ➡</button>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <a href="/" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center;">🏠 Home</a>
+    </div>
+  </div>
+  <div style="height: 130px;"></div>
+  <div class="container">
+    <div class="header">
+      <h1>📊 Reports</h1>
+      <div class="header-actions">
+        <a href="/settings" class="btn btn-ghost">← Back to Settings</a>
+      </div>
+    </div>
+
+    <div class="content">
+      <div id="msgContainer"></div>
+
+      <div class="filters-section">
+        <div class="filters-title">📋 Filter & Generate Report</div>
+
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 10px; text-transform: uppercase;">Report Type</div>
+          <div class="report-type-grid">
+            <button class="report-type-btn active" onclick="setReportType('daily')">📅 Daily</button>
+            <button class="report-type-btn" onclick="setReportType('monthly')">📆 Monthly</button>
+            <button class="report-type-btn" onclick="setReportType('custom')">🔍 Custom</button>
+            <button class="report-type-btn" onclick="setReportType('shift')">⏰ Shift</button>
+            <a href="/farmer_report" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; width: auto; grid-column: auto;">Farmer Report</a>
+          </div>
+        </div>
+
+        <div class="filters-grid">
+          <div class="filter-group">
+            <label>Farmer Code</label>
+            <input type="text" id="farmerCodeSearch" placeholder="Enter farmer code..." />
+          </div>
+          <div class="filter-group">
+            <label>Milk Type</label>
+            <select id="milkTypeFilter">
+              <option value="">-- All Types --</option>
+              <option value="COW">Cow</option>
+              <option value="CAMEL">Camel</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>From Date</label>
+            <input type="date" id="dateFrom" />
+          </div>
+          <div class="filter-group">
+            <label>To Date</label>
+            <input type="date" id="dateTo" />
+          </div>
+        </div>
+
+        <div class="filter-actions" id="commonActions">
+          <button class="btn btn-secondary" onclick="generateReport()">🔍 Generate Report</button>
+          <button class="btn btn-warning" onclick="exportReport()">📥 Export Excel</button>
+          <button class="btn btn-secondary" onclick="window.print()">🖨️ Print</button>
+          <button class="btn btn-ghost" onclick="clearFilters()">🔄 Reset</button>
+        </div>
+      </div>
+
+      <div class="report-container" id="reportContainer">
+        <div class="msg info">👈 Loading report data...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allFarmers = [];
+    let currentReportType = 'daily';
+    let settings = {};
+    let charts = {};
+
+    async function loadData() {
+      try {
+        console.log('Loading farmers...');
+        const farmersResp = await fetch('/api/farmers');
+        if (!farmersResp.ok) throw new Error('Failed to load farmers: ' + farmersResp.statusText);
+        allFarmers = await farmersResp.json();
+        console.log('Farmers loaded:', allFarmers);
+        populateFarmerFilter();
+
+        console.log('Loading settings...');
+        const settingsResp = await fetch('/api/settings');
+        if (!settingsResp.ok) throw new Error('Failed to load settings: ' + settingsResp.statusText);
+        settings = await settingsResp.json();
+        console.log('Settings loaded:', settings);
+        
+        return true;
+      } catch (e) {
+        console.error('Error loading data:', e);
+        showMsg('Error loading data: ' + e.message, 'error');
+        return false;
+      }
+    }
+
+    function populateFarmerFilter() {
+      // Legacy function - no longer needed
+    }
+
+    function setupEventListeners() {
+      const farmerCodeInput = document.getElementById('farmerCodeSearch');
+      const milkTypeSelect = document.getElementById('milkTypeFilter');
+      
+      if (farmerCodeInput) {
+        farmerCodeInput.addEventListener('input', (e) => {
+          generateReport();
+        });
+      }
+
+      if (milkTypeSelect) {
+        milkTypeSelect.addEventListener('change', (e) => {
+          generateReport();
+        });
+      }
+    }
+
+    function setReportType(type) {
+      currentReportType = type;
+      document.querySelectorAll('.report-type-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const today = new Date();
+      if (type === 'daily') {
+        document.getElementById('dateFrom').value = today.toISOString().split('T')[0];
+        document.getElementById('dateTo').value = today.toISOString().split('T')[0];
+      } else if (type === 'monthly') {
+        const first = new Date(today.getFullYear(), today.getMonth(), 1);
+        const last = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        document.getElementById('dateFrom').value = first.toISOString().split('T')[0];
+        document.getElementById('dateTo').value = last.toISOString().split('T')[0];
+      } else if (type === 'custom') {
+        const start = new Date(today);
+        start.setDate(today.getDate() - 7);
+        document.getElementById('dateFrom').value = start.toISOString().split('T')[0];
+        document.getElementById('dateTo').value = today.toISOString().split('T')[0];
+      }
+
+      setTimeout(() => generateReport(), 100);
+    }
+
+    function generateReport() {
+      const dateFrom = document.getElementById('dateFrom').value;
+      const dateTo = document.getElementById('dateTo').value;
+      const farmerCode = document.getElementById('farmerCodeSearch').value;
+      const milkType = document.getElementById('milkTypeFilter').value;
+
+      if (!dateFrom || !dateTo) {
+        return showMsg('Please select dates', 'error');
+      }
+
+      console.log('Generating report:', { dateFrom, dateTo, farmerCode, milkType });
+
+      let farmers = allFarmers;
+      
+      // Filter by farmer code
+      if (farmerCode) {
+        farmers = farmers.filter(f => f.code.toLowerCase().includes(farmerCode.toLowerCase()));
+      }
+
+      // Filter by milk type
+      if (milkType) {
+        farmers = farmers.filter(f => f.type === milkType);
+      }
+
+      const reportData = {
+        farmers: farmers,
+        dateRange: { from: dateFrom, to: dateTo },
+        totalQuantity: 0,
+        totalValue: 0
+      };
+
+      farmers.forEach(farmer => {
+        const expectedQty = parseFloat(farmer.expected_qty) || 0;
+        const pricePerLiter = getPriceForFarmer(farmer);
+        reportData.totalQuantity += expectedQty;
+        reportData.totalValue += expectedQty * pricePerLiter;
+      });
+
+      displayReport(reportData, dateFrom, dateTo);
+    }
+
+    function getPriceForFarmer(farmer) {
+      const priceKey = farmer.type === 'COW' ? 'milk_price_cow' : 'milk_price_camel';
+      return parseFloat(settings[priceKey]) || 0;
+    }
+
+    function displayReport(reportData, dateFrom, dateTo) {
+      const container = document.getElementById('reportContainer');
+      const currency = settings.currency || 'OMR';
+
+      if (!reportData || !reportData.farmers || reportData.farmers.length === 0) {
+        container.innerHTML = '<div class="msg error">No farmers found for the selected criteria</div>';
+        return;
+      }
+
+      let html = `
+        <div class="report-header">
+          <h2>📊 ${currentReportType === 'daily' ? 'Daily Report' : currentReportType === 'monthly' ? 'Monthly Report' : 'Custom Report'}</h2>
+          <p>From ${dateFrom} to ${dateTo}</p>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">Total Quantity</div>
+            <div class="summary-value">${reportData.totalQuantity.toFixed(1)}</div>
+            <div class="summary-unit">Liters</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Total Value</div>
+            <div class="summary-value">${reportData.totalValue.toFixed(2)}</div>
+            <div class="summary-unit">${currency}</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Number of Farmers</div>
+            <div class="summary-value">${reportData.farmers.length}</div>
+            <div class="summary-unit">Farmers</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Average Price</div>
+            <div class="summary-value">${reportData.totalQuantity > 0 ? (reportData.totalValue / reportData.totalQuantity).toFixed(2) : '0.00'}</div>
+            <div class="summary-unit">${currency}/L</div>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Farmer Name</th>
+                <th>Type</th>
+                <th>Center</th>
+                <th>Bank</th>
+                <th>Account #</th>
+                <th>Swift Code</th>
+                <th>Expected Qty</th>
+                <th>Unit Price</th>
+                <th>Total Value</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      reportData.farmers.forEach(farmer => {
+        const qty = parseFloat(farmer.expected_qty) || 0;
+        const price = getPriceForFarmer(farmer);
+        const value = qty * price;
+
+        html += `
+          <tr>
+            <td class="font-bold">${farmer.code}</td>
+            <td>${farmer.name}</td>
+            <td><span class="badge ${farmer.type === 'COW' ? 'badge-success' : 'badge-info'}">${farmer.type}</span></td>
+            <td>${farmer.center}</td>
+            <td>${farmer.bank || '-'}</td>
+            <td>${farmer.bank_acc || '-'}</td>
+            <td>${farmer.bank_swift || '-'}</td>
+            <td class="text-right">${qty.toFixed(1)} L</td>
+            <td class="text-right">${price.toFixed(2)} ${currency}</td>
+            <td class="text-right font-bold">${value.toFixed(2)} ${currency}</td>
+            <td><span class="badge badge-success">✓ Active</span></td>
+          </tr>
+        `;
+      });
+
+      html += `
+        <tr class="total-row">
+          <td colspan="7">TOTAL</td>
+          <td class="text-right">${reportData.totalQuantity.toFixed(1)} L</td>
+          <td></td>
+          <td class="text-right">${reportData.totalValue.toFixed(2)} ${currency}</td>
+          <td></td>
+        </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>📊 Quantity by Farmer</h3>
+            <div class="chart-container">
+              <canvas id="farmerQuantityChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3>💰 Value by Type</h3>
+            <div class="chart-container">
+              <canvas id="typeValueChart"></canvas>
+            </div>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+
+      setTimeout(() => renderCharts(reportData), 100);
+    }
+
+    function renderCharts(reportData) {
+      const farmerLabels = reportData.farmers.map(f => (f.name?.substring(0, 15) || f.code));
+      const farmerQuantities = reportData.farmers.map(f => parseFloat(f.expected_qty) || 0);
+
+      console.log('Rendering charts with data:', { farmerLabels, farmerQuantities });
+
+      try {
+        const ctx1 = document.getElementById('farmerQuantityChart');
+        if (ctx1 && farmerLabels.length > 0) {
+          if (charts.farmerQuantity) charts.farmerQuantity.destroy();
+          charts.farmerQuantity = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+              labels: farmerLabels,
+              datasets: [{
+                label: 'Quantity (L)',
+                data: farmerQuantities,
+                backgroundColor: '#667eea',
+                borderRadius: 8
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } }
+            }
+          });
+        }
+
+        const cowValue = reportData.farmers
+          .filter(f => f.type === 'COW')
+          .reduce((sum, f) => sum + (parseFloat(f.expected_qty) || 0) * getPriceForFarmer(f), 0);
+
+        const camelValue = reportData.farmers
+          .filter(f => f.type === 'CAMEL')
+          .reduce((sum, f) => sum + (parseFloat(f.expected_qty) || 0) * getPriceForFarmer(f), 0);
+
+        const ctx2 = document.getElementById('typeValueChart');
+        if (ctx2) {
+          if (charts.typeValue) charts.typeValue.destroy();
+          charts.typeValue = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+              labels: ['Cow', 'Camel'],
+              datasets: [{
+                data: [cowValue, camelValue],
+                backgroundColor: ['#3b82f6', '#f97316'],
+                borderWidth: 0
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { position: 'bottom' } }
+            }
+          });
+        }
+      } catch (e) {
+        console.error('Error rendering charts:', e);
+      }
+    }
+
+    function exportReport() {
+      const dateFrom = document.getElementById('dateFrom').value;
+      const dateTo = document.getElementById('dateTo').value;
+
+      if (!dateFrom || !dateTo) {
+        return showMsg('Please select dates first', 'error');
+      }
+
+      try {
+        // Get current table data
+        const table = document.querySelector('table');
+        if (!table) {
+          return showMsg('No report data to export', 'error');
+        }
+
+        // Create workbook
+        const wb = XLSX.utils.table_to_book(table);
+        
+        // Get report type and create filename
+        const reportType = currentReportType === 'daily' ? 'Daily' : currentReportType === 'monthly' ? 'Monthly' : 'Custom';
+        const timestamp = new Date().toISOString().split('T')[0];
+        const filename = `Report_${reportType}_${dateFrom}_to_${dateTo}.xlsx`;
+
+        // Write file
+        XLSX.writeFile(wb, filename);
+        showMsg('Report exported successfully!', 'success');
+      } catch (e) {
+        console.error('Export error:', e);
+        showMsg('Error exporting report: ' + e.message, 'error');
+      }
+    }
+
+    function clearFilters() {
+      setReportType('daily');
+      document.getElementById('farmerCodeSearch').value = '';
+      document.getElementById('milkTypeFilter').value = '';
+    }
+
+    function showMsg(text, type) {
+      const container = document.getElementById('msgContainer');
+      container.innerHTML = `<div class="msg ${type}">${text}</div>`;
+      setTimeout(() => { container.innerHTML = ''; }, 4000);
+    }
+
+    window.addEventListener('load', function() {
+      console.log('Page loaded, starting initialization...');
+      loadData().then(success => {
+        if (success) {
+          console.log('Data loaded, setting up report...');
+          setupEventListeners();
+          setReportType('daily');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Register Farmer</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; padding: 24px; background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%); min-height: 100vh; }
+    .card { max-width: 900px; margin: 0 auto; padding: 30px; background: #fff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+    .card h2 { font-size: 26px; color: #333; margin-bottom: 8px; }
+    .card p { color: #666; margin-bottom: 20px; font-size: 14px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 4px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #444; font-size: 13px; }
+    .form-group input, .form-group select { width: 100%; padding: 11px 14px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; transition: all 0.2s; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 4px rgba(102,126,234,0.12); }
+    .form-group input[readonly] { background: #f5f5f5; cursor: not-allowed; }
+    .actions { margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end; }
+    .btn { padding: 12px 24px; border-radius: 10px; border: none; cursor: pointer; font-size: 14px; font-weight: 700; transition: all 0.25s; }
+    .btn-save { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; box-shadow: 0 6px 18px rgba(16,185,129,0.3); }
+    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(16,185,129,0.4); }
+    .btn-back { background: #e5e7eb; color: #374151; text-decoration: none; display: inline-flex; align-items: center; }
+    .btn-back:hover { background: #d1d5db; }
+    .msg { margin-top: 16px; padding: 12px; border-radius: 10px; text-align: center; font-weight: 600; }
+    .msg.error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .msg.success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .required { color: #ef4444; }
+    @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div id="topNav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.12);">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <a href="/" aria-label="Home" style="display: inline-flex; align-items: center; cursor: pointer;">
+        <img src="/logo.png" alt="Logo" style="height: 100px; width: auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); background: rgba(57, 50, 50, 0.25); padding: 0;" />
+      </a>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button type="button" onclick="history.back()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">⬅ Back</button>
+        <button type="button" onclick="history.forward()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">Forward ➡</button>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <a href="/" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center;">🏠 Home</a>
+    </div>
+  </div>
+  <div style="height: 130px;"></div>
+  <div class="card">
+    <h2>📝 Register Farmer</h2>
+    <p>Fill the form to register a new farmer.</p>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="code">Code <span class="required">*</span></label>
+        <input id="code" placeholder="Unique code" required inputmode="numeric" pattern="[0-9]*" />
+      </div>
+
+      <div class="form-group">
+        <label for="name">Name <span class="required">*</span></label>
+        <input id="name" placeholder="Full name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="nid">National ID <span class="required">*</span></label>
+        <input id="nid" placeholder="Civil/ID number" required inputmode="numeric" pattern="[0-9]*" />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number <span class="required">*</span></label>
+        <input id="phone" placeholder="Phone number" required inputmode="tel" />
+      </div>
+
+      <div class="form-group">
+        <label for="type">Milk Type <span class="required">*</span></label>
+        <select id="type" required>
+          <option value="">-- Select Milk Type --</option>
+          <option value="COW">COW</option>
+          <option value="CAMEL">CAMEL</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="center">Center <span class="required">*</span></label>
+        <select id="center" required>
+          <option value="">-- Select Center --</option>
+          <option value="GHADO">GHADO</option>
+          <option value="ZEEK">ZEEK</option>
+          <option value="HAJEEF">HAJEEF</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="bank">Bank <span class="required">*</span></label>
+        <select id="bankSelect" required>
+      <option value="">-- None --</option>
+      <option value="AUBOOMRUALH" data-name="AHLI BANK S.A.O.G - AHLI ISLAMIC">AHLI BANK S.A.O.G - AHLI ISLAMIC</option>
+      <option value="AUBOOMRU" data-name="AHLI BANK S.A.O.G - RUWI">AHLI BANK S.A.O.G - RUWI</option>
+      <option value="ASMLOMR1" data-name="AL AMIN SECURITIES COMPANY LLC">AL AMIN SECURITIES COMPANY LLC</option>
+      <option value="IZZBOMRU" data-name="ALIZZ ISLAMIC BANK">ALIZZ ISLAMIC BANK</option>
+      <option value="BDOFOMRU" data-name="BANK DHOFAR (S.A.O.G.)">BANK DHOFAR (S.A.O.G.)</option>
+      <option value="BDOFOMRUTFD" data-name="BANK DHOFAR (S.A.O.G.) - TFD">BANK DHOFAR (S.A.O.G.) - TFD</option>
+      <option value="BDOFOMRUMIB" data-name="BANK DHOFAR (S.A.O.G.) - MAISARAH">BANK DHOFAR (S.A.O.G.) - MAISARAH</option>
+      <option value="MELIOMR1" data-name="BANK MELLI IRAN">BANK MELLI IRAN</option>
+      <option value="BMUSOMRX" data-name="BANK MUSCAT SAOG">BANK MUSCAT SAOG</option>
+      <option value="BMUSOMRXISL" data-name="BANK MUSCAT SAOG - ISLAMIC">BANK MUSCAT SAOG - ISLAMIC</option>
+      <option value="BMUSOMRXTBG" data-name="BANK MUSCAT SAOG - TRANSACTION BANKING">BANK MUSCAT SAOG - TRANSACTION BANKING</option>
+      <option value="BNZWOMRX" data-name="BANK NIZWA">BANK NIZWA</option>
+      <option value="BARBOMMXMUT" data-name="BANK OF BARODA - MUTTRAH">BANK OF BARODA - MUTTRAH</option>
+      <option value="BARBOMMXSAL" data-name="BANK OF BARODA - SALALAH">BANK OF BARODA - SALALAH</option>
+      <option value="BARBOMMX" data-name="BANK OF BARODA - RUWI">BANK OF BARODA - RUWI</option>
+      <option value="BARBOMMXSOH" data-name="BANK OF BARODA - SOHAR">BANK OF BARODA - SOHAR</option>
+      <option value="BABEOMRX" data-name="BANK OF BEIRUT">BANK OF BEIRUT</option>
+      <option value="CBOMOMRU" data-name="CENTRAL BANK OF OMAN">CENTRAL BANK OF OMAN</option>
+      <option value="EFGHOMM1" data-name="EFG HERMES OMAN LLC">EFG HERMES OMAN LLC</option>
+      <option value="FIVOOMR1" data-name="FINANCIAL SERVICES COMPANY SAOG">FINANCIAL SERVICES COMPANY SAOG</option>
+      <option value="NBADOMRX" data-name="FIRST ABU DHABI BANK">FIRST ABU DHABI BANK</option>
+      <option value="NBADOMRXCMS" data-name="FIRST ABU DHABI BANK - CMS">FIRST ABU DHABI BANK - CMS</option>
+      <option value="NBADOMRXTFO" data-name="FIRST ABU DHABI BANK - TFO">FIRST ABU DHABI BANK - TFO</option>
+      <option value="GFISOMR1" data-name="GLOBAL FINANCIAL INVESTMENTS HOLDING">GLOBAL FINANCIAL INVESTMENTS HOLDING</option>
+      <option value="GULFOMRX" data-name="GULF INTERNATIONAL BANK">GULF INTERNATIONAL BANK</option>
+      <option value="GISCOMR1" data-name="GULF INVESTMENT SERVICES CO.">GULF INVESTMENT SERVICES CO.</option>
+      <option value="HBZUOMM1" data-name="HABIB BANK LIMITED">HABIB BANK LIMITED</option>
+      <option value="HABBOMRX" data-name="HABIB BANK OMAN">HABIB BANK OMAN</option>
+      <option value="HBMEOMRX" data-name="HSBC BANK MIDDLE EAST">HSBC BANK MIDDLE EAST</option>
+      <option value="MINIOMRU" data-name="MINISTRY OF FINANCE">MINISTRY OF FINANCE</option>
+      <option value="MDSROMR1" data-name="MUSCAT DEPOSITORY">MUSCAT DEPOSITORY</option>
+      <option value="XMUSOMM1" data-name="MUSCAT SECURITIES MARKET">MUSCAT SECURITIES MARKET</option>
+      <option value="MUZNOMR1" data-name="MUZN ISLAMIC BANKING">MUZN ISLAMIC BANKING</option>
+      <option value="NBOMOMRX" data-name="NATIONAL BANK OF OMAN">NATIONAL BANK OF OMAN</option>
+      <option value="NBOMOMRXIBS" data-name="NATIONAL BANK OF OMAN - IBS">NATIONAL BANK OF OMAN - IBS</option>
+      <option value="NBOMOMRXITF" data-name="NATIONAL BANK OF OMAN - ITF">NATIONAL BANK OF OMAN - ITF</option>
+      <option value="NBOMOMRXTSS" data-name="NATIONAL BANK OF OMAN - TSS">NATIONAL BANK OF OMAN - TSS</option>
+      <option value="OPCFOMRX" data-name="OCTAL PETROCHEMICALS FZC">OCTAL PETROCHEMICALS FZC</option>
+      <option value="OMEMOMR1" data-name="OMAN AND EMIRATES INVESTMENT">OMAN AND EMIRATES INVESTMENT</option>
+      <option value="OMABOMRU" data-name="OMAN ARAB BANK">OMAN ARAB BANK</option>
+      <option value="OMABOMRUYSR" data-name="OMAN ARAB BANK - AL-YUSR">OMAN ARAB BANK - AL-YUSR</option>
+      <option value="BOGUOMR1" data-name="OMAN BANKING CORP">OMAN BANKING CORP</option>
+      <option value="OIDIOMR1" data-name="OMAN INTERNATIONAL DEVELOPMENT">OMAN INTERNATIONAL DEVELOPMENT</option>
+      <option value="SGRFOMRA" data-name="OMAN INVESTMENT AUTHORITY">OMAN INVESTMENT AUTHORITY</option>
+      <option value="OIBBOMRX" data-name="OMAN INVESTMENT BANK">OMAN INVESTMENT BANK</option>
+      <option value="OMUEOMR1" data-name="OMAN UNITED EXCHANGE">OMAN UNITED EXCHANGE</option>
+          <option value="QNBAOMRX" data-name="QATAR NATIONAL BANK">QATAR NATIONAL BANK</option>
+          <option value="OTHER" data-name="Other">Other (specify)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="bank_swift">Bank SWIFT Code <span class="required">*</span></label>
+        <input id="bank_swift" placeholder="SWIFT Code" readonly required />
+      </div>
+
+      <div class="form-group">
+        <label for="bank_acc">Bank Account Number <span class="required">*</span></label>
+        <input id="bank_acc" placeholder="Account number" required inputmode="numeric" pattern="[0-9]*" />
+      </div>
+
+      <div class="form-group">
+        <label for="address">Address <span class="required">*</span></label>
+        <input id="address" placeholder="Address" required />
+      </div>
+
+      <div class="form-group">
+        <label for="area">Area <span class="required">*</span></label>
+        <input id="area" placeholder="Area / Region" required />
+      </div>
+
+      <div class="form-group">
+        <label for="expected_qty">Daily Expected Quantity <span class="required">*</span></label>
+        <input id="expected_qty" type="number" placeholder="Daily expected quantity" required />
+      </div>
+
+      <div class="form-group">
+        <label for="maximum">Daily Maximum Quantity <span class="required">*</span></label>
+        <input id="maximum" type="number" placeholder="Daily maximum quantity" required />
+      </div>
+
+      <div class="form-group">
+        <label for="animal_count">Number of Animals <span class="required">*</span></label>
+        <input id="animal_count" type="number" placeholder="Number of animals" required min="1" />
+      </div>
+
+      <div class="form-group full">
+        <label for="status">Farmer Status <span class="required">*</span></label>
+        <select id="status" required>
+          <option value="">-- Select Status --</option>
+          <option value="active">Active</option>
+          <option value="standby">Standby</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="/farmers" class="btn btn-back">← Back to Farmers</a>
+      <button class="btn btn-save" onclick="saveFarmer()">💾 Save</button>
+    </div>
+
+    <div id="msg" class="msg" style="display:none;"></div>
+  </div>
+
+  <script>
+    const bankSelect = document.getElementById('bankSelect');
+    const bankSwiftInput = document.getElementById('bank_swift');
+    const msgEl = document.getElementById('msg');
+
+    bankSelect.addEventListener('change', () => {
+      const val = bankSelect.value;
+      if (val === 'OTHER') {
+        bankSwiftInput.readOnly = false;
+        bankSwiftInput.value = '';
+        bankSwiftInput.focus();
+      } else {
+        bankSwiftInput.readOnly = true;
+        bankSwiftInput.value = val || '';
+      }
+    });
+
+    function showMsg(text, type) {
+      msgEl.textContent = text;
+      msgEl.className = 'msg ' + type;
+      msgEl.style.display = 'block';
+      setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
+    }
+
+    async function saveFarmer() {
+      const code = document.getElementById('code').value.trim();
+      const name = document.getElementById('name').value.trim();
+      const nid = document.getElementById('nid').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const bankSwift = document.getElementById('bank_swift').value.trim();
+      const bankAcc = document.getElementById('bank_acc').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const area = document.getElementById('area').value.trim();
+      const animalCount = document.getElementById('animal_count').value;
+      const expectedQty = document.getElementById('expected_qty').value;
+      const maximum = document.getElementById('maximum').value;
+      const status = document.getElementById('status').value;
+
+      if (!code || !name || !nid || !phone || !bankSelect.value || !bankSwift || !bankAcc || !address || !area || !animalCount || !expectedQty || !maximum || !status) {
+        return showMsg('All fields are required.', 'error');
+      }
+      if (!/^\d+$/.test(code)) return showMsg('Code must contain only numbers.', 'error');
+      if (!/^\d+$/.test(nid)) return showMsg('National ID must contain only numbers.', 'error');
+      if (!/^\d+$/.test(bankAcc)) return showMsg('Bank Account Number must contain only numbers.', 'error');
+
+      const selectedSwift = bankSelect.value;
+      const bankName = bankSelect.options[bankSelect.selectedIndex]?.getAttribute('data-name') || '';
+
+      const data = {
+        code,
+        name,
+        nid,
+        phone,
+        type: document.getElementById('type').value,
+        center: document.getElementById('center').value,
+        bank: bankName,
+        bank_swift: selectedSwift === 'OTHER' ? bankSwift : selectedSwift,
+        bank_acc: bankAcc,
+        address,
+        area,
+        animal_count: animalCount || 0,
+        expected_qty: expectedQty || 0,
+        maximum: maximum || 0,
+        status: status || 'active'
+      };
+
+      try {
+        const resp = await fetch('/api/farmers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const j = await resp.json();
+        if (resp.ok && j.success) {
+          showMsg('Saved successfully!', 'success');
+          document.getElementById('code').value = '';
+          document.getElementById('name').value = '';
+          document.getElementById('nid').value = '';
+          document.getElementById('phone').value = '';
+          document.getElementById('bank_acc').value = '';
+          document.getElementById('address').value = '';
+          document.getElementById('area').value = '';
+          document.getElementById('animal_count').value = '';
+          document.getElementById('expected_qty').value = '';
+          document.getElementById('maximum').value = '';
+          bankSelect.value = '';
+          bankSwiftInput.value = '';
+        } else {
+          showMsg('Save failed: ' + (j.message || ''), 'error');
+        }
+      } catch (e) {
+        showMsg('Error saving.', 'error');
+      }
+    }
+  </script>
+</body>
+</html>

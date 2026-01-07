@@ -1,0 +1,1 @@
+{"port": "COM1", "baud_rate": 2400, "sensor_mode": "automatic", "port_quantity": "", "baud_rate_quantity": 2400, "quantity_mode": "manual", "milk_price": 0.0, "milk_price_cow": 0.25, "milk_price_camel": 0.4, "currency": "OMR"}

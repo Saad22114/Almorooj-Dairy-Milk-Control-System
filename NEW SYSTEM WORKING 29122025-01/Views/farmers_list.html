@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farmers Management</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+Data Management ToolsbodyData Management Tools{
+Data Management Toolsfont-family:Data Management Tools'SegoeData Management ToolsUI',Data Management ToolsArial,Data Management Toolssans-serif;
+Data Management Toolsbackground:Data Management Toolslinear-gradient(135deg,Data Management Tools#b7ab81Data Management Tools0%,Data Management Tools#d4cdb1Data Management Tools100%);
+Data Management Toolsmin-height:Data Management Tools100vh;
+Data Management Toolspadding:Data Management Tools24px;
+Data Management Toolscolor:Data Management Tools#1f2937;
+Data Management Tools}
+Data Management Tools.containerData Management Tools{
+Data Management Toolsmax-width:Data Management Tools1400px;
+Data Management Toolsmargin:Data Management Tools0Data Management ToolsautoData Management Tools40px;
+Data Management Toolsbackground:Data Management Tools#ffffff;
+Data Management Toolsborder-radius:Data Management Tools16px;
+Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools20pxData Management Tools60pxData Management Toolsrgba(0,Data Management Tools0,Data Management Tools0,Data Management Tools0.25);
+Data Management Toolsoverflow:Data Management Toolshidden;
+Data Management Tools}
+Data Management Tools.headerData Management Tools{
+Data Management Toolsbackground:Data Management Toolslinear-gradient(135deg,Data Management Tools#b7ab81Data Management Tools0%,Data Management Tools#d4cdb1Data Management Tools100%);
+Data Management Toolscolor:Data Management Tools#fff;
+Data Management Toolspadding:Data Management Tools32pxData Management Tools28px;
+Data Management Toolsdisplay:Data Management Toolsflex;
+Data Management Toolsjustify-content:Data Management Toolsspace-between;
+Data Management Toolsalign-items:Data Management Toolscenter;
+Data Management Toolsborder-bottom:Data Management Tools4pxData Management ToolssolidData Management Toolsrgba(255,255,255,0.2);
+Data Management Tools}
+Data Management Tools.headerData Management Toolsh1Data Management Tools{Data Management Toolsfont-size:Data Management Tools30px;Data Management Toolsfont-weight:Data Management Tools700;Data Management Toolsletter-spacing:Data Management Tools-0.5px;Data Management Tools}
+Data Management Tools.header-actionsData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsgap:Data Management Tools12px;Data Management Toolsflex-wrap:Data Management Toolswrap;Data Management Tools}
+Data Management Tools.contentData Management Tools{Data Management Toolspadding:Data Management Tools30px;Data Management Tools}
+
+Data Management Tools/*Data Management ToolsButtonsData Management Tools*/
+Data Management Tools.btnData Management Tools{
+Data Management Toolspadding:Data Management Tools11pxData Management Tools18px;
+Data Management Toolsborder-radius:Data Management Tools10px;
+Data Management Toolsborder:Data Management Toolsnone;
+Data Management Toolscursor:Data Management Toolspointer;
+Data Management Toolsfont-size:Data Management Tools14px;
+Data Management Toolsfont-weight:Data Management Tools700;
+Data Management Toolstransition:Data Management ToolsallData Management Tools0.25s;
+Data Management Toolstext-decoration:Data Management Toolsnone;
+Data Management Toolsdisplay:Data Management Toolsinline-flex;
+Data Management Toolsalign-items:Data Management Toolscenter;
+Data Management Toolsgap:Data Management Tools8px;
+Data Management Toolscolor:Data Management Tools#fff;
+Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools8pxData Management Tools20pxData Management Toolsrgba(0,Data Management Tools0,Data Management Tools0,Data Management Tools0.12);
+Data Management Toolsbackground:Data Management Toolslinear-gradient(135deg,Data Management Tools#b7ab81Data Management Tools0%,Data Management Tools#d4cdb1Data Management Tools100%);
+Data Management Tools}
+Data Management Tools.btn:hoverData Management Tools{Data Management Toolstransform:Data Management ToolstranslateY(-2px);Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools12pxData Management Tools28pxData Management Toolsrgba(0,0,0,0.18);Data Management Tools}
+Data Management Tools.btn-secondaryData Management Tools{Data Management Toolsbackground:Data Management Tools#10b981;Data Management Tools}
+Data Management Tools.btn-warningData Management Tools{Data Management Toolsbackground:Data Management Tools#f59e0b;Data Management Tools}
+Data Management Tools.btn-ghostData Management Tools{Data Management Toolsbackground:Data Management Tools#e5e7eb;Data Management Toolscolor:Data Management Tools#111827;Data Management Toolsbox-shadow:Data Management Toolsnone;Data Management Tools}
+Data Management Tools.btn-ghost:hoverData Management Tools{Data Management Toolsbackground:Data Management Tools#d1d5db;Data Management Tools}
+Data Management Tools.btn-smallData Management Tools{Data Management Toolspadding:Data Management Tools7pxData Management Tools12px;Data Management Toolsfont-size:Data Management Tools12px;Data Management Toolsborder-radius:Data Management Tools8px;Data Management Toolsbox-shadow:Data Management Toolsnone;Data Management Tools}
+Data Management Tools.btn-dangerData Management Tools{Data Management Toolsbackground:Data Management Tools#ef4444;Data Management Tools}
+
+Data Management Tools/*Data Management ToolsSummaryData Management ToolscardsData Management Tools*/
+Data Management Tools.summary-gridData Management Tools{
+Data Management Toolsdisplay:Data Management Toolsgrid;
+Data Management Toolsgrid-template-columns:Data Management Toolsrepeat(auto-fit,Data Management Toolsminmax(240px,Data Management Tools1fr));
+Data Management Toolsgap:Data Management Tools16px;
+Data Management Toolsmargin:Data Management Tools20pxData Management Tools0Data Management Tools10px;
+Data Management Tools}
+Data Management Tools.summary-cardData Management Tools{
+Data Management Toolsposition:Data Management Toolsrelative;
+Data Management Toolsbackground:Data Management Toolslinear-gradient(135deg,Data Management Tools#b7ab81Data Management Tools0%,Data Management Tools#d4cdb1Data Management Tools100%);
+Data Management Toolscolor:Data Management Tools#fff;
+Data Management Toolspadding:Data Management Tools20px;
+Data Management Toolsborder-radius:Data Management Tools14px;
+Data Management Toolsoverflow:Data Management Toolshidden;
+Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools14pxData Management Tools30pxData Management Toolsrgba(102,126,234,0.25);
+Data Management Tools}
+Data Management Tools.summary-cardData Management Toolsh3Data Management Tools{Data Management Toolsfont-size:Data Management Tools14px;Data Management Toolsopacity:Data Management Tools0.9;Data Management Toolsmargin-bottom:Data Management Tools6px;Data Management Toolsfont-weight:Data Management Tools600;Data Management Tools}
+Data Management Tools.summary-cardData Management Tools.numberData Management Tools{Data Management Toolsfont-size:Data Management Tools38px;Data Management Toolsfont-weight:Data Management Tools800;Data Management Toolsletter-spacing:Data Management Tools-1px;Data Management Tools}
+Data Management Tools.summary-cardData Management Tools.tagData Management Tools{Data Management Toolsfont-size:Data Management Tools12px;Data Management Toolsopacity:Data Management Tools0.85;Data Management Toolsmargin-top:Data Management Tools6px;Data Management Toolsdisplay:Data Management Toolsblock;Data Management Tools}
+
+Data Management Tools/*Data Management ToolsFilterData Management Tools+Data Management ToolsactionsData Management Tools*/
+Data Management Tools.top-barData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsflex-wrap:Data Management Toolswrap;Data Management Toolsgap:Data Management Tools16px;Data Management Toolsalign-items:Data Management Toolscenter;Data Management Toolsjustify-content:Data Management Toolsspace-between;Data Management Tools}
+Data Management Tools.search-boxData Management Tools{Data Management Toolsposition:Data Management Toolsrelative;Data Management Toolsflex:Data Management Tools1;Data Management Toolsmin-width:Data Management Tools220px;Data Management Tools}
+Data Management Tools.search-boxData Management ToolsinputData Management Tools{
+Data Management Toolswidth:Data Management Tools100%;
+Data Management Toolspadding:Data Management Tools12pxData Management Tools14pxData Management Tools12pxData Management Tools40px;
+Data Management Toolsborder:Data Management Tools2pxData Management ToolssolidData Management Tools#e5e7eb;
+Data Management Toolsborder-radius:Data Management Tools10px;
+Data Management Toolsfont-size:Data Management Tools14px;
+Data Management Toolstransition:Data Management ToolsallData Management Tools0.2s;
+Data Management Tools}
+Data Management Tools.search-boxData Management Toolsinput:focusData Management Tools{Data Management Toolsoutline:Data Management Toolsnone;Data Management Toolsborder-color:Data Management Tools#667eea;Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools0Data Management Tools0Data Management Tools4pxData Management Toolsrgba(102,126,234,0.12);Data Management Tools}
+Data Management Tools.search-box::beforeData Management Tools{Data Management Toolscontent:Data Management Tools"🔍";Data Management Toolsposition:Data Management Toolsabsolute;Data Management Toolsleft:Data Management Tools12px;Data Management Toolstop:Data Management Tools10px;Data Management Toolsfont-size:Data Management Tools16px;Data Management Tools}
+Data Management Tools.filtersData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsgap:Data Management Tools12px;Data Management Toolsflex-wrap:Data Management Toolswrap;Data Management Toolsalign-items:Data Management Toolscenter;Data Management Toolsmargin-top:Data Management Tools12px;Data Management Tools}
+Data Management Tools.filtersData Management ToolslabelData Management Tools{Data Management Toolsfont-size:Data Management Tools12px;Data Management Toolsfont-weight:Data Management Tools700;Data Management Toolscolor:Data Management Tools#4b5563;Data Management Tools}
+Data Management Tools.filtersData Management ToolsselectData Management Tools{
+Data Management Toolspadding:Data Management Tools10pxData Management Tools12px;
+Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#d1d5db;
+Data Management Toolsborder-radius:Data Management Tools10px;
+Data Management Toolsfont-size:Data Management Tools13px;
+Data Management Toolsmin-width:Data Management Tools150px;
+Data Management Tools}
+
+Data Management Tools/*Data Management ToolsSectionsData Management Tools*/
+Data Management Tools.section-titleData Management Tools{Data Management Toolsfont-size:Data Management Tools18px;Data Management Toolsfont-weight:Data Management Tools800;Data Management Toolsmargin-top:Data Management Tools26px;Data Management Toolsmargin-bottom:Data Management Tools12px;Data Management Toolscolor:Data Management Tools#111827;Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsgap:Data Management Tools10px;Data Management Toolsalign-items:Data Management Toolscenter;Data Management Tools}
+Data Management Tools.section-cardData Management Tools{Data Management Toolsbackground:Data Management Tools#f9fafb;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Toolsborder-radius:Data Management Tools12px;Data Management Toolspadding:Data Management Tools16px;Data Management Toolsbox-shadow:Data Management ToolsinsetData Management Tools0Data Management Tools1pxData Management Tools0Data Management Toolsrgba(255,255,255,0.7);Data Management Tools}
+
+Data Management Tools/*Data Management ToolsTablesData Management Tools*/
+Data Management Tools.table-wrapperData Management Tools{Data Management Toolsoverflow-x:Data Management Toolsauto;Data Management Toolsborder-radius:Data Management Tools12px;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools4pxData Management Tools16pxData Management Toolsrgba(0,0,0,0.06);Data Management Toolsbackground:Data Management Tools#fff;Data Management Tools}
+Data Management ToolstableData Management Tools{Data Management Toolswidth:Data Management Tools100%;Data Management Toolsborder-collapse:Data Management Toolscollapse;Data Management Toolsfont-size:Data Management Tools13px;Data Management Tools}
+Data Management ToolstheadData Management Tools{Data Management Toolsbackground:Data Management Toolslinear-gradient(90deg,Data Management Tools#f3f4f6Data Management Tools0%,Data Management Tools#ffffffData Management Tools100%);Data Management Tools}
+Data Management ToolsthData Management Tools{Data Management Toolstext-align:Data Management Toolsleft;Data Management Toolspadding:Data Management Tools12px;Data Management Toolsfont-size:Data Management Tools12px;Data Management Toolsfont-weight:Data Management Tools800;Data Management Toolstext-transform:Data Management Toolsuppercase;Data Management Toolsletter-spacing:Data Management Tools0.4px;Data Management Toolsborder-bottom:Data Management Tools1pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Toolswhite-space:Data Management Toolsnowrap;Data Management Toolscolor:Data Management Tools#111827;Data Management Tools}
+Data Management ToolstdData Management Tools{Data Management Toolspadding:Data Management Tools12px;Data Management Toolsborder-bottom:Data Management Tools1pxData Management ToolssolidData Management Tools#f1f5f9;Data Management Toolscolor:Data Management Tools#374151;Data Management Tools}
+Data Management ToolstbodyData Management Toolstr:hoverData Management Tools{Data Management Toolsbackground:Data Management Tools#f8fafc;Data Management Tools}
+Data Management Tools.code-badgeData Management Tools{Data Management Toolsbackground:Data Management Tools#eef2ff;Data Management Toolscolor:Data Management Tools#4338ca;Data Management Toolspadding:Data Management Tools6pxData Management Tools10px;Data Management Toolsborder-radius:Data Management Tools8px;Data Management Toolsfont-weight:Data Management Tools700;Data Management Tools}
+Data Management Tools.badgeData Management Tools{Data Management Toolspadding:Data Management Tools6pxData Management Tools12px;Data Management Toolsborder-radius:Data Management Tools999px;Data Management Toolsfont-weight:Data Management Tools700;Data Management Toolsfont-size:Data Management Tools11px;Data Management Toolsletter-spacing:Data Management Tools0.4px;Data Management Toolstext-transform:Data Management Toolsuppercase;Data Management Tools}
+Data Management Tools.badge-cowData Management Tools{Data Management Toolsbackground:Data Management Tools#dbeafe;Data Management Toolscolor:Data Management Tools#1d4ed8;Data Management Tools}
+Data Management Tools.badge-camelData Management Tools{Data Management Toolsbackground:Data Management Tools#fff7ed;Data Management Toolscolor:Data Management Tools#c2410c;Data Management Tools}
+Data Management Tools.badge-centerData Management Tools{Data Management Toolsbackground:Data Management Tools#ecfeff;Data Management Toolscolor:Data Management Tools#0ea5e9;Data Management Tools}
+Data Management Tools.actionsData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsgap:Data Management Tools8px;Data Management Toolsflex-wrap:Data Management Toolswrap;Data Management Tools}
+Data Management Tools.record-infoData Management Tools{Data Management Toolsmargin-top:Data Management Tools10px;Data Management Toolsfont-size:Data Management Tools13px;Data Management Toolscolor:Data Management Tools#6b7280;Data Management Tools}
+
+Data Management Tools/*Data Management ToolsEmptyData Management ToolsstateData Management Tools*/
+Data Management Tools.empty-stateData Management Tools{Data Management Toolstext-align:Data Management Toolscenter;Data Management Toolspadding:Data Management Tools50pxData Management Tools20px;Data Management Toolscolor:Data Management Tools#9ca3af;Data Management Tools}
+Data Management Tools.empty-iconData Management Tools{Data Management Toolsfont-size:Data Management Tools52px;Data Management Toolsmargin-bottom:Data Management Tools8px;Data Management Tools}
+
+Data Management Tools/*Data Management ToolsChartsData Management Tools*/
+Data Management Tools.charts-gridData Management Tools{Data Management Toolsdisplay:Data Management Toolsgrid;Data Management Toolsgrid-template-columns:Data Management Toolsrepeat(auto-fit,Data Management Toolsminmax(320px,Data Management Tools1fr));Data Management Toolsgap:Data Management Tools20px;Data Management Toolsmargin:Data Management Tools20pxData Management Tools0;Data Management Tools}
+Data Management Tools.chart-cardData Management Tools{Data Management Toolsbackground:Data Management Tools#fff;Data Management Toolsborder-radius:Data Management Tools14px;Data Management Toolspadding:Data Management Tools20px;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools4pxData Management Tools16pxData Management Toolsrgba(0,0,0,0.06);Data Management Tools}
+Data Management Tools.chart-cardData Management Toolsh3Data Management Tools{Data Management Toolsfont-size:Data Management Tools14px;Data Management Toolsfont-weight:Data Management Tools700;Data Management Toolscolor:Data Management Tools#374151;Data Management Toolsmargin-bottom:Data Management Tools16px;Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsalign-items:Data Management Toolscenter;Data Management Toolsgap:Data Management Tools8px;Data Management Tools}
+Data Management Tools.chart-containerData Management Tools{Data Management Toolsposition:Data Management Toolsrelative;Data Management Toolsheight:Data Management Tools220px;Data Management Tools}
+
+Data Management Tools/*Data Management ToolsPerformanceData Management ToolsCardsData Management Tools*/
+Data Management Tools.performance-gridData Management Tools{Data Management Toolsdisplay:Data Management Toolsgrid;Data Management Toolsgrid-template-columns:Data Management Toolsrepeat(auto-fit,Data Management Toolsminmax(280px,Data Management Tools1fr));Data Management Toolsgap:Data Management Tools16px;Data Management Toolsmargin:Data Management Tools20pxData Management Tools0;Data Management Tools}
+Data Management Tools.perf-cardData Management Tools{Data Management Toolsbackground:Data Management Tools#fff;Data Management Toolsborder-radius:Data Management Tools12px;Data Management Toolspadding:Data Management Tools16px;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools2pxData Management Tools8pxData Management Toolsrgba(0,0,0,0.04);Data Management Tools}
+Data Management Tools.perf-cardData Management Toolsh4Data Management Tools{Data Management Toolsfont-size:Data Management Tools13px;Data Management Toolscolor:Data Management Tools#6b7280;Data Management Toolsmargin-bottom:Data Management Tools8px;Data Management Tools}
+Data Management Tools.perf-barData Management Tools{Data Management Toolsheight:Data Management Tools10px;Data Management Toolsbackground:Data Management Tools#e5e7eb;Data Management Toolsborder-radius:Data Management Tools5px;Data Management Toolsoverflow:Data Management Toolshidden;Data Management Toolsmargin:Data Management Tools8pxData Management Tools0;Data Management Tools}
+Data Management Tools.perf-fillData Management Tools{Data Management Toolsheight:Data Management Tools100%;Data Management Toolsborder-radius:Data Management Tools5px;Data Management Toolstransition:Data Management ToolswidthData Management Tools0.5sData Management Toolsease;Data Management Tools}
+Data Management Tools.perf-fill.goodData Management Tools{Data Management Toolsbackground:Data Management Toolslinear-gradient(90deg,Data Management Tools#10b981,Data Management Tools#34d399);Data Management Tools}
+Data Management Tools.perf-fill.warningData Management Tools{Data Management Toolsbackground:Data Management Toolslinear-gradient(90deg,Data Management Tools#f59e0b,Data Management Tools#fbbf24);Data Management Tools}
+Data Management Tools.perf-fill.dangerData Management Tools{Data Management Toolsbackground:Data Management Toolslinear-gradient(90deg,Data Management Tools#ef4444,Data Management Tools#f87171);Data Management Tools}
+Data Management Tools.perf-statsData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsjustify-content:Data Management Toolsspace-between;Data Management Toolsfont-size:Data Management Tools12px;Data Management Toolscolor:Data Management Tools#6b7280;Data Management Tools}
+Data Management Tools.perf-valueData Management Tools{Data Management Toolsfont-size:Data Management Tools24px;Data Management Toolsfont-weight:Data Management Tools800;Data Management Toolscolor:Data Management Tools#111827;Data Management Tools}
+
+Data Management Tools/*Data Management ToolsTabsData Management Tools*/
+Data Management Tools.tabsData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsgap:Data Management Tools4px;Data Management Toolsmargin-bottom:Data Management Tools20px;Data Management Toolsborder-bottom:Data Management Tools2pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Tools}
+Data Management Tools.tabData Management Tools{Data Management Toolspadding:Data Management Tools12pxData Management Tools20px;Data Management Toolscursor:Data Management Toolspointer;Data Management Toolsfont-weight:Data Management Tools600;Data Management Toolsfont-size:Data Management Tools13px;Data Management Toolscolor:Data Management Tools#6b7280;Data Management Toolsborder-bottom:Data Management Tools3pxData Management ToolssolidData Management Toolstransparent;Data Management Toolsmargin-bottom:Data Management Tools-2px;Data Management Toolstransition:Data Management ToolsallData Management Tools0.2s;Data Management Tools}
+Data Management Tools.tab:hoverData Management Tools{Data Management Toolscolor:Data Management Tools#374151;Data Management Tools}
+Data Management Tools.tab.activeData Management Tools{Data Management Toolscolor:Data Management Tools#667eea;Data Management Toolsborder-bottom-color:Data Management Tools#667eea;Data Management Tools}
+Data Management Tools.tab-contentData Management Tools{Data Management Toolsdisplay:Data Management Toolsnone;Data Management Tools}
+Data Management Tools.tab-content.activeData Management Tools{Data Management Toolsdisplay:Data Management Toolsblock;Data Management Tools}
+
+Data Management Tools/*Data Management ToolsAdvancedData Management ToolsFiltersData Management Tools*/
+Data Management Tools.filters-advancedData Management Tools{Data Management Toolsbackground:Data Management Tools#f9fafb;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Toolsborder-radius:Data Management Tools12px;Data Management Toolspadding:Data Management Tools16px;Data Management Toolsmargin-top:Data Management Tools12px;Data Management Toolsdisplay:Data Management Toolsnone;Data Management Tools}
+Data Management Tools.filters-advanced.showData Management Tools{Data Management Toolsdisplay:Data Management Toolsblock;Data Management Tools}
+Data Management Tools.filters-rowData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsgap:Data Management Tools12px;Data Management Toolsflex-wrap:Data Management Toolswrap;Data Management Toolsalign-items:Data Management Toolsflex-end;Data Management Tools}
+Data Management Tools.filter-groupData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsflex-direction:Data Management Toolscolumn;Data Management Toolsgap:Data Management Tools4px;Data Management Tools}
+Data Management Tools.filter-groupData Management ToolslabelData Management Tools{Data Management Toolsfont-size:Data Management Tools11px;Data Management Toolsfont-weight:Data Management Tools700;Data Management Toolscolor:Data Management Tools#6b7280;Data Management Toolstext-transform:Data Management Toolsuppercase;Data Management Tools}
+Data Management Tools.filter-groupData Management Toolsselect,Data Management Tools.filter-groupData Management ToolsinputData Management Tools{Data Management Toolspadding:Data Management Tools8pxData Management Tools12px;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#d1d5db;Data Management Toolsborder-radius:Data Management Tools8px;Data Management Toolsfont-size:Data Management Tools12px;Data Management Toolsmin-width:Data Management Tools140px;Data Management Tools}
+
+Data Management Tools/*Data Management ToolsAlertsData Management Tools*/
+Data Management Tools.alerts-panelData Management Tools{Data Management Toolsbackground:Data Management Tools#fef3c7;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#fcd34d;Data Management Toolsborder-radius:Data Management Tools12px;Data Management Toolspadding:Data Management Tools16px;Data Management Toolsmargin:Data Management Tools16pxData Management Tools0;Data Management Tools}
+Data Management Tools.alerts-panel.dangerData Management Tools{Data Management Toolsbackground:Data Management Tools#fee2e2;Data Management Toolsborder-color:Data Management Tools#fca5a5;Data Management Tools}
+Data Management Tools.alerts-panelData Management Toolsh4Data Management Tools{Data Management Toolsfont-size:Data Management Tools13px;Data Management Toolsfont-weight:Data Management Tools700;Data Management Toolscolor:Data Management Tools#92400e;Data Management Toolsmargin-bottom:Data Management Tools10px;Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsalign-items:Data Management Toolscenter;Data Management Toolsgap:Data Management Tools8px;Data Management Tools}
+Data Management Tools.alerts-panel.dangerData Management Toolsh4Data Management Tools{Data Management Toolscolor:Data Management Tools#991b1b;Data Management Tools}
+Data Management Tools.alert-itemData Management Tools{Data Management Toolspadding:Data Management Tools8pxData Management Tools12px;Data Management Toolsbackground:Data Management Toolsrgba(255,255,255,0.6);Data Management Toolsborder-radius:Data Management Tools8px;Data Management Toolsmargin-bottom:Data Management Tools6px;Data Management Toolsfont-size:Data Management Tools12px;Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsjustify-content:Data Management Toolsspace-between;Data Management Toolsalign-items:Data Management Toolscenter;Data Management Tools}
+
+Data Management Tools/*Data Management ToolsToolsData Management ToolsSectionData Management Tools*/
+Data Management Tools.tools-gridData Management Tools{Data Management Toolsdisplay:Data Management Toolsgrid;Data Management Toolsgrid-template-columns:Data Management Toolsrepeat(auto-fit,Data Management Toolsminmax(350px,Data Management Tools1fr));Data Management Toolsgap:Data Management Tools20px;Data Management Toolsmargin:Data Management Tools20pxData Management Tools0;Data Management Tools}
+Data Management Tools.tool-cardData Management Tools{Data Management Toolsbackground:Data Management Tools#fff;Data Management Toolsborder-radius:Data Management Tools14px;Data Management Toolspadding:Data Management Tools24px;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools4pxData Management Tools16pxData Management Toolsrgba(0,0,0,0.06);Data Management Tools}
+Data Management Tools.tool-cardData Management Toolsh3Data Management Tools{Data Management Toolsfont-size:Data Management Tools18px;Data Management Toolsfont-weight:Data Management Tools700;Data Management Toolscolor:Data Management Tools#111827;Data Management Toolsmargin-bottom:Data Management Tools8px;Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsalign-items:Data Management Toolscenter;Data Management Toolsgap:Data Management Tools10px;Data Management Tools}
+Data Management Tools.tool-cardData Management ToolspData Management Tools{Data Management Toolsfont-size:Data Management Tools13px;Data Management Toolscolor:Data Management Tools#6b7280;Data Management Toolsmargin-bottom:Data Management Tools16px;Data Management Toolsline-height:Data Management Tools1.6;Data Management Tools}
+Data Management Tools.tool-actionsData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsgap:Data Management Tools10px;Data Management Toolsflex-wrap:Data Management Toolswrap;Data Management Tools}
+Data Management Tools.backup-listData Management Tools{Data Management Toolsmargin-top:Data Management Tools16px;Data Management Toolsmax-height:Data Management Tools200px;Data Management Toolsoverflow-y:Data Management Toolsauto;Data Management Tools}
+Data Management Tools.backup-itemData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsjustify-content:Data Management Toolsspace-between;Data Management Toolsalign-items:Data Management Toolscenter;Data Management Toolspadding:Data Management Tools10pxData Management Tools12px;Data Management Toolsbackground:Data Management Tools#f9fafb;Data Management Toolsborder-radius:Data Management Tools8px;Data Management Toolsmargin-bottom:Data Management Tools6px;Data Management Toolsfont-size:Data Management Tools13px;Data Management Tools}
+Data Management Tools.duplicate-listData Management Tools{Data Management Toolsmargin-top:Data Management Tools16px;Data Management Toolsmax-height:Data Management Tools300px;Data Management Toolsoverflow-y:Data Management Toolsauto;Data Management Tools}
+Data Management Tools.duplicate-groupData Management Tools{Data Management Toolsbackground:Data Management Tools#fef3c7;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#fcd34d;Data Management Toolsborder-radius:Data Management Tools10px;Data Management Toolspadding:Data Management Tools14px;Data Management Toolsmargin-bottom:Data Management Tools12px;Data Management Tools}
+Data Management Tools.duplicate-groupData Management Toolsh4Data Management Tools{Data Management Toolsfont-size:Data Management Tools13px;Data Management Toolsfont-weight:Data Management Tools700;Data Management Toolscolor:Data Management Tools#92400e;Data Management Toolsmargin-bottom:Data Management Tools10px;Data Management Tools}
+Data Management Tools.duplicate-itemData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsjustify-content:Data Management Toolsspace-between;Data Management Toolsalign-items:Data Management Toolscenter;Data Management Toolspadding:Data Management Tools8pxData Management Tools10px;Data Management Toolsbackground:Data Management Tools#fff;Data Management Toolsborder-radius:Data Management Tools6px;Data Management Toolsmargin-bottom:Data Management Tools6px;Data Management Toolsfont-size:Data Management Tools12px;Data Management Tools}
+Data Management Tools.duplicate-item.selectedData Management Tools{Data Management Toolsbackground:Data Management Tools#dbeafe;Data Management Toolsborder:Data Management Tools2pxData Management ToolssolidData Management Tools#3b82f6;Data Management Tools}
+
+Data Management Tools/*Data Management ToolsModalsData Management Tools*/
+Data Management Tools.modalData Management Tools{Data Management Toolsdisplay:Data Management Toolsnone;Data Management Toolsposition:Data Management Toolsfixed;Data Management Toolsinset:Data Management Tools0;Data Management Toolsbackground:Data Management Toolsrgba(0,0,0,0.55);Data Management Toolsz-index:Data Management Tools1000;Data Management Toolsalign-items:Data Management Toolscenter;Data Management Toolsjustify-content:Data Management Toolscenter;Data Management Toolspadding:Data Management Tools20px;Data Management Tools}
+Data Management Tools.modal.showData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Tools}
+Data Management Tools.modal-contentData Management Tools{Data Management Toolsbackground:Data Management Tools#fff;Data Management Toolsborder-radius:Data Management Tools14px;Data Management Toolswidth:Data Management Tools95%;Data Management Toolsmax-width:Data Management Tools760px;Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools30pxData Management Tools80pxData Management Toolsrgba(0,0,0,0.28);Data Management Toolsanimation:Data Management ToolsfadeInData Management Tools0.2sData Management Toolsease;Data Management Tools}
+Data Management Tools.modal-headerData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsjustify-content:Data Management Toolsspace-between;Data Management Toolsalign-items:Data Management Toolscenter;Data Management Toolspadding:Data Management Tools18pxData Management Tools22px;Data Management Toolsborder-bottom:Data Management Tools1pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Tools}
+Data Management Tools.modal-bodyData Management Tools{Data Management Toolspadding:Data Management Tools18pxData Management Tools22px;Data Management Toolsmax-height:Data Management Tools70vh;Data Management Toolsoverflow-y:Data Management Toolsauto;Data Management Tools}
+Data Management Tools.modal-closeData Management Tools{Data Management Toolsbackground:Data Management Toolsnone;Data Management Toolsborder:Data Management Toolsnone;Data Management Toolsfont-size:Data Management Tools26px;Data Management Toolscursor:Data Management Toolspointer;Data Management Toolscolor:Data Management Tools#6b7280;Data Management Tools}
+Data Management Tools.modal-close:hoverData Management Tools{Data Management Toolscolor:Data Management Tools#111827;Data Management Tools}
+Data Management Tools.detail-gridData Management Tools{Data Management Toolsdisplay:Data Management Toolsgrid;Data Management Toolsgrid-template-columns:Data Management Toolsrepeat(auto-fit,Data Management Toolsminmax(220px,Data Management Tools1fr));Data Management Toolsgap:Data Management Tools14px;Data Management Tools}
+Data Management Tools.detail-itemData Management Tools{Data Management Toolspadding:Data Management Tools12px;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Toolsborder-radius:Data Management Tools10px;Data Management Toolsbackground:Data Management Tools#f9fafb;Data Management Tools}
+Data Management Tools.detail-labelData Management Tools{Data Management Toolsfont-size:Data Management Tools12px;Data Management Toolsfont-weight:Data Management Tools700;Data Management Toolscolor:Data Management Tools#6b7280;Data Management Toolsmargin-bottom:Data Management Tools4px;Data Management Toolstext-transform:Data Management Toolsuppercase;Data Management Toolsletter-spacing:Data Management Tools0.3px;Data Management Tools}
+Data Management Tools.detail-valueData Management Tools{Data Management Toolsfont-size:Data Management Tools14px;Data Management Toolscolor:Data Management Tools#111827;Data Management Toolsword-break:Data Management Toolsbreak-word;Data Management Tools}
+Data Management Tools.form-gridData Management Tools{Data Management Toolsdisplay:Data Management Toolsgrid;Data Management Toolsgrid-template-columns:Data Management Toolsrepeat(auto-fit,Data Management Toolsminmax(240px,Data Management Tools1fr));Data Management Toolsgap:Data Management Tools14px;Data Management Tools}
+Data Management Tools.form-gridData Management ToolslabelData Management Tools{Data Management Toolsdisplay:Data Management Toolsblock;Data Management Toolsfont-size:Data Management Tools12px;Data Management Toolsfont-weight:Data Management Tools700;Data Management Toolscolor:Data Management Tools#4b5563;Data Management Toolsmargin-bottom:Data Management Tools6px;Data Management Tools}
+Data Management Tools.form-gridData Management Toolsinput,Data Management Tools.form-gridData Management ToolsselectData Management Tools{Data Management Toolswidth:Data Management Tools100%;Data Management Toolspadding:Data Management Tools10pxData Management Tools12px;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#d1d5db;Data Management Toolsborder-radius:Data Management Tools10px;Data Management Toolsfont-size:Data Management Tools13px;Data Management Tools}
+Data Management Tools.form-actionsData Management Tools{Data Management Toolsdisplay:Data Management Toolsflex;Data Management Toolsjustify-content:Data Management Toolsflex-end;Data Management Toolsgap:Data Management Tools10px;Data Management Toolsmargin-top:Data Management Tools14px;Data Management Tools}
+
+Data Management Tools@keyframesData Management ToolsfadeInData Management Tools{Data Management ToolsfromData Management Tools{Data Management Toolsopacity:Data Management Tools0;Data Management Toolstransform:Data Management ToolstranslateY(10px);Data Management Tools}Data Management ToolstoData Management Tools{Data Management Toolsopacity:Data Management Tools1;Data Management Toolstransform:Data Management ToolstranslateY(0);Data Management Tools}Data Management Tools}
+Data Management Tools@mediaData Management Tools(max-width:Data Management Tools768px)Data Management Tools{Data Management Tools.top-barData Management Tools{Data Management Toolsflex-direction:Data Management Toolscolumn;Data Management Toolsalign-items:Data Management Toolsstretch;Data Management Tools}Data Management Tools.headerData Management Tools{Data Management Toolsflex-direction:Data Management Toolscolumn;Data Management Toolsgap:Data Management Tools16px;Data Management Toolsalign-items:Data Management Toolsflex-start;Data Management Tools}Data Management Tools}
+Data Management Tools</style>
+</head>
+<body>
+	<div id="topNav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; background: linear-gradient(135deg, #b7ab81 0%, #d4cdb1 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.12);">
+		<div style="display: flex; align-items: center; gap: 10px;">
+			<a href="/" aria-label="Home" style="display: inline-flex; align-items: center; cursor: pointer;">
+				<img src="/logo.png" alt="Logo" style="height: 100px; width: auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); background: rgba(57, 50, 50, 0.25); padding: 0;" />
+			</a>
+			<div style="display: flex; gap: 8px; align-items: center;">
+				<button type="button" onclick="history.back()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">⬅ Back</button>
+				<button type="button" onclick="history.forward()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; cursor: pointer;">Forward ➡</button>
+			</div>
+		</div>
+		<div style="display: flex; gap: 8px; align-items: center;">
+			<a href="/" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 8px 12px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center;">🏠 Home</a>
+		</div>
+	</div>
+	<div style="height: 130px;"></div>
+Data Management Tools<divData Management Toolsclass="container">
+Data Management Tools<divData Management Toolsclass="header">
+Data Management Tools<h1>🥛Data Management ToolsFarmersData Management ToolsManagement</h1>
+Data Management Tools<divData Management Toolsclass="header-actions">
+Data Management Tools<aData Management Toolshref="/"Data Management Toolsclass="btnData Management Toolsbtn-ghost">←Data Management ToolsDashboard</a>
+Data Management Tools<aData Management Toolshref="/register"Data Management Toolsclass="btn">＋Data Management ToolsAddData Management ToolsFarmer</a>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<divData Management Toolsclass="content">
+Data Management Tools<divData Management Toolsclass="summary-grid">
+Data Management Tools<divData Management Toolsclass="summary-card">
+Data Management Tools<h3>TotalData Management ToolsFarmers</h3>
+Data Management Tools<divData Management Toolsclass="number"Data Management Toolsid="totalCount">0</div>
+Data Management Tools<spanData Management Toolsclass="tag">AllData Management Toolsregistered</span>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="summary-card">
+Data Management Tools<h3>CowData Management ToolsFarmers</h3>
+Data Management Tools<divData Management Toolsclass="number"Data Management Toolsid="cowCount">0</div>
+Data Management Tools<spanData Management Toolsclass="tag">DairyData Management Toolscattle</span>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="summary-card">
+Data Management Tools<h3>CamelData Management ToolsFarmers</h3>
+Data Management Tools<divData Management Toolsclass="number"Data Management Toolsid="camelCount">0</div>
+Data Management Tools<spanData Management Toolsclass="tag">CamelData Management Toolsdairy</span>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="summary-card">
+Data Management Tools<h3>Centers</h3>
+Data Management Tools<divData Management Toolsclass="number"Data Management Toolsid="centerCount">0</div>
+Data Management Tools<spanData Management Toolsclass="tag">ActiveData Management ToolsdeliveryData Management Toolshubs</span>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<!--Data Management ToolsTabsData Management ToolsNavigationData Management Tools-->
+Data Management Tools<divData Management Toolsclass="tabs">
+Data Management Tools<divData Management Toolsclass="tabData Management Toolsactive"Data Management Toolsonclick="switchTab('overview')">📊Data Management ToolsOverview</div>
+Data Management Tools<divData Management Toolsclass="tab"Data Management Toolsonclick="switchTab('directory')">👥Data Management ToolsDirectory</div>
+Data Management Tools<divData Management Toolsclass="tab"Data Management Toolsonclick="switchTab('performance')">📈Data Management ToolsPerformance</div>
+Data Management Tools<divData Management Toolsclass="tab"Data Management Toolsonclick="switchTab('alerts')">🔔Data Management ToolsAlerts</div>
+Data Management Tools</div>
+
+Data Management Tools<divData Management Toolsid="msgContainer"></div>
+
+Data Management Tools<!--Data Management ToolsOVERVIEWData Management ToolsTABData Management Tools-->
+Data Management Tools<divData Management Toolsid="tab-overview"Data Management Toolsclass="tab-contentData Management Toolsactive">
+Data Management Tools<!--Data Management ToolsChartsData Management ToolsSectionData Management Tools-->
+Data Management Tools<divData Management Toolsclass="section-title">📊Data Management ToolsDistributionData Management ToolsCharts</div>
+Data Management Tools<divData Management Toolsclass="charts-grid">
+Data Management Tools<divData Management Toolsclass="chart-card">
+Data Management Tools<h3>🥧Data Management ToolsFarmersData Management ToolsbyData Management ToolsType</h3>
+Data Management Tools<divData Management Toolsclass="chart-container">
+Data Management Tools<canvasData Management Toolsid="typeChart"></canvas>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="chart-card">
+Data Management Tools<h3>📊Data Management ToolsFarmersData Management ToolsbyData Management ToolsCenter</h3>
+Data Management Tools<divData Management Toolsclass="chart-container">
+Data Management Tools<canvasData Management Toolsid="centerChart"></canvas>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="chart-card">
+Data Management Tools<h3>📈Data Management ToolsExpectedData Management ToolsvsData Management ToolsActualData Management ToolsCapacity</h3>
+Data Management Tools<divData Management Toolsclass="chart-container">
+Data Management Tools<canvasData Management Toolsid="capacityChart"></canvas>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="chart-card">
+Data Management Tools<h3>🏆Data Management ToolsTopData Management Tools5Data Management ToolsFarmersData Management ToolsbyData Management ToolsCapacity</h3>
+Data Management Tools<divData Management Toolsclass="chart-container">
+Data Management Tools<canvasData Management Toolsid="topFarmersChart"></canvas>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<!--Data Management ToolsSummaryData Management ToolsbyData Management ToolsCenterData Management Tools-->
+Data Management Tools<divData Management Toolsclass="section-title">📍Data Management ToolsSummaryData Management ToolsbyData Management ToolsCenter</div>
+Data Management Tools<divData Management Toolsclass="table-wrapper"Data Management Toolsstyle="margin-bottom:Data Management Tools18px;">
+Data Management Tools<table>
+Data Management Tools<thead>
+Data Management Tools<tr>
+Data Management Tools<th>Center</th>
+Data Management Tools<th>CowData Management ToolsFarmers</th>
+Data Management Tools<th>CamelData Management ToolsFarmers</th>
+Data Management Tools<th>Total</th>
+Data Management Tools<th>TotalData Management ToolsExpectedData Management ToolsQty</th>
+Data Management Tools<th>TotalData Management ToolsMaxData Management ToolsQty</th>
+Data Management Tools</tr>
+Data Management Tools</thead>
+Data Management Tools<tbodyData Management Toolsid="centerSummaryBody">
+Data Management Tools<tr><tdData Management Toolscolspan="6"Data Management Toolsstyle="text-align:center;Data Management Toolspadding:16px;Data Management Toolscolor:#9ca3af;">Loading...</td></tr>
+Data Management Tools</tbody>
+Data Management Tools</table>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<!--Data Management ToolsDIRECTORYData Management ToolsTABData Management Tools-->
+Data Management Tools<divData Management Toolsid="tab-directory"Data Management Toolsclass="tab-content">
+Data Management Tools<divData Management Toolsclass="top-bar">
+Data Management Tools<divData Management Toolsclass="search-box">
+Data Management Tools<inputData Management Toolsid="searchInput"Data Management Toolsplaceholder="SearchData Management ToolsbyData Management Toolscode,Data Management Toolsname,Data Management Toolsarea,Data Management ToolsorData Management Toolscenter..."Data Management Toolsoninput="applyFilters()"Data Management Tools/>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsstyle="display:Data Management Toolsflex;Data Management Toolsgap:Data Management Tools10px;Data Management Toolsflex-wrap:Data Management Toolswrap;">
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-ghost"Data Management Toolsonclick="toggleAdvancedFilters()">🔍Data Management ToolsAdvanced</button>
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-secondary"Data Management Toolsonclick="exportCSV()">📥Data Management ToolsExportData Management ToolsCSV</button>
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-warning"Data Management Toolsonclick="window.print()">🖨️Data Management ToolsPrint</button>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<divData Management Toolsclass="filters">
+Data Management Tools<labelData Management Toolsfor="typeFilter">Type:</label>
+Data Management Tools<selectData Management Toolsid="typeFilter"Data Management Toolsonchange="applyFilters()">
+Data Management Tools<optionData Management Toolsvalue="ALL">AllData Management ToolsTypes</option>
+Data Management Tools<optionData Management Toolsvalue="COW">Cow</option>
+Data Management Tools<optionData Management Toolsvalue="CAMEL">Camel</option>
+Data Management Tools</select>
+
+Data Management Tools<labelData Management Toolsfor="centerFilter">Center:</label>
+Data Management Tools<selectData Management Toolsid="centerFilter"Data Management Toolsonchange="applyFilters()">
+Data Management Tools<optionData Management Toolsvalue="ALL">AllData Management ToolsCenters</option>
+Data Management Tools</select>
+Data Management Tools</div>
+
+Data Management Tools<!--Data Management ToolsAdvancedData Management ToolsFiltersData Management Tools-->
+Data Management Tools<divData Management Toolsid="advancedFilters"Data Management Toolsclass="filters-advanced">
+Data Management Tools<divData Management Toolsclass="filters-row">
+Data Management Tools<divData Management Toolsclass="filter-group">
+Data Management Tools<label>Area</label>
+Data Management Tools<selectData Management Toolsid="areaFilter"Data Management Toolsonchange="applyFilters()">
+Data Management Tools<optionData Management Toolsvalue="ALL">AllData Management ToolsAreas</option>
+Data Management Tools</select>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="filter-group">
+Data Management Tools<label>Bank</label>
+Data Management Tools<selectData Management Toolsid="bankFilter"Data Management Toolsonchange="applyFilters()">
+Data Management Tools<optionData Management Toolsvalue="ALL">AllData Management ToolsBanks</option>
+Data Management Tools</select>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="filter-group">
+Data Management Tools<label>MinData Management ToolsExpectedData Management ToolsQty</label>
+Data Management Tools<inputData Management Toolstype="number"Data Management Toolsid="minQtyFilter"Data Management Toolsplaceholder="0"Data Management Toolsoninput="applyFilters()"Data Management Tools/>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="filter-group">
+Data Management Tools<label>MaxData Management ToolsExpectedData Management ToolsQty</label>
+Data Management Tools<inputData Management Toolstype="number"Data Management Toolsid="maxQtyFilter"Data Management Toolsplaceholder="Any"Data Management Toolsoninput="applyFilters()"Data Management Tools/>
+Data Management Tools</div>
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-ghostData Management Toolsbtn-small"Data Management Toolsonclick="clearFilters()">ClearData Management ToolsAll</button>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<divData Management Toolsclass="section-title">👥Data Management ToolsFarmersData Management ToolsDirectory</div>
+Data Management Tools<divData Management Toolsclass="table-scroll-container"Data Management Toolsstyle="max-height:Data Management Tools400px;Data Management Toolsoverflow-y:Data Management Toolsauto;Data Management Toolsborder-radius:Data Management Tools12px;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools4pxData Management Tools16pxData Management Toolsrgba(0,0,0,0.06);Data Management Toolsbackground:Data Management Tools#fff;">
+Data Management Tools<tableData Management Toolsid="breederTable"Data Management Toolsstyle="width:Data Management Tools100%;Data Management Toolsborder-collapse:Data Management Toolscollapse;">
+Data Management Tools<theadData Management Toolsstyle="position:Data Management Toolssticky;Data Management Toolstop:Data Management Tools0;Data Management Toolsz-index:Data Management Tools5;Data Management Toolsbackground:Data Management Toolslinear-gradient(90deg,Data Management Tools#f3f4f6Data Management Tools0%,Data Management Tools#ffffffData Management Tools100%);">
+Data Management Tools<tr>
+Data Management Tools<thData Management Toolsonclick="sortTable('code')"Data Management Toolsstyle="cursor:pointer;">CodeData Management Tools↕</th>
+Data Management Tools<thData Management Toolsonclick="sortTable('name')"Data Management Toolsstyle="cursor:pointer;">NameData Management Tools↕</th>
+Data Management Tools<th>Phone</th>
+Data Management Tools<th>Type</th>
+Data Management Tools<th>Center</th>
+Data Management Tools<th>Area</th>
+Data Management Tools<th>Bank</th>
+Data Management Tools<thData Management Toolsonclick="sortTable('expected_qty')"Data Management Toolsstyle="cursor:pointer;">ExpectedData Management Tools↕</th>
+Data Management Tools<thData Management Toolsonclick="sortTable('maximum')"Data Management Toolsstyle="cursor:pointer;">MaxData Management Tools↕</th>
+Data Management Tools<th>Actions</th>
+Data Management Tools</tr>
+Data Management Tools</thead>
+Data Management Tools<tbodyData Management Toolsid="breederBody">
+Data Management Tools<tr><tdData Management Toolscolspan="10"Data Management Toolsstyle="text-align:center;Data Management Toolspadding:18px;Data Management Toolscolor:#9ca3af;">Loading...</td></tr>
+Data Management Tools</tbody>
+Data Management Tools</table>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="record-info"Data Management Toolsid="recordInfo">0Data Management ToolsfarmersData Management Toolsdisplayed</div>
+
+Data Management Tools<divData Management Toolsid="emptyState"Data Management Toolsclass="empty-state"Data Management Toolsstyle="display:Data Management Toolsnone;">
+Data Management Tools<divData Management Toolsclass="empty-icon">📋</div>
+Data Management Tools<p>NoData Management ToolsfarmersData Management Toolsfound.</p>
+Data Management Tools<aData Management Toolshref="/register"Data Management Toolsclass="btn">RegisterData Management ToolsFarmer</a>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<!--Data Management ToolsPERFORMANCEData Management ToolsTABData Management Tools-->
+Data Management Tools<divData Management Toolsid="tab-performance"Data Management Toolsclass="tab-content">
+Data Management Tools<divData Management Toolsclass="section-title">📈Data Management ToolsPerformanceData Management ToolsIndicators</div>
+Data Management Tools<divData Management Toolsclass="performance-grid"Data Management Toolsid="performanceGrid">
+Data Management Tools<divData Management Toolsstyle="text-align:center;Data Management Toolspadding:40px;Data Management Toolscolor:#9ca3af;">LoadingData Management ToolsperformanceData Management Toolsdata...</div>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<!--Data Management ToolsALERTSData Management ToolsTABData Management Tools-->
+Data Management Tools<divData Management Toolsid="tab-alerts"Data Management Toolsclass="tab-content">
+Data Management Tools<divData Management Toolsclass="section-title">🔔Data Management ToolsAlertsData Management ToolsandData Management ToolsNotifications</div>
+Data Management Tools<divData Management Toolsid="alertsContainer">
+Data Management Tools<divData Management Toolsstyle="text-align:center;Data Management Toolspadding:40px;Data Management Toolscolor:#9ca3af;">LoadingData Management Toolsalerts...</div>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<!--Data Management ToolsTOOLSData Management ToolsTABData Management Tools-->
+Data Management Tools<divData Management Toolsid="tab-tools"Data Management Toolsclass="tab-content">
+Data Management Tools<divData Management Toolsclass="section-title">�️Data Management Tools</div>
+Data Management Tools
+Data Management Tools<divData Management Toolsclass="tools-grid">
+Data Management Tools<!--Data Management ToolsBackupData Management ToolsToolData Management Tools-->
+Data Management Tools<divData Management Toolsclass="tool-card">
+Data Management Tools<h3>💾Data Management ToolsBackup</h3>
+Data Management Tools<p>
+Data Management ToolsCreateData Management ToolsaData Management ToolsbackupData Management ToolscopyData Management ToolsofData Management ToolsallData Management ToolsfarmerData Management Toolsdata.<br>
+Data Management ToolsYouData Management ToolscanData Management ToolsrestoreData Management ToolsdataData Management ToolsatData Management ToolsanyData Management ToolstimeData Management ToolsfromData Management ToolstheData Management ToolsbackupData Management Toolsfile.
+Data Management Tools</p>
+Data Management Tools<divData Management Toolsclass="tool-actions">
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-secondary"Data Management Toolsonclick="createBackup()">📥Data Management ToolsCreateData Management ToolsBackup</button>
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-warning"Data Management Toolsonclick="restoreBackup()">📤Data Management ToolsRestoreData Management ToolsfromData Management ToolsFile</button>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="backup-list"Data Management Toolsid="backupHistory">
+Data Management Tools<divData Management Toolsstyle="text-align:center;Data Management Toolspadding:20px;Data Management Toolscolor:#9ca3af;">Loading...</div>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<!--Data Management ToolsMergeData Management ToolsDuplicatesData Management ToolsToolData Management Tools-->
+Data Management Tools<divData Management Toolsclass="tool-card">
+Data Management Tools<h3>🔄Data Management ToolsMergeData Management ToolsDuplicates</h3>
+Data Management Tools<p>
+Data Management ToolsFindData Management ToolsduplicateData Management ToolsrecordsData Management ToolsbyData Management Toolsname,Data Management ToolsIDData Management Toolsnumber,Data Management ToolsorData Management ToolsbankData Management Toolsaccount.<br>
+Data Management ToolsSelectData Management ToolsprimaryData Management ToolsrecordData Management ToolsandData Management ToolsdeleteData Management Toolsduplicates.
+Data Management Tools</p>
+Data Management Tools<divData Management Toolsclass="tool-actions">
+Data Management Tools<buttonData Management Toolsclass="btn"Data Management Toolsonclick="findDuplicates()">🔍Data Management ToolsFindData Management ToolsDuplicates</button>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="duplicate-list"Data Management Toolsid="duplicatesList">
+Data Management Tools<divData Management Toolsstyle="text-align:center;Data Management Toolspadding:20px;Data Management Toolscolor:#9ca3af;">ClickData Management Tools"FindData Management ToolsDuplicates"Data Management ToolstoData Management Toolsstart</div>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools</div>
+
+
+Data Management Tools<divData Management Toolsclass="table-scroll-container"Data Management Toolsstyle="max-height:Data Management Tools400px;Data Management Toolsoverflow-y:Data Management Toolsauto;Data Management Toolsborder-radius:Data Management Tools12px;Data Management Toolsborder:Data Management Tools1pxData Management ToolssolidData Management Tools#e5e7eb;Data Management Toolsbox-shadow:Data Management Tools0Data Management Tools4pxData Management Tools16pxData Management Toolsrgba(0,0,0,0.06);Data Management Toolsbackground:Data Management Tools#fff;Data Management Toolsdisplay:Data Management Toolsnone;">
+Data Management Tools<tableData Management Toolsid="breederTable"Data Management Toolsstyle="width:Data Management Tools100%;Data Management Toolsborder-collapse:Data Management Toolscollapse;">
+Data Management Tools<theadData Management Toolsstyle="position:Data Management Toolssticky;Data Management Toolstop:Data Management Tools0;Data Management Toolsz-index:Data Management Tools5;Data Management Toolsbackground:Data Management Toolslinear-gradient(90deg,Data Management Tools#f3f4f6Data Management Tools0%,Data Management Tools#ffffffData Management Tools100%);">
+Data Management Tools<tr>
+Data Management Tools<th>Code</th>
+Data Management Tools<th>Name</th>
+Data Management Tools<th>Type</th>
+Data Management Tools<th>Center</th>
+Data Management Tools<th>Area</th>
+Data Management Tools<th>Bank</th>
+Data Management Tools<th>ExpectedData Management ToolsQty</th>
+Data Management Tools<th>Max</th>
+Data Management Tools<th>Actions</th>
+Data Management Tools</tr>
+Data Management Tools</thead>
+Data Management Tools<tbodyData Management Toolsid="breederBody">
+Data Management Tools<tr><tdData Management Toolscolspan="9"Data Management Toolsstyle="text-align:center;Data Management Toolspadding:18px;Data Management Toolscolor:#9ca3af;">Loading...</td></tr>
+Data Management Tools</tbody>
+Data Management Tools</table>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="record-info"Data Management Toolsid="recordInfo">0Data Management ToolsfarmersData Management Toolsdisplayed</div>
+
+Data Management Tools<divData Management Toolsid="emptyState"Data Management Toolsclass="empty-state"Data Management Toolsstyle="display:Data Management Toolsnone;">
+Data Management Tools<divData Management Toolsclass="empty-icon">📋</div>
+Data Management Tools<p>NoData Management ToolsfarmersData Management Toolsfound.</p>
+Data Management Tools<aData Management Toolshref="/register"Data Management Toolsclass="btn">RegisterData Management ToolsFarmer</a>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<!--Data Management ToolsDetailData Management ToolsModalData Management Tools-->
+Data Management Tools<divData Management Toolsid="detailModal"Data Management Toolsclass="modal">
+Data Management Tools<divData Management Toolsclass="modal-content">
+Data Management Tools<divData Management Toolsclass="modal-header">
+Data Management Tools<h2>FarmerData Management ToolsDetails</h2>
+Data Management Tools<buttonData Management Toolsclass="modal-close"Data Management Toolsonclick="closeDetailModal()">✕</button>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="modal-body">
+Data Management Tools<divData Management Toolsclass="detail-grid"Data Management Toolsid="detailBody"></div>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<!--Data Management ToolsEditData Management ToolsModalData Management Tools-->
+Data Management Tools<divData Management Toolsid="editModal"Data Management Toolsclass="modal">
+Data Management Tools<divData Management Toolsclass="modal-content">
+Data Management Tools<divData Management Toolsclass="modal-header">
+Data Management Tools<h2>EditData Management ToolsFarmer</h2>
+Data Management Tools<buttonData Management Toolsclass="modal-close"Data Management Toolsonclick="closeEditModal()">✕</button>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="modal-body">
+Data Management Tools<formData Management Toolsid="editForm">
+Data Management Tools<divData Management Toolsclass="form-grid">
+Data Management Tools<div>
+Data Management Tools<label>CodeData Management Tools(read-only)</label>
+Data Management Tools<inputData Management Toolsid="editCode"Data Management ToolsreadonlyData Management Tools/>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>Name</label>
+Data Management Tools<inputData Management Toolsid="editName"Data Management Tools/>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>Phone</label>
+Data Management Tools<inputData Management Toolsid="editPhone"Data Management Toolsplaceholder="PhoneData Management Toolsnumber"Data Management Toolsinputmode="tel"Data Management Tools/>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>TypeData Management Tools(read-only)</label>
+Data Management Tools<inputData Management Toolsid="editType"Data Management ToolsreadonlyData Management Tools/>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>Center</label>
+Data Management Tools<selectData Management Toolsid="editCenter"></select>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>Bank</label>
+Data Management Tools<selectData Management Toolsid="editBankSelect">
+Data Management Tools<optionData Management Toolsvalue="">--Data Management ToolsNoneData Management Tools--</option>
+Data Management Tools<optionData Management Toolsvalue="AUBOOMRUALH"Data Management Toolsdata-name="AHLIData Management ToolsBANKData Management ToolsS.A.O.GData Management Tools-Data Management ToolsAHLIData Management ToolsISLAMIC">AHLIData Management ToolsBANKData Management ToolsS.A.O.GData Management Tools-Data Management ToolsAHLIData Management ToolsISLAMIC</option>
+Data Management Tools<optionData Management Toolsvalue="AUBOOMRU"Data Management Toolsdata-name="AHLIData Management ToolsBANKData Management ToolsS.A.O.GData Management Tools-Data Management ToolsRUWI">AHLIData Management ToolsBANKData Management ToolsS.A.O.GData Management Tools-Data Management ToolsRUWI</option>
+Data Management Tools<optionData Management Toolsvalue="ASMLOMR1"Data Management Toolsdata-name="ALData Management ToolsAMINData Management ToolsSECURITIESData Management ToolsCOMPANYData Management ToolsLLC">ALData Management ToolsAMINData Management ToolsSECURITIESData Management ToolsCOMPANYData Management ToolsLLC</option>
+Data Management Tools<optionData Management Toolsvalue="IZZBOMRU"Data Management Toolsdata-name="ALIZZData Management ToolsISLAMICData Management ToolsBANK">ALIZZData Management ToolsISLAMICData Management ToolsBANK</option>
+Data Management Tools<optionData Management Toolsvalue="BDOFOMRU"Data Management Toolsdata-name="BANKData Management ToolsDHOFARData Management Tools(S.A.O.G.)">BANKData Management ToolsDHOFARData Management Tools(S.A.O.G.)</option>
+Data Management Tools<optionData Management Toolsvalue="BDOFOMRUTFD"Data Management Toolsdata-name="BANKData Management ToolsDHOFARData Management Tools(S.A.O.G.)Data Management Tools-Data Management ToolsTFD">BANKData Management ToolsDHOFARData Management Tools(S.A.O.G.)Data Management Tools-Data Management ToolsTFD</option>
+Data Management Tools<optionData Management Toolsvalue="BDOFOMRUMIB"Data Management Toolsdata-name="BANKData Management ToolsDHOFARData Management Tools(S.A.O.G.)Data Management Tools-Data Management ToolsMAISARAH">BANKData Management ToolsDHOFARData Management Tools(S.A.O.G.)Data Management Tools-Data Management ToolsMAISARAH</option>
+Data Management Tools<optionData Management Toolsvalue="MELIOMR1"Data Management Toolsdata-name="BANKData Management ToolsMELLIData Management ToolsIRAN">BANKData Management ToolsMELLIData Management ToolsIRAN</option>
+Data Management Tools<optionData Management Toolsvalue="BMUSOMRX"Data Management Toolsdata-name="BANKData Management ToolsMUSCATData Management ToolsSAOG">BANKData Management ToolsMUSCATData Management ToolsSAOG</option>
+Data Management Tools<optionData Management Toolsvalue="BMUSOMRXISL"Data Management Toolsdata-name="BANKData Management ToolsMUSCATData Management ToolsSAOGData Management Tools-Data Management ToolsISLAMIC">BANKData Management ToolsMUSCATData Management ToolsSAOGData Management Tools-Data Management ToolsISLAMIC</option>
+Data Management Tools<optionData Management Toolsvalue="BMUSOMRXTBG"Data Management Toolsdata-name="BANKData Management ToolsMUSCATData Management ToolsSAOGData Management Tools-Data Management ToolsTRANSACTIONData Management ToolsBANKING">BANKData Management ToolsMUSCATData Management ToolsSAOGData Management Tools-Data Management ToolsTRANSACTIONData Management ToolsBANKING</option>
+Data Management Tools<optionData Management Toolsvalue="BNZWOMRX"Data Management Toolsdata-name="BANKData Management ToolsNIZWA">BANKData Management ToolsNIZWA</option>
+Data Management Tools<optionData Management Toolsvalue="BARBOMMXMUT"Data Management Toolsdata-name="BANKData Management ToolsOFData Management ToolsBARODAData Management Tools-Data Management ToolsMUTTRAH">BANKData Management ToolsOFData Management ToolsBARODAData Management Tools-Data Management ToolsMUTTRAH</option>
+Data Management Tools<optionData Management Toolsvalue="BARBOMMXSAL"Data Management Toolsdata-name="BANKData Management ToolsOFData Management ToolsBARODAData Management Tools-Data Management ToolsSALALAH">BANKData Management ToolsOFData Management ToolsBARODAData Management Tools-Data Management ToolsSALALAH</option>
+Data Management Tools<optionData Management Toolsvalue="BARBOMMX"Data Management Toolsdata-name="BANKData Management ToolsOFData Management ToolsBARODAData Management Tools-Data Management ToolsRUWI">BANKData Management ToolsOFData Management ToolsBARODAData Management Tools-Data Management ToolsRUWI</option>
+Data Management Tools<optionData Management Toolsvalue="BARBOMMXSOH"Data Management Toolsdata-name="BANKData Management ToolsOFData Management ToolsBARODAData Management Tools-Data Management ToolsSOHAR">BANKData Management ToolsOFData Management ToolsBARODAData Management Tools-Data Management ToolsSOHAR</option>
+Data Management Tools<optionData Management Toolsvalue="BABEOMRX"Data Management Toolsdata-name="BANKData Management ToolsOFData Management ToolsBEIRUT">BANKData Management ToolsOFData Management ToolsBEIRUT</option>
+Data Management Tools<optionData Management Toolsvalue="CBOMOMRU"Data Management Toolsdata-name="CENTRALData Management ToolsBANKData Management ToolsOFData Management ToolsOMAN">CENTRALData Management ToolsBANKData Management ToolsOFData Management ToolsOMAN</option>
+Data Management Tools<optionData Management Toolsvalue="EFGHOMM1"Data Management Toolsdata-name="EFGData Management ToolsHERMESData Management ToolsOMANData Management ToolsLLC">EFGData Management ToolsHERMESData Management ToolsOMANData Management ToolsLLC</option>
+Data Management Tools<optionData Management Toolsvalue="FIVOOMR1"Data Management Toolsdata-name="FINANCIALData Management ToolsSERVICESData Management ToolsCOMPANYData Management ToolsSAOG">FINANCIALData Management ToolsSERVICESData Management ToolsCOMPANYData Management ToolsSAOG</option>
+Data Management Tools<optionData Management Toolsvalue="NBADOMRX"Data Management Toolsdata-name="FIRSTData Management ToolsABUData Management ToolsDHABIData Management ToolsBANK">FIRSTData Management ToolsABUData Management ToolsDHABIData Management ToolsBANK</option>
+Data Management Tools<optionData Management Toolsvalue="NBADOMRXCMS"Data Management Toolsdata-name="FIRSTData Management ToolsABUData Management ToolsDHABIData Management ToolsBANKData Management Tools-Data Management ToolsCMS">FIRSTData Management ToolsABUData Management ToolsDHABIData Management ToolsBANKData Management Tools-Data Management ToolsCMS</option>
+Data Management Tools<optionData Management Toolsvalue="NBADOMRXTFO"Data Management Toolsdata-name="FIRSTData Management ToolsABUData Management ToolsDHABIData Management ToolsBANKData Management Tools-Data Management ToolsTFO">FIRSTData Management ToolsABUData Management ToolsDHABIData Management ToolsBANKData Management Tools-Data Management ToolsTFO</option>
+Data Management Tools<optionData Management Toolsvalue="GFISOMR1"Data Management Toolsdata-name="GLOBALData Management ToolsFINANCIALData Management ToolsINVESTMENTSData Management ToolsHOLDING">GLOBALData Management ToolsFINANCIALData Management ToolsINVESTMENTSData Management ToolsHOLDING</option>
+Data Management Tools<optionData Management Toolsvalue="GULFOMRX"Data Management Toolsdata-name="GULFData Management ToolsINTERNATIONALData Management ToolsBANK">GULFData Management ToolsINTERNATIONALData Management ToolsBANK</option>
+Data Management Tools<optionData Management Toolsvalue="GISCOMR1"Data Management Toolsdata-name="GULFData Management ToolsINVESTMENTData Management ToolsSERVICESData Management ToolsCO.">GULFData Management ToolsINVESTMENTData Management ToolsSERVICESData Management ToolsCO.</option>
+Data Management Tools<optionData Management Toolsvalue="HBZUOMM1"Data Management Toolsdata-name="HABIBData Management ToolsBANKData Management ToolsLIMITED">HABIBData Management ToolsBANKData Management ToolsLIMITED</option>
+Data Management Tools<optionData Management Toolsvalue="HABBOMRX"Data Management Toolsdata-name="HABIBData Management ToolsBANKData Management ToolsOMAN">HABIBData Management ToolsBANKData Management ToolsOMAN</option>
+Data Management Tools<optionData Management Toolsvalue="HBMEOMRX"Data Management Toolsdata-name="HSBCData Management ToolsBANKData Management ToolsMIDDLEData Management ToolsEAST">HSBCData Management ToolsBANKData Management ToolsMIDDLEData Management ToolsEAST</option>
+Data Management Tools<optionData Management Toolsvalue="MINIOMRU"Data Management Toolsdata-name="MINISTRYData Management ToolsOFData Management ToolsFINANCE">MINISTRYData Management ToolsOFData Management ToolsFINANCE</option>
+Data Management Tools<optionData Management Toolsvalue="MDSROMR1"Data Management Toolsdata-name="MUSCATData Management ToolsDEPOSITORY">MUSCATData Management ToolsDEPOSITORY</option>
+Data Management Tools<optionData Management Toolsvalue="XMUSOMM1"Data Management Toolsdata-name="MUSCATData Management ToolsSECURITIESData Management ToolsMARKET">MUSCATData Management ToolsSECURITIESData Management ToolsMARKET</option>
+Data Management Tools<optionData Management Toolsvalue="MUZNOMR1"Data Management Toolsdata-name="MUZNData Management ToolsISLAMICData Management ToolsBANKING">MUZNData Management ToolsISLAMICData Management ToolsBANKING</option>
+Data Management Tools<optionData Management Toolsvalue="NBOMOMRX"Data Management Toolsdata-name="NATIONALData Management ToolsBANKData Management ToolsOFData Management ToolsOMAN">NATIONALData Management ToolsBANKData Management ToolsOFData Management ToolsOMAN</option>
+Data Management Tools<optionData Management Toolsvalue="NBOMOMRXIBS"Data Management Toolsdata-name="NATIONALData Management ToolsBANKData Management ToolsOFData Management ToolsOMANData Management Tools-Data Management ToolsIBS">NATIONALData Management ToolsBANKData Management ToolsOFData Management ToolsOMANData Management Tools-Data Management ToolsIBS</option>
+Data Management Tools<optionData Management Toolsvalue="NBOMOMRXITF"Data Management Toolsdata-name="NATIONALData Management ToolsBANKData Management ToolsOFData Management ToolsOMANData Management Tools-Data Management ToolsITF">NATIONALData Management ToolsBANKData Management ToolsOFData Management ToolsOMANData Management Tools-Data Management ToolsITF</option>
+Data Management Tools<optionData Management Toolsvalue="NBOMOMRXTSS"Data Management Toolsdata-name="NATIONALData Management ToolsBANKData Management ToolsOFData Management ToolsOMANData Management Tools-Data Management ToolsTSS">NATIONALData Management ToolsBANKData Management ToolsOFData Management ToolsOMANData Management Tools-Data Management ToolsTSS</option>
+Data Management Tools<optionData Management Toolsvalue="OPCFOMRX"Data Management Toolsdata-name="OCTALData Management ToolsPETROCHEMICALSData Management ToolsFZC">OCTALData Management ToolsPETROCHEMICALSData Management ToolsFZC</option>
+Data Management Tools<optionData Management Toolsvalue="OMEMOMR1"Data Management Toolsdata-name="OMANData Management ToolsANDData Management ToolsEMIRATESData Management ToolsINVESTMENT">OMANData Management ToolsANDData Management ToolsEMIRATESData Management ToolsINVESTMENT</option>
+Data Management Tools<optionData Management Toolsvalue="OMABOMRU"Data Management Toolsdata-name="OMANData Management ToolsARABData Management ToolsBANK">OMANData Management ToolsARABData Management ToolsBANK</option>
+Data Management Tools<optionData Management Toolsvalue="OMABOMRUYSR"Data Management Toolsdata-name="OMANData Management ToolsARABData Management ToolsBANKData Management Tools-Data Management ToolsAL-YUSR">OMANData Management ToolsARABData Management ToolsBANKData Management Tools-Data Management ToolsAL-YUSR</option>
+Data Management Tools<optionData Management Toolsvalue="BOGUOMR1"Data Management Toolsdata-name="OMANData Management ToolsBANKINGData Management ToolsCORP">OMANData Management ToolsBANKINGData Management ToolsCORP</option>
+Data Management Tools<optionData Management Toolsvalue="OIDIOMR1"Data Management Toolsdata-name="OMANData Management ToolsINTERNATIONALData Management ToolsDEVELOPMENT">OMANData Management ToolsINTERNATIONALData Management ToolsDEVELOPMENT</option>
+Data Management Tools<optionData Management Toolsvalue="SGRFOMRA"Data Management Toolsdata-name="OMANData Management ToolsINVESTMENTData Management ToolsAUTHORITY">OMANData Management ToolsINVESTMENTData Management ToolsAUTHORITY</option>
+Data Management Tools<optionData Management Toolsvalue="OIBBOMRX"Data Management Toolsdata-name="OMANData Management ToolsINVESTMENTData Management ToolsBANK">OMANData Management ToolsINVESTMENTData Management ToolsBANK</option>
+Data Management Tools<optionData Management Toolsvalue="OMUEOMR1"Data Management Toolsdata-name="OMANData Management ToolsUNITEDData Management ToolsEXCHANGE">OMANData Management ToolsUNITEDData Management ToolsEXCHANGE</option>
+Data Management Tools<optionData Management Toolsvalue="QNBAOMRX"Data Management Toolsdata-name="QATARData Management ToolsNATIONALData Management ToolsBANK">QATARData Management ToolsNATIONALData Management ToolsBANK</option>
+Data Management Tools<optionData Management Toolsvalue="OTHER"Data Management Toolsdata-name="Other">OtherData Management Tools(specify)</option>
+Data Management Tools</select>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>SWIFTData Management ToolsCode</label>
+Data Management Tools<inputData Management Toolsid="editSwift"Data Management Toolsplaceholder="SWIFTData Management ToolsCode"Data Management ToolsreadonlyData Management Tools/>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>BankData Management ToolsAccount</label>
+Data Management Tools<inputData Management Toolsid="editBankAcc"Data Management Tools/>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>Address</label>
+Data Management Tools<inputData Management Toolsid="editAddress"Data Management Tools/>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>Area</label>
+Data Management Tools<inputData Management Toolsid="editArea"Data Management Tools/>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>DailyData Management ToolsExpectedData Management ToolsQuantity</label>
+Data Management Tools<inputData Management Toolsid="editExpectedQty"Data Management Toolstype="number"Data Management Tools/>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>DailyData Management ToolsMaximumData Management ToolsQuantity</label>
+Data Management Tools<inputData Management Toolsid="editMaximum"Data Management Toolstype="number"Data Management Tools/>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>NumberData Management ToolsofData Management ToolsAnimals</label>
+Data Management Tools<inputData Management Toolsid="editAnimalCount"Data Management Toolstype="number"Data Management Toolsmin="1"Data Management Tools/>
+Data Management Tools</div>
+Data Management Tools<div>
+Data Management Tools<label>FarmerData Management ToolsStatus</label>
+Data Management Tools<selectData Management Toolsid="editStatus">
+Data Management Tools<optionData Management Toolsvalue="active">Active</option>
+Data Management Tools<optionData Management Toolsvalue="standby">Standby</option>
+Data Management Tools<optionData Management Toolsvalue="inactive">Inactive</option>
+Data Management Tools</select>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="form-actions">
+Data Management Tools<buttonData Management Toolstype="button"Data Management Toolsclass="btnData Management Toolsbtn-ghost"Data Management Toolsonclick="closeEditModal()">Cancel</button>
+Data Management Tools<buttonData Management Toolstype="button"Data Management Toolsclass="btn"Data Management Toolsonclick="saveEditedFarmer()">SaveData Management ToolsChanges</button>
+Data Management Tools</div>
+Data Management Tools</form>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<!--Data Management ToolsDeleteData Management ToolsConfirmationData Management ToolsModalData Management Tools-->
+Data Management Tools<divData Management Toolsid="deleteModal"Data Management Toolsclass="modal">
+Data Management Tools<divData Management Toolsclass="modal-content"Data Management Toolsstyle="max-width:420px;">
+Data Management Tools<divData Management Toolsclass="modal-header">
+Data Management Tools<h2>ConfirmData Management ToolsDelete</h2>
+Data Management Tools<buttonData Management Toolsclass="modal-close"Data Management Toolsonclick="closeDeleteModal()">✕</button>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="modal-body"Data Management Toolsstyle="text-align:center;">
+Data Management Tools<pData Management Toolsstyle="margin-bottom:Data Management Tools18px;Data Management Toolsfont-size:Data Management Tools15px;">AreData Management ToolsyouData Management ToolssureData Management ToolsyouData Management ToolswantData Management ToolstoData Management ToolsdeleteData Management ToolsfarmerData Management Tools<strongData Management Toolsid="deleteCode">-</strong>?</p>
+Data Management Tools<divData Management Toolsclass="form-actions"Data Management Toolsstyle="justify-content:center;">
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-danger"Data Management Toolsonclick="confirmDelete()">Yes,Data Management Toolsdelete</button>
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-ghost"Data Management Toolsonclick="closeDeleteModal()">Cancel</button>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools</div>
+
+Data Management Tools<script>
+Data Management ToolsletData Management ToolsallFarmersData Management Tools=Data Management Tools[];
+Data Management ToolsletData Management ToolsfilteredFarmersData Management Tools=Data Management Tools[];
+Data Management ToolsletData Management ToolsdeleteTargetData Management Tools=Data Management Toolsnull;
+Data Management ToolsletData Management ToolssortFieldData Management Tools=Data Management Tools'code';
+Data Management ToolsletData Management ToolssortAscData Management Tools=Data Management Toolstrue;
+Data Management ToolsletData Management ToolschartsData Management Tools=Data Management Tools{};
+
+Data Management ToolsasyncData Management ToolsfunctionData Management ToolsloadFarmers()Data Management Tools{
+Data Management ToolstryData Management Tools{
+Data Management ToolsconstData Management ToolsrespData Management Tools=Data Management ToolsawaitData Management Toolsfetch('/api/farmers');
+Data Management ToolsallFarmersData Management Tools=Data Management ToolsawaitData Management Toolsresp.json();
+Data Management ToolsfilteredFarmersData Management Tools=Data Management ToolsallFarmers;
+Data Management ToolspopulateAllFilters();
+Data Management ToolsrenderAll();
+Data Management ToolsrenderCharts();
+Data Management ToolsrenderPerformance();
+Data Management ToolsrenderAlerts();
+Data Management ToolsrenderBackupHistory();
+Data Management Tools}Data Management ToolscatchData Management Tools(e)Data Management Tools{
+Data Management ToolsshowMsg('ErrorData Management ToolsloadingData Management Toolsfarmers',Data Management Tools'error');
+Data Management Tools}
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolspopulateAllFilters()Data Management Tools{
+Data Management Tools//Data Management ToolsCenters
+Data Management ToolsconstData Management ToolscentersData Management Tools=Data Management ToolsArray.from(newData Management ToolsSet(allFarmers.map(bData Management Tools=>Data Management Toolsb.centerData Management Tools||Data Management Tools'Unknown'))).sort();
+Data Management Toolsdocument.getElementById('centerFilter').innerHTMLData Management Tools=Data Management Tools'<optionData Management Toolsvalue="ALL">AllData Management ToolsCenters</option>'Data Management Tools+Data Management Toolscenters.map(cData Management Tools=>Data Management Tools`<optionData Management Toolsvalue="${c}">${c}</option>`).join('');
+Data Management Tools
+Data Management ToolsconstData Management ToolseditCenterData Management Tools=Data Management Toolsdocument.getElementById('editCenter');
+Data Management ToolsifData Management Tools(editCenter)Data Management ToolseditCenter.innerHTMLData Management Tools=Data Management Toolscenters.map(cData Management Tools=>Data Management Tools`<optionData Management Toolsvalue="${c}">${c}</option>`).join('');
+
+Data Management Tools//Data Management ToolsAreas
+Data Management ToolsconstData Management ToolsareasData Management Tools=Data Management ToolsArray.from(newData Management ToolsSet(allFarmers.map(bData Management Tools=>Data Management Toolsb.areaData Management Tools||Data Management Tools'Unknown'))).sort();
+Data Management Toolsdocument.getElementById('areaFilter').innerHTMLData Management Tools=Data Management Tools'<optionData Management Toolsvalue="ALL">AllData Management ToolsAreas</option>'Data Management Tools+Data Management Toolsareas.map(aData Management Tools=>Data Management Tools`<optionData Management Toolsvalue="${a}">${a}</option>`).join('');
+
+Data Management Tools//Data Management ToolsBanks
+Data Management ToolsconstData Management ToolsbanksData Management Tools=Data Management ToolsArray.from(newData Management ToolsSet(allFarmers.map(bData Management Tools=>Data Management Toolsb.bankData Management Tools||Data Management Tools'Unknown'))).sort();
+Data Management Toolsdocument.getElementById('bankFilter').innerHTMLData Management Tools=Data Management Tools'<optionData Management Toolsvalue="ALL">AllData Management ToolsBanks</option>'Data Management Tools+Data Management Toolsbanks.map(bData Management Tools=>Data Management Tools`<optionData Management Toolsvalue="${b}">${b.substring(0,25)}${b.lengthData Management Tools>Data Management Tools25Data Management Tools?Data Management Tools'...'Data Management Tools:Data Management Tools''}</option>`).join('');
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsapplyFilters()Data Management Tools{
+Data Management ToolsconstData Management ToolssearchData Management Tools=Data Management Tools(document.getElementById('searchInput').valueData Management Tools||Data Management Tools'').toLowerCase();
+Data Management ToolsconstData Management ToolstypeData Management Tools=Data Management Toolsdocument.getElementById('typeFilter').value;
+Data Management ToolsconstData Management ToolscenterData Management Tools=Data Management Toolsdocument.getElementById('centerFilter').value;
+Data Management ToolsconstData Management ToolsareaData Management Tools=Data Management Toolsdocument.getElementById('areaFilter').value;
+Data Management ToolsconstData Management ToolsbankData Management Tools=Data Management Toolsdocument.getElementById('bankFilter').value;
+Data Management ToolsconstData Management ToolsminQtyData Management Tools=Data Management ToolsparseFloat(document.getElementById('minQtyFilter').value)Data Management Tools||Data Management Tools0;
+Data Management ToolsconstData Management ToolsmaxQtyData Management Tools=Data Management ToolsparseFloat(document.getElementById('maxQtyFilter').value)Data Management Tools||Data Management ToolsInfinity;
+
+Data Management ToolsfilteredFarmersData Management Tools=Data Management ToolsallFarmers.filter(bData Management Tools=>Data Management Tools{
+Data Management ToolsconstData Management ToolsmatchesSearchData Management Tools=Data Management Tools!searchData Management Tools||
+Data Management Tools(b.codeData Management Tools||Data Management Tools'').toLowerCase().includes(search)Data Management Tools||
+Data Management Tools(b.nameData Management Tools||Data Management Tools'').toLowerCase().includes(search)Data Management Tools||
+Data Management Tools(b.areaData Management Tools||Data Management Tools'').toLowerCase().includes(search)Data Management Tools||
+Data Management Tools(b.centerData Management Tools||Data Management Tools'').toLowerCase().includes(search);
+Data Management ToolsconstData Management ToolsmatchesTypeData Management Tools=Data Management ToolstypeData Management Tools===Data Management Tools'ALL'Data Management Tools||Data Management Toolsb.typeData Management Tools===Data Management Toolstype;
+Data Management ToolsconstData Management ToolsmatchesCenterData Management Tools=Data Management ToolscenterData Management Tools===Data Management Tools'ALL'Data Management Tools||Data Management Tools(b.centerData Management Tools||Data Management Tools'Unknown')Data Management Tools===Data Management Toolscenter;
+Data Management ToolsconstData Management ToolsmatchesAreaData Management Tools=Data Management ToolsareaData Management Tools===Data Management Tools'ALL'Data Management Tools||Data Management Tools(b.areaData Management Tools||Data Management Tools'Unknown')Data Management Tools===Data Management Toolsarea;
+Data Management ToolsconstData Management ToolsmatchesBankData Management Tools=Data Management ToolsbankData Management Tools===Data Management Tools'ALL'Data Management Tools||Data Management Tools(b.bankData Management Tools||Data Management Tools'Unknown')Data Management Tools===Data Management Toolsbank;
+Data Management ToolsconstData Management ToolsqtyData Management Tools=Data Management ToolsparseFloat(b.expected_qty)Data Management Tools||Data Management Tools0;
+Data Management ToolsconstData Management ToolsmatchesQtyData Management Tools=Data Management ToolsqtyData Management Tools>=Data Management ToolsminQtyData Management Tools&&Data Management ToolsqtyData Management Tools<=Data Management ToolsmaxQty;
+Data Management ToolsreturnData Management ToolsmatchesSearchData Management Tools&&Data Management ToolsmatchesTypeData Management Tools&&Data Management ToolsmatchesCenterData Management Tools&&Data Management ToolsmatchesAreaData Management Tools&&Data Management ToolsmatchesBankData Management Tools&&Data Management ToolsmatchesQty;
+Data Management Tools});
+
+Data Management Tools//Data Management ToolsSort
+Data Management ToolsfilteredFarmers.sort((a,Data Management Toolsb)Data Management Tools=>Data Management Tools{
+Data Management ToolsletData Management ToolsvalAData Management Tools=Data Management Toolsa[sortField]Data Management Tools||Data Management Tools'';
+Data Management ToolsletData Management ToolsvalBData Management Tools=Data Management Toolsb[sortField]Data Management Tools||Data Management Tools'';
+Data Management ToolsifData Management Tools(typeofData Management ToolsvalAData Management Tools===Data Management Tools'string')Data Management ToolsvalAData Management Tools=Data Management ToolsvalA.toLowerCase();
+Data Management ToolsifData Management Tools(typeofData Management ToolsvalBData Management Tools===Data Management Tools'string')Data Management ToolsvalBData Management Tools=Data Management ToolsvalB.toLowerCase();
+Data Management ToolsifData Management Tools(valAData Management Tools<Data Management ToolsvalB)Data Management ToolsreturnData Management ToolssortAscData Management Tools?Data Management Tools-1Data Management Tools:Data Management Tools1;
+Data Management ToolsifData Management Tools(valAData Management Tools>Data Management ToolsvalB)Data Management ToolsreturnData Management ToolssortAscData Management Tools?Data Management Tools1Data Management Tools:Data Management Tools-1;
+Data Management ToolsreturnData Management Tools0;
+Data Management Tools});
+
+Data Management ToolsrenderAll();
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolssortTable(field)Data Management Tools{
+Data Management ToolsifData Management Tools(sortFieldData Management Tools===Data Management Toolsfield)Data Management ToolssortAscData Management Tools=Data Management Tools!sortAsc;
+Data Management ToolselseData Management Tools{Data Management ToolssortFieldData Management Tools=Data Management Toolsfield;Data Management ToolssortAscData Management Tools=Data Management Toolstrue;Data Management Tools}
+Data Management ToolsapplyFilters();
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolstoggleAdvancedFilters()Data Management Tools{
+Data Management Toolsdocument.getElementById('advancedFilters').classList.toggle('show');
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsclearFilters()Data Management Tools{
+Data Management Toolsdocument.getElementById('searchInput').valueData Management Tools=Data Management Tools'';
+Data Management Toolsdocument.getElementById('typeFilter').valueData Management Tools=Data Management Tools'ALL';
+Data Management Toolsdocument.getElementById('centerFilter').valueData Management Tools=Data Management Tools'ALL';
+Data Management Toolsdocument.getElementById('areaFilter').valueData Management Tools=Data Management Tools'ALL';
+Data Management Toolsdocument.getElementById('bankFilter').valueData Management Tools=Data Management Tools'ALL';
+Data Management Toolsdocument.getElementById('minQtyFilter').valueData Management Tools=Data Management Tools'';
+Data Management Toolsdocument.getElementById('maxQtyFilter').valueData Management Tools=Data Management Tools'';
+Data Management ToolsapplyFilters();
+Data Management Tools}
+
+Data Management Tools//Data Management ToolsTabs
+Data Management ToolsfunctionData Management ToolsswitchTab(tabName)Data Management Tools{
+Data Management Toolsdocument.querySelectorAll('.tab').forEach(tData Management Tools=>Data Management Toolst.classList.remove('active'));
+Data Management Toolsdocument.querySelectorAll('.tab-content').forEach(tData Management Tools=>Data Management Toolst.classList.remove('active'));
+Data Management Toolsdocument.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+Data Management Toolsdocument.getElementById(`tab-${tabName}`).classList.add('active');
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsrenderAll()Data Management Tools{
+Data Management ToolsupdateStats();
+Data Management ToolsrenderCenterSummary();
+Data Management ToolsrenderTable();
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsupdateStats()Data Management Tools{
+Data Management ToolsconstData Management ToolstotalData Management Tools=Data Management ToolsfilteredFarmers.length;
+Data Management ToolsconstData Management ToolscowsData Management Tools=Data Management ToolsfilteredFarmers.filter(bData Management Tools=>Data Management Toolsb.typeData Management Tools===Data Management Tools'COW').length;
+Data Management ToolsconstData Management ToolscamelsData Management Tools=Data Management ToolsfilteredFarmers.filter(bData Management Tools=>Data Management Toolsb.typeData Management Tools===Data Management Tools'CAMEL').length;
+Data Management ToolsconstData Management ToolscentersData Management Tools=Data Management ToolsnewData Management ToolsSet(filteredFarmers.map(bData Management Tools=>Data Management Toolsb.centerData Management Tools||Data Management Tools'Unknown')).size;
+Data Management Toolsdocument.getElementById('totalCount').textContentData Management Tools=Data Management Toolstotal;
+Data Management Toolsdocument.getElementById('cowCount').textContentData Management Tools=Data Management Toolscows;
+Data Management Toolsdocument.getElementById('camelCount').textContentData Management Tools=Data Management Toolscamels;
+Data Management Toolsdocument.getElementById('centerCount').textContentData Management Tools=Data Management Toolscenters;
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsrenderCenterSummary()Data Management Tools{
+Data Management ToolsconstData Management ToolstbodyData Management Tools=Data Management Toolsdocument.getElementById('centerSummaryBody');
+Data Management ToolsconstData Management ToolsmapData Management Tools=Data Management Tools{};
+Data Management ToolsallFarmers.forEach(bData Management Tools=>Data Management Tools{
+Data Management ToolsconstData Management ToolscData Management Tools=Data Management Toolsb.centerData Management Tools||Data Management Tools'Unknown';
+Data Management ToolsifData Management Tools(!map[c])Data Management Toolsmap[c]Data Management Tools=Data Management Tools{Data Management Toolscow:Data Management Tools0,Data Management Toolscamel:Data Management Tools0,Data Management ToolsexpectedQty:Data Management Tools0,Data Management ToolsmaxQty:Data Management Tools0Data Management Tools};
+Data Management ToolsifData Management Tools(b.typeData Management Tools===Data Management Tools'COW')Data Management Toolsmap[c].cow++;
+Data Management ToolsifData Management Tools(b.typeData Management Tools===Data Management Tools'CAMEL')Data Management Toolsmap[c].camel++;
+Data Management Toolsmap[c].expectedQtyData Management Tools+=Data Management ToolsparseFloat(b.expected_qty)Data Management Tools||Data Management Tools0;
+Data Management Toolsmap[c].maxQtyData Management Tools+=Data Management ToolsparseFloat(b.maximum)Data Management Tools||Data Management Tools0;
+Data Management Tools});
+
+Data Management ToolsconstData Management ToolscentersData Management Tools=Data Management ToolsObject.keys(map).sort();
+Data Management ToolsifData Management Tools(centers.lengthData Management Tools===Data Management Tools0)Data Management Tools{
+Data Management Toolstbody.innerHTMLData Management Tools=Data Management Tools'<tr><tdData Management Toolscolspan="6"Data Management Toolsstyle="text-align:center;Data Management Toolspadding:14px;Data Management Toolscolor:#9ca3af;">NoData Management Toolsdata</td></tr>';
+Data Management Toolsreturn;
+Data Management Tools}
+
+Data Management Toolstbody.innerHTMLData Management Tools=Data Management Toolscenters.map(cData Management Tools=>Data Management Tools{
+Data Management ToolsconstData Management ToolsdData Management Tools=Data Management Toolsmap[c];
+Data Management ToolsconstData Management ToolstotalData Management Tools=Data Management Toolsd.cowData Management Tools+Data Management Toolsd.camel;
+Data Management ToolsreturnData Management Tools`
+Data Management Tools<tr>
+Data Management Tools<td><strong>${c}</strong></td>
+Data Management Tools<td><spanData Management Toolsclass="badgeData Management Toolsbadge-cow">${d.cow}</span></td>
+Data Management Tools<td><spanData Management Toolsclass="badgeData Management Toolsbadge-camel">${d.camel}</span></td>
+Data Management Tools<td><strong>${total}</strong></td>
+Data Management Tools<td>${d.expectedQty.toFixed(1)}Data Management ToolsL</td>
+Data Management Tools<td>${d.maxQty.toFixed(1)}Data Management ToolsL</td>
+Data Management Tools</tr>`;
+Data Management Tools}).join('');
+Data Management Tools}
+
+Data Management Tools//Data Management ToolsCharts
+Data Management ToolsfunctionData Management ToolsrenderCharts()Data Management Tools{
+Data Management Tools//Data Management ToolsTypeData Management ToolsDistributionData Management ToolsPieData Management ToolsChart
+Data Management ToolsconstData Management ToolscowCountData Management Tools=Data Management ToolsallFarmers.filter(bData Management Tools=>Data Management Toolsb.typeData Management Tools===Data Management Tools'COW').length;
+Data Management ToolsconstData Management ToolscamelCountData Management Tools=Data Management ToolsallFarmers.filter(bData Management Tools=>Data Management Toolsb.typeData Management Tools===Data Management Tools'CAMEL').length;
+
+Data Management ToolsifData Management Tools(charts.typeChart)Data Management Toolscharts.typeChart.destroy();
+Data Management Toolscharts.typeChartData Management Tools=Data Management ToolsnewData Management ToolsChart(document.getElementById('typeChart'),Data Management Tools{
+Data Management Toolstype:Data Management Tools'doughnut',
+Data Management Toolsdata:Data Management Tools{
+Data Management Toolslabels:Data Management Tools['CowData Management ToolsFarmers',Data Management Tools'CamelData Management ToolsFarmers'],
+Data Management Toolsdatasets:Data Management Tools[{
+Data Management Toolsdata:Data Management Tools[cowCount,Data Management ToolscamelCount],
+Data Management ToolsbackgroundColor:Data Management Tools['#3b82f6',Data Management Tools'#f97316'],
+Data Management ToolsborderWidth:Data Management Tools0
+Data Management Tools}]
+Data Management Tools},
+Data Management Toolsoptions:Data Management Tools{
+Data Management Toolsresponsive:Data Management Toolstrue,
+Data Management ToolsmaintainAspectRatio:Data Management Toolsfalse,
+Data Management Toolsplugins:Data Management Tools{Data Management Toolslegend:Data Management Tools{Data Management Toolsposition:Data Management Tools'bottom'Data Management Tools}Data Management Tools}
+Data Management Tools}
+Data Management Tools});
+
+Data Management Tools//Data Management ToolsCenterData Management ToolsDistributionData Management ToolsBarData Management ToolsChart
+Data Management ToolsconstData Management ToolscenterMapData Management Tools=Data Management Tools{};
+Data Management ToolsallFarmers.forEach(bData Management Tools=>Data Management Tools{
+Data Management ToolsconstData Management ToolscData Management Tools=Data Management Toolsb.centerData Management Tools||Data Management Tools'Unknown';
+Data Management ToolscenterMap[c]Data Management Tools=Data Management Tools(centerMap[c]Data Management Tools||Data Management Tools0)Data Management Tools+Data Management Tools1;
+Data Management Tools});
+Data Management ToolsconstData Management ToolscenterLabelsData Management Tools=Data Management ToolsObject.keys(centerMap).sort();
+Data Management ToolsconstData Management ToolscenterDataData Management Tools=Data Management ToolscenterLabels.map(cData Management Tools=>Data Management ToolscenterMap[c]);
+
+Data Management ToolsifData Management Tools(charts.centerChart)Data Management Toolscharts.centerChart.destroy();
+Data Management Toolscharts.centerChartData Management Tools=Data Management ToolsnewData Management ToolsChart(document.getElementById('centerChart'),Data Management Tools{
+Data Management Toolstype:Data Management Tools'bar',
+Data Management Toolsdata:Data Management Tools{
+Data Management Toolslabels:Data Management ToolscenterLabels,
+Data Management Toolsdatasets:Data Management Tools[{
+Data Management Toolslabel:Data Management Tools'Farmers',
+Data Management Toolsdata:Data Management ToolscenterData,
+Data Management ToolsbackgroundColor:Data Management Tools'#667eea',
+Data Management ToolsborderRadius:Data Management Tools8
+Data Management Tools}]
+Data Management Tools},
+Data Management Toolsoptions:Data Management Tools{
+Data Management Toolsresponsive:Data Management Toolstrue,
+Data Management ToolsmaintainAspectRatio:Data Management Toolsfalse,
+Data Management Toolsplugins:Data Management Tools{Data Management Toolslegend:Data Management Tools{Data Management Toolsdisplay:Data Management ToolsfalseData Management Tools}Data Management Tools},
+Data Management Toolsscales:Data Management Tools{Data Management Toolsy:Data Management Tools{Data Management ToolsbeginAtZero:Data Management ToolstrueData Management Tools}Data Management Tools}
+Data Management Tools}
+Data Management Tools});
+
+Data Management Tools//Data Management ToolsCapacityData Management ToolsChartData Management Tools(ExpectedData Management ToolsvsData Management ToolsMaxData Management ToolsbyData Management ToolsCenter)
+Data Management ToolsconstData Management ToolsexpectedByCenterData Management Tools=Data Management ToolscenterLabels.map(cData Management Tools=>Data Management Tools{
+Data Management ToolsreturnData Management ToolsallFarmers.filter(bData Management Tools=>Data Management Tools(b.centerData Management Tools||Data Management Tools'Unknown')Data Management Tools===Data Management Toolsc).reduce((sum,Data Management Toolsb)Data Management Tools=>Data Management ToolssumData Management Tools+Data Management Tools(parseFloat(b.expected_qty)Data Management Tools||Data Management Tools0),Data Management Tools0);
+Data Management Tools});
+Data Management ToolsconstData Management ToolsmaxByCenterData Management Tools=Data Management ToolscenterLabels.map(cData Management Tools=>Data Management Tools{
+Data Management ToolsreturnData Management ToolsallFarmers.filter(bData Management Tools=>Data Management Tools(b.centerData Management Tools||Data Management Tools'Unknown')Data Management Tools===Data Management Toolsc).reduce((sum,Data Management Toolsb)Data Management Tools=>Data Management ToolssumData Management Tools+Data Management Tools(parseFloat(b.maximum)Data Management Tools||Data Management Tools0),Data Management Tools0);
+Data Management Tools});
+
+Data Management ToolsifData Management Tools(charts.capacityChart)Data Management Toolscharts.capacityChart.destroy();
+Data Management Toolscharts.capacityChartData Management Tools=Data Management ToolsnewData Management ToolsChart(document.getElementById('capacityChart'),Data Management Tools{
+Data Management Toolstype:Data Management Tools'bar',
+Data Management Toolsdata:Data Management Tools{
+Data Management Toolslabels:Data Management ToolscenterLabels,
+Data Management Toolsdatasets:Data Management Tools[
+Data Management Tools{Data Management Toolslabel:Data Management Tools'ExpectedData Management ToolsQty',Data Management Toolsdata:Data Management ToolsexpectedByCenter,Data Management ToolsbackgroundColor:Data Management Tools'#10b981',Data Management ToolsborderRadius:Data Management Tools4Data Management Tools},
+Data Management Tools{Data Management Toolslabel:Data Management Tools'MaxData Management ToolsQty',Data Management Toolsdata:Data Management ToolsmaxByCenter,Data Management ToolsbackgroundColor:Data Management Tools'#f59e0b',Data Management ToolsborderRadius:Data Management Tools4Data Management Tools}
+Data Management Tools]
+Data Management Tools},
+Data Management Toolsoptions:Data Management Tools{
+Data Management Toolsresponsive:Data Management Toolstrue,
+Data Management ToolsmaintainAspectRatio:Data Management Toolsfalse,
+Data Management Toolsplugins:Data Management Tools{Data Management Toolslegend:Data Management Tools{Data Management Toolsposition:Data Management Tools'bottom'Data Management Tools}Data Management Tools},
+Data Management Toolsscales:Data Management Tools{Data Management Toolsy:Data Management Tools{Data Management ToolsbeginAtZero:Data Management ToolstrueData Management Tools}Data Management Tools}
+Data Management Tools}
+Data Management Tools});
+
+Data Management Tools//Data Management ToolsTopData Management Tools5Data Management ToolsFarmers
+Data Management ToolsconstData Management ToolstopFarmersData Management Tools=Data Management Tools[...allFarmers].sort((a,Data Management Toolsb)Data Management Tools=>Data Management Tools(parseFloat(b.expected_qty)Data Management Tools||Data Management Tools0)Data Management Tools-Data Management Tools(parseFloat(a.expected_qty)Data Management Tools||Data Management Tools0)).slice(0,Data Management Tools5);
+
+Data Management ToolsifData Management Tools(charts.topFarmersChart)Data Management Toolscharts.topFarmersChart.destroy();
+Data Management Toolscharts.topFarmersChartData Management Tools=Data Management ToolsnewData Management ToolsChart(document.getElementById('topFarmersChart'),Data Management Tools{
+Data Management Toolstype:Data Management Tools'bar',
+Data Management Toolsdata:Data Management Tools{
+Data Management Toolslabels:Data Management ToolstopFarmers.map(fData Management Tools=>Data Management Toolsf.name?.substring(0,Data Management Tools15)Data Management Tools||Data Management Toolsf.code),
+Data Management Toolsdatasets:Data Management Tools[{
+Data Management Toolslabel:Data Management Tools'ExpectedData Management ToolsQty',
+Data Management Toolsdata:Data Management ToolstopFarmers.map(fData Management Tools=>Data Management ToolsparseFloat(f.expected_qty)Data Management Tools||Data Management Tools0),
+Data Management ToolsbackgroundColor:Data Management Tools'#8b5cf6',
+Data Management ToolsborderRadius:Data Management Tools8
+Data Management Tools}]
+Data Management Tools},
+Data Management Toolsoptions:Data Management Tools{
+Data Management ToolsindexAxis:Data Management Tools'y',
+Data Management Toolsresponsive:Data Management Toolstrue,
+Data Management ToolsmaintainAspectRatio:Data Management Toolsfalse,
+Data Management Toolsplugins:Data Management Tools{Data Management Toolslegend:Data Management Tools{Data Management Toolsdisplay:Data Management ToolsfalseData Management Tools}Data Management Tools}
+Data Management Tools}
+Data Management Tools});
+Data Management Tools}
+
+Data Management Tools//Data Management ToolsPerformance
+Data Management ToolsfunctionData Management ToolsrenderPerformance()Data Management Tools{
+Data Management ToolsconstData Management ToolsgridData Management Tools=Data Management Toolsdocument.getElementById('performanceGrid');
+Data Management ToolsifData Management Tools(!allFarmers.length)Data Management Tools{
+Data Management Toolsgrid.innerHTMLData Management Tools=Data Management Tools'<divData Management Toolsstyle="text-align:center;Data Management Toolspadding:40px;Data Management Toolscolor:#9ca3af;">NoData Management ToolsfarmersData Management ToolstoData Management Toolsanalyze</div>';
+Data Management Toolsreturn;
+Data Management Tools}
+
+Data Management Tools//Data Management ToolsCalculateData Management ToolsperformanceData Management ToolsratioData Management ToolsforData Management ToolseachData Management ToolsfarmerData Management Tools(expectedData Management ToolsvsData Management Toolsmax)
+Data Management ToolsconstData Management ToolsperfDataData Management Tools=Data Management ToolsallFarmers.map(fData Management Tools=>Data Management Tools{
+Data Management ToolsconstData Management ToolsexpectedData Management Tools=Data Management ToolsparseFloat(f.expected_qty)Data Management Tools||Data Management Tools0;
+Data Management ToolsconstData Management ToolsmaxData Management Tools=Data Management ToolsparseFloat(f.maximum)Data Management Tools||Data Management Tools1;
+Data Management ToolsconstData Management ToolsratioData Management Tools=Data Management Tools(expectedData Management Tools/Data Management Toolsmax)Data Management Tools*Data Management Tools100;
+Data Management ToolsreturnData Management Tools{Data Management Tools...f,Data Management Toolsratio,Data Management Toolsexpected,Data Management ToolsmaxData Management Tools};
+Data Management Tools}).sort((a,Data Management Toolsb)Data Management Tools=>Data Management Toolsb.ratioData Management Tools-Data Management Toolsa.ratio);
+
+Data Management Toolsgrid.innerHTMLData Management Tools=Data Management ToolsperfData.slice(0,Data Management Tools12).map(fData Management Tools=>Data Management Tools{
+Data Management ToolsconstData Management ToolsratioData Management Tools=Data Management ToolsMath.min(f.ratio,Data Management Tools100);
+Data Management ToolsletData Management ToolsperfClassData Management Tools=Data Management Tools'good';
+Data Management ToolsifData Management Tools(ratioData Management Tools<Data Management Tools50)Data Management ToolsperfClassData Management Tools=Data Management Tools'danger';
+Data Management ToolselseData Management ToolsifData Management Tools(ratioData Management Tools<Data Management Tools75)Data Management ToolsperfClassData Management Tools=Data Management Tools'warning';
+
+Data Management ToolsreturnData Management Tools`
+Data Management Tools<divData Management Toolsclass="perf-card">
+Data Management Tools<h4>${f.nameData Management Tools||Data Management Toolsf.code}Data Management Tools<spanData Management Toolsclass="badgeData Management Tools${f.typeData Management Tools===Data Management Tools'COW'Data Management Tools?Data Management Tools'badge-cow'Data Management Tools:Data Management Tools'badge-camel'}">${f.type}</span></h4>
+Data Management Tools<divData Management Toolsclass="perf-value">${ratio.toFixed(0)}%</div>
+Data Management Tools<divData Management Toolsclass="perf-bar">
+Data Management Tools<divData Management Toolsclass="perf-fillData Management Tools${perfClass}"Data Management Toolsstyle="width:Data Management Tools${ratio}%"></div>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsclass="perf-stats">
+Data Management Tools<span>Expected:Data Management Tools${f.expected}Data Management ToolsL</span>
+Data Management Tools<span>Max:Data Management Tools${f.max}Data Management ToolsL</span>
+Data Management Tools</div>
+Data Management Tools</div>`;
+Data Management Tools}).join('');
+Data Management Tools}
+
+Data Management Tools//Data Management ToolsAlerts
+Data Management ToolsfunctionData Management ToolsrenderAlerts()Data Management Tools{
+Data Management ToolsconstData Management ToolscontainerData Management Tools=Data Management Toolsdocument.getElementById('alertsContainer');
+Data Management ToolsconstData Management ToolsalertsData Management Tools=Data Management Tools{Data Management Toolscritical:Data Management Tools[],Data Management Toolswarning:Data Management Tools[],Data Management Toolsinfo:Data Management Tools[]Data Management Tools};
+
+Data Management ToolsallFarmers.forEach(fData Management Tools=>Data Management Tools{
+Data Management ToolsconstData Management ToolsexpectedData Management Tools=Data Management ToolsparseFloat(f.expected_qty)Data Management Tools||Data Management Tools0;
+Data Management ToolsconstData Management ToolsmaxData Management Tools=Data Management ToolsparseFloat(f.maximum)Data Management Tools||Data Management Tools0;
+Data Management ToolsconstData Management ToolsratioData Management Tools=Data Management ToolsmaxData Management Tools>Data Management Tools0Data Management Tools?Data Management Tools(expectedData Management Tools/Data Management Toolsmax)Data Management Tools*Data Management Tools100Data Management Tools:Data Management Tools0;
+Data Management ToolsconstData Management ToolslastDeliveryData Management Tools=Data Management Toolsf.last_deliveryData Management Tools?Data Management ToolsnewData Management ToolsDate(f.last_delivery)Data Management Tools:Data Management Toolsnull;
+Data Management ToolsconstData Management ToolsdaysSinceDeliveryData Management Tools=Data Management ToolslastDeliveryData Management Tools?Data Management ToolsMath.floor((newData Management ToolsDate()Data Management Tools-Data Management ToolslastDelivery)Data Management Tools/Data Management Tools(1000Data Management Tools*Data Management Tools60Data Management Tools*Data Management Tools60Data Management Tools*Data Management Tools24))Data Management Tools:Data Management Toolsnull;
+
+Data Management Tools//Data Management Tools🚨Data Management ToolsCRITICAL:Data Management ToolsExceedsData Management ToolsmaximumData Management Toolscapacity
+Data Management ToolsifData Management Tools(expectedData Management Tools>Data Management ToolsmaxData Management Tools&&Data Management ToolsmaxData Management Tools>Data Management Tools0)Data Management Tools{
+Data Management Toolsalerts.critical.push({Data Management Tools
+Data Management Toolsfarmer:Data Management Toolsf,Data Management Tools
+Data Management Toolsmessage:Data Management Tools`⛔ Exceeds maximum! (${expected}L > ${max}L)`,Data Management Tools
+Data Management Toolstype:Data Management Tools'exceed',
+Data Management Toolsicon:Data Management Tools'🚨'
+Data Management Tools});
+Data Management Tools}
+
+Data Management Tools//Data Management Tools🚨Data Management ToolsCRITICAL:Data Management ToolsMissingData Management ToolsbankData Management Toolsinformation
+Data Management ToolsifData Management Tools(!f.bankData Management Tools||Data Management Tools!f.bank_acc)Data Management Tools{
+Data Management Toolsalerts.critical.push({Data Management Tools
+Data Management Toolsfarmer:Data Management Toolsf,Data Management Tools
+Data Management Toolsmessage:Data Management Tools'🏦 Missing bank information',Data Management Tools
+Data Management Toolstype:Data Management Tools'data',
+Data Management Toolsicon:Data Management Tools'🏦'
+Data Management Tools});
+Data Management Tools}
+
+Data Management Tools//Data Management Tools🚨Data Management ToolsCRITICAL:Data Management ToolsMissingData Management ToolsNationalData Management ToolsID
+Data Management ToolsifData Management Tools(!f.nid)Data Management Tools{
+Data Management Toolsalerts.critical.push({Data Management Tools
+Data Management Toolsfarmer:Data Management Toolsf,Data Management Tools
+Data Management Toolsmessage:Data Management Tools'🪪 Missing national ID',Data Management Tools
+Data Management Toolstype:Data Management Tools'data',
+Data Management Toolsicon:Data Management Tools'🪪'
+Data Management Tools});
+Data Management Tools}
+
+Data Management Tools//Data Management Tools⚠️Data Management ToolsWARNING:Data Management ToolsNoData Management ToolsdeliveryData Management ToolsforData Management Tools7+Data Management Toolsdays
+Data Management ToolsifData Management Tools(daysSinceDeliveryData Management Tools!==Data Management ToolsnullData Management Tools&&Data Management ToolsdaysSinceDeliveryData Management Tools>=Data Management Tools7)Data Management Tools{
+Data Management Toolsalerts.warning.push({Data Management Tools
+Data Management Toolsfarmer:Data Management Toolsf,Data Management Tools
+Data Management Toolsmessage:Data Management Tools`📦 No delivery for ${daysSinceDelivery} days`,Data Management Tools
+Data Management Toolstype:Data Management Tools'no_delivery',
+Data Management Toolsicon:Data Management Tools'📦'
+Data Management Tools});
+Data Management Tools}
+
+Data Management Tools//Data Management Tools⚠️Data Management ToolsWARNING:Data Management ToolsNearData Management ToolsmaximumData Management ToolscapacityData Management Tools(90%+)
+Data Management ToolsifData Management Tools(ratioData Management Tools>=Data Management Tools90Data Management Tools&&Data Management ToolsexpectedData Management Tools<=Data Management Toolsmax)Data Management Tools{
+Data Management Toolsalerts.warning.push({Data Management Tools
+Data Management Toolsfarmer:Data Management Toolsf,Data Management Tools
+Data Management Toolsmessage:Data Management Tools`📈 Near maximum capacity (${ratio.toFixed(0)}%)`,Data Management Tools
+Data Management Toolstype:Data Management Tools'capacity',
+Data Management Toolsicon:Data Management Tools'📈'
+Data Management Tools});
+Data Management Tools}
+
+Data Management Tools//Data Management Tools⚠️Data Management ToolsWARNING:Data Management ToolsMissingData Management Toolsaddress
+Data Management ToolsifData Management Tools(!f.address)Data Management Tools{
+Data Management Toolsalerts.warning.push({Data Management Tools
+Data Management Toolsfarmer:Data Management Toolsf,Data Management Tools
+Data Management Toolsmessage:Data Management Tools'📍 Missing address',Data Management Tools
+Data Management Toolstype:Data Management Tools'data',
+Data Management Toolsicon:Data Management Tools'📍'
+Data Management Tools});
+Data Management Tools}
+
+Data Management Tools//Data Management Tools⚠️Data Management ToolsWARNING:Data Management ToolsMissingData Management Toolsarea
+Data Management ToolsifData Management Tools(!f.area)Data Management Tools{
+Data Management Toolsalerts.warning.push({Data Management Tools
+Data Management Toolsfarmer:Data Management Toolsf,Data Management Tools
+Data Management Toolsmessage:Data Management Tools'🗺️ Missing area',Data Management Tools
+Data Management Toolstype:Data Management Tools'data',
+Data Management Toolsicon:Data Management Tools'🗺️'
+Data Management Tools});
+Data Management Tools}
+
+Data Management Tools//Data Management Toolsℹ️Data Management ToolsINFO:Data Management ToolsVeryData Management ToolslowData Management ToolsexpectedData Management Toolsquantity
+Data Management ToolsifData Management Tools(expectedData Management Tools<Data Management Tools5Data Management Tools&&Data Management ToolsexpectedData Management Tools>Data Management Tools0)Data Management Tools{
+Data Management Toolsalerts.info.push({Data Management Tools
+Data Management Toolsfarmer:Data Management Toolsf,Data Management Tools
+Data Management Toolsmessage:Data Management Tools`📉 Very low expected quantity (${expected}L)`,Data Management Tools
+Data Management Toolstype:Data Management Tools'low',
+Data Management Toolsicon:Data Management Tools'📉'
+Data Management Tools});
+Data Management Tools}
+
+Data Management Tools//Data Management Toolsℹ️Data Management ToolsINFO:Data Management ToolsNoData Management ToolsdeliveryData Management ToolsdateData Management Toolsrecorded
+Data Management ToolsifData Management Tools(!f.last_deliveryData Management Tools&&Data Management ToolsdaysSinceDeliveryData Management Tools===Data Management Toolsnull)Data Management Tools{
+Data Management Toolsalerts.info.push({Data Management Tools
+Data Management Toolsfarmer:Data Management Toolsf,Data Management Tools
+Data Management Toolsmessage:Data Management Tools'📅 No delivery date recorded',Data Management Tools
+Data Management Toolstype:Data Management Tools'no_record',
+Data Management Toolsicon:Data Management Tools'📅'
+Data Management Tools});
+Data Management Tools}
+Data Management Tools});
+
+Data Management ToolsletData Management ToolshtmlData Management Tools=Data Management Tools'';
+
+Data Management Tools//Data Management ToolsSummaryData Management Toolsbadges
+Data Management ToolshtmlData Management Tools+=Data Management Tools`
+Data Management Tools<divData Management Toolsstyle="display:flex;Data Management Toolsgap:12px;Data Management Toolsmargin-bottom:16px;Data Management Toolsflex-wrap:wrap;">
+Data Management Tools<divData Management Toolsstyle="background:#fee2e2;Data Management Toolscolor:#991b1b;Data Management Toolspadding:10pxData Management Tools16px;Data Management Toolsborder-radius:10px;Data Management Toolsfont-weight:700;">
+Data Management Tools🚨 Critical:Data Management Tools${alerts.critical.length}
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsstyle="background:#fef3c7;Data Management Toolscolor:#92400e;Data Management Toolspadding:10pxData Management Tools16px;Data Management Toolsborder-radius:10px;Data Management Toolsfont-weight:700;">
+Data Management Tools⚠️ Warning:Data Management Tools${alerts.warning.length}
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsstyle="background:#dbeafe;Data Management Toolscolor:#1e40af;Data Management Toolspadding:10pxData Management Tools16px;Data Management Toolsborder-radius:10px;Data Management Toolsfont-weight:700;">
+Data Management Toolsℹ️ Info:Data Management Tools${alerts.info.length}
+Data Management Tools</div>
+Data Management Tools</div>`;
+
+Data Management Tools//Data Management ToolsCriticalData Management Toolsalerts
+Data Management ToolsifData Management Tools(alerts.critical.lengthData Management Tools>Data Management Tools0)Data Management Tools{
+Data Management ToolshtmlData Management Tools+=Data Management Tools`
+Data Management Tools<divData Management Toolsclass="alerts-panelData Management Toolsdanger">
+Data Management Tools<h4>🚨 Critical alerts (${alerts.critical.length})</h4>
+Data Management Tools${alerts.critical.slice(0,Data Management Tools15).map(aData Management Tools=>Data Management Tools`
+Data Management Tools<divData Management Toolsclass="alert-item">
+Data Management Tools<span>${a.icon}Data Management Tools<strong>${a.farmer.code}</strong>Data Management Tools-Data Management Tools${a.farmer.nameData Management Tools||Data Management Tools'Name'}:Data Management Tools${a.message}</span>
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-small"Data Management Toolsonclick="openEditModal('${a.farmer.code}')">Edit</button>
+Data Management Tools</div>
+Data Management Tools`).join('')}
+Data Management Tools${alerts.critical.lengthData Management Tools>Data Management Tools15Data Management Tools?Data Management Tools`<divData Management Toolsstyle="padding:8px;Data Management Toolscolor:#991b1b;">...Data Management Tools${alerts.critical.lengthData Management Tools-Data Management Tools15} more</div>`Data Management Tools:Data Management Tools''}
+Data Management Tools</div>`;
+Data Management Tools}
+
+Data Management Tools//Data Management ToolsWarningData Management Toolsalerts
+Data Management ToolsifData Management Tools(alerts.warning.lengthData Management Tools>Data Management Tools0)Data Management Tools{
+Data Management ToolshtmlData Management Tools+=Data Management Tools`
+Data Management Tools<divData Management Toolsclass="alerts-panel">
+Data Management Tools<h4>⚠️ Warning alerts (${alerts.warning.length})</h4>
+Data Management Tools${alerts.warning.slice(0,Data Management Tools15).map(aData Management Tools=>Data Management Tools`
+Data Management Tools<divData Management Toolsclass="alert-item">
+Data Management Tools<span>${a.icon}Data Management Tools<strong>${a.farmer.code}</strong>Data Management Tools-Data Management Tools${a.farmer.nameData Management Tools||Data Management Tools'Name'}:Data Management Tools${a.message}</span>
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-smallData Management Toolsbtn-ghost"Data Management Toolsonclick="viewDetails('${a.farmer.code}')">View</button>
+Data Management Tools</div>
+Data Management Tools`).join('')}
+Data Management Tools${alerts.warning.lengthData Management Tools>Data Management Tools15Data Management Tools?Data Management Tools`<divData Management Toolsstyle="padding:8px;Data Management Toolscolor:#92400e;">...Data Management Tools${alerts.warning.lengthData Management Tools-Data Management Tools15} more</div>`Data Management Tools:Data Management Tools''}
+Data Management Tools</div>`;
+Data Management Tools}
+
+Data Management Tools//Data Management ToolsInfoData Management Toolsalerts
+Data Management ToolsifData Management Tools(alerts.info.lengthData Management Tools>Data Management Tools0)Data Management Tools{
+Data Management ToolshtmlData Management Tools+=Data Management Tools`
+Data Management Tools<divData Management Toolsclass="alerts-panel"Data Management Toolsstyle="background:#eff6ff;Data Management Toolsborder-color:#93c5fd;">
+Data Management Tools<h4Data Management Toolsstyle="color:#1e40af;">ℹ️ Info alerts (${alerts.info.length})</h4>
+Data Management Tools${alerts.info.slice(0,Data Management Tools10).map(aData Management Tools=>Data Management Tools`
+Data Management Tools<divData Management Toolsclass="alert-item">
+Data Management Tools<span>${a.icon}Data Management Tools<strong>${a.farmer.code}</strong>Data Management Tools-Data Management Tools${a.farmer.nameData Management Tools||Data Management Tools'Name'}:Data Management Tools${a.message}</span>
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-smallData Management Toolsbtn-ghost"Data Management Toolsonclick="viewDetails('${a.farmer.code}')">View</button>
+Data Management Tools</div>
+Data Management Tools`).join('')}
+Data Management Tools${alerts.info.lengthData Management Tools>Data Management Tools10Data Management Tools?Data Management Tools`<divData Management Toolsstyle="padding:8px;Data Management Toolscolor:#1e40af;">...Data Management Tools${alerts.info.lengthData Management Tools-Data Management Tools10} more</div>`Data Management Tools:Data Management Tools''}
+Data Management Tools</div>`;
+Data Management Tools}
+
+Data Management ToolsifData Management Tools(alerts.critical.lengthData Management Tools===Data Management Tools0Data Management Tools&&Data Management Toolsalerts.warning.lengthData Management Tools===Data Management Tools0Data Management Tools&&Data Management Toolsalerts.info.lengthData Management Tools===Data Management Tools0)Data Management Tools{
+Data Management ToolshtmlData Management Tools+=Data Management Tools'<divData Management Toolsstyle="text-align:center;Data Management Toolspadding:40px;Data Management Toolscolor:#10b981;Data Management Toolsfont-weight:700;">✅ No alerts</div>';
+Data Management Tools}
+
+Data Management Toolscontainer.innerHTMLData Management Tools=Data Management Toolshtml;
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsrenderTable()Data Management Tools{
+Data Management ToolsconstData Management ToolstbodyData Management Tools=Data Management Toolsdocument.getElementById('breederBody');
+Data Management ToolsconstData Management ToolsemptyData Management Tools=Data Management Toolsdocument.getElementById('emptyState');
+
+Data Management ToolsifData Management Tools(!filteredFarmers.length)Data Management Tools{
+Data Management Toolstbody.innerHTMLData Management Tools=Data Management Tools'<tr><tdData Management Toolscolspan="10"Data Management Toolsstyle="text-align:center;Data Management Toolspadding:18px;Data Management Toolscolor:#9ca3af;">NoData Management ToolsfarmersData Management ToolsmatchData Management ToolsyourData Management Toolsfilters</td></tr>';
+Data Management Toolsempty.style.displayData Management Tools=Data Management Tools'block';
+Data Management Toolsdocument.getElementById('recordInfo').textContentData Management Tools=Data Management Tools'0Data Management ToolsfarmersData Management Toolsdisplayed';
+Data Management Toolsreturn;
+Data Management Tools}
+
+Data Management Toolsempty.style.displayData Management Tools=Data Management Tools'none';
+Data Management Toolstbody.innerHTMLData Management Tools=Data Management ToolsfilteredFarmers.map(bData Management Tools=>Data Management Tools`
+Data Management Tools<tr>
+Data Management Tools<td><spanData Management Toolsclass="code-badge">${b.codeData Management Tools||Data Management Tools'-'}</span></td>
+Data Management Tools<td><strong>${b.nameData Management Tools||Data Management Tools'-'}</strong></td>
+Data Management Tools<td>${b.phoneData Management Tools||Data Management Tools'-'}</td>
+Data Management Tools<td><spanData Management Toolsclass="badgeData Management Tools${b.typeData Management Tools===Data Management Tools'COW'Data Management Tools?Data Management Tools'badge-cow'Data Management Tools:Data Management Tools'badge-camel'}">${b.typeData Management Tools||Data Management Tools'-'}</span></td>
+Data Management Tools<td><spanData Management Toolsclass="badgeData Management Toolsbadge-center">${b.centerData Management Tools||Data Management Tools'-'}</span></td>
+Data Management Tools<td>${b.areaData Management Tools||Data Management Tools'-'}</td>
+Data Management Tools<td>${(b.bankData Management Tools||Data Management Tools'-').substring(0,Data Management Tools30)}${(b.bankData Management Tools||Data Management Tools'').lengthData Management Tools>Data Management Tools30Data Management Tools?Data Management Tools'...'Data Management Tools:Data Management Tools''}</td>
+Data Management Tools<td>${b.expected_qtyData Management Tools||Data Management Tools'-'}</td>
+Data Management Tools<td>${b.maximumData Management Tools||Data Management Tools'-'}</td>
+Data Management Tools<tdData Management Toolsclass="actions">
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-smallData Management Toolsbtn-warning"Data Management Toolsonclick="viewDetails('${b.code}')">View</button>
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-small"Data Management Toolsonclick="openEditModal('${b.code}')">Edit</button>
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-smallData Management Toolsbtn-danger"Data Management Toolsonclick="openDeleteModal('${b.code}')">Delete</button>
+Data Management Tools</td>
+Data Management Tools</tr>
+Data Management Tools`).join('');
+
+Data Management Toolsdocument.getElementById('recordInfo').textContentData Management Tools=Data Management Tools`${filteredFarmers.length}Data Management Toolsfarmer(s)Data Management Toolsdisplayed`;
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsviewDetails(code)Data Management Tools{
+Data Management ToolsconstData Management ToolsbData Management Tools=Data Management ToolsallFarmers.find(xData Management Tools=>Data Management Toolsx.codeData Management Tools===Data Management Toolscode);
+Data Management ToolsifData Management Tools(!b)Data Management Toolsreturn;
+Data Management ToolsconstData Management ToolsdetailData Management Tools=Data Management Toolsdocument.getElementById('detailBody');
+Data Management ToolsconstData Management ToolsrowsData Management Tools=Data Management Tools[
+Data Management Tools['Code',Data Management Toolsb.code],
+Data Management Tools['Name',Data Management Toolsb.name],
+Data Management Tools['Phone',Data Management Toolsb.phone],
+Data Management Tools['NationalData Management ToolsID',Data Management Toolsb.nid],
+Data Management Tools['Type',Data Management Toolsb.type],
+Data Management Tools['Center',Data Management Toolsb.center],
+Data Management Tools['Area',Data Management Toolsb.area],
+Data Management Tools['Address',Data Management Toolsb.address],
+Data Management Tools['Bank',Data Management Toolsb.bank],
+Data Management Tools['BankData Management ToolsAccount',Data Management Toolsb.bank_acc],
+Data Management Tools['SWIFT',Data Management Toolsb.bank_swift],
+Data Management Tools['ExpectedData Management ToolsQty',Data Management Toolsb.expected_qty],
+Data Management Tools['Maximum',Data Management Toolsb.maximum],
+Data Management Tools['NumberData Management ToolsofData Management ToolsAnimals',Data Management Toolsb.animal_count],
+Data Management Tools];
+Data Management Toolsdetail.innerHTMLData Management Tools=Data Management Toolsrows.map(([label,Data Management Toolsvalue])Data Management Tools=>Data Management Tools`
+Data Management Tools<divData Management Toolsclass="detail-item">
+Data Management Tools<divData Management Toolsclass="detail-label">${label}</div>
+Data Management Tools<divData Management Toolsclass="detail-value">${valueData Management Tools||Data Management Tools'-'}</div>
+Data Management Tools</div>`).join('');
+Data Management Toolsdocument.getElementById('detailModal').classList.add('show');
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolscloseDetailModal()Data Management Tools{Data Management Toolsdocument.getElementById('detailModal').classList.remove('show');Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsopenEditModal(code)Data Management Tools{
+Data Management ToolsconstData Management ToolsfData Management Tools=Data Management ToolsallFarmers.find(xData Management Tools=>Data Management Toolsx.codeData Management Tools===Data Management Toolscode);
+Data Management ToolsifData Management Tools(!f)Data Management Toolsreturn;
+Data Management Toolsdocument.getElementById('editCode').valueData Management Tools=Data Management Toolsf.codeData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editName').valueData Management Tools=Data Management Toolsf.nameData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editPhone').valueData Management Tools=Data Management Toolsf.phoneData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editType').valueData Management Tools=Data Management Toolsf.typeData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editCenter').valueData Management Tools=Data Management Toolsf.centerData Management Tools||Data Management Tools(document.getElementById('editCenter').options[0]?.valueData Management Tools||Data Management Tools'');
+Data Management Toolsdocument.getElementById('editBankSelect').valueData Management Tools=Data Management Toolsf.bank_swiftData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editSwift').valueData Management Tools=Data Management Toolsf.bank_swiftData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editBankAcc').valueData Management Tools=Data Management Toolsf.bank_accData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editAddress').valueData Management Tools=Data Management Toolsf.addressData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editArea').valueData Management Tools=Data Management Toolsf.areaData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editAnimalCount').valueData Management Tools=Data Management Toolsf.animal_countData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editExpectedQty').valueData Management Tools=Data Management Toolsf.expected_qtyData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editMaximum').valueData Management Tools=Data Management Toolsf.maximumData Management Tools||Data Management Tools'';
+Data Management Toolsdocument.getElementById('editStatus').valueData Management Tools=Data Management Toolsf.statusData Management Tools||Data Management Tools'active';
+Data Management ToolsupdateEditBankDisplay();
+Data Management Toolsdocument.getElementById('editModal').classList.add('show');
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsupdateEditBankDisplay()Data Management Tools{
+Data Management ToolsconstData Management ToolsvalData Management Tools=Data Management Toolsdocument.getElementById('editBankSelect').value;
+Data Management ToolsconstData Management ToolsswiftInputData Management Tools=Data Management Toolsdocument.getElementById('editSwift');
+Data Management ToolsswiftInput.readOnlyData Management Tools=Data Management ToolsvalData Management Tools!==Data Management Tools'OTHER';
+Data Management ToolsifData Management Tools(valData Management Tools!==Data Management Tools'OTHER')Data Management ToolsswiftInput.valueData Management Tools=Data Management ToolsvalData Management Tools||Data Management Tools'';
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolscloseEditModal()Data Management Tools{Data Management Toolsdocument.getElementById('editModal').classList.remove('show');Data Management Tools}
+
+Data Management ToolsasyncData Management ToolsfunctionData Management ToolssaveEditedFarmer()Data Management Tools{
+Data Management ToolsconstData Management ToolscodeData Management Tools=Data Management Toolsdocument.getElementById('editCode').value;
+Data Management ToolsconstData Management ToolsbankSelectData Management Tools=Data Management Toolsdocument.getElementById('editBankSelect');
+Data Management ToolsconstData Management ToolsselectedSwiftData Management Tools=Data Management ToolsbankSelect.value;
+Data Management ToolsconstData Management ToolsbankNameData Management Tools=Data Management ToolsbankSelect.options[bankSelect.selectedIndex]?.getAttribute('data-name')Data Management Tools||Data Management Tools'';
+Data Management ToolsconstData Management ToolspayloadData Management Tools=Data Management Tools{
+Data Management Toolsname:Data Management Toolsdocument.getElementById('editName').value.trim(),
+Data Management Toolsphone:Data Management Toolsdocument.getElementById('editPhone').value.trim(),
+Data Management Toolscenter:Data Management Toolsdocument.getElementById('editCenter').value,
+Data Management Toolsbank:Data Management ToolsbankName,
+Data Management Toolsbank_swift:Data Management ToolsselectedSwiftData Management Tools===Data Management Tools'OTHER'Data Management Tools?Data Management Toolsdocument.getElementById('editSwift').value.trim()Data Management Tools:Data Management ToolsselectedSwift,
+Data Management Toolsbank_acc:Data Management Toolsdocument.getElementById('editBankAcc').value.trim(),
+Data Management Toolsaddress:Data Management Toolsdocument.getElementById('editAddress').value.trim(),
+Data Management Toolsarea:Data Management Toolsdocument.getElementById('editArea').value.trim(),
+Data Management Toolsanimal_count:Data Management Toolsdocument.getElementById('editAnimalCount').valueData Management Tools||Data Management Tools0,
+Data Management Toolsexpected_qty:Data Management Toolsdocument.getElementById('editExpectedQty').valueData Management Tools||Data Management Tools0,
+Data Management Toolsmaximum:Data Management Toolsdocument.getElementById('editMaximum').valueData Management Tools||Data Management Tools0,
+Data Management Toolsstatus:Data Management Toolsdocument.getElementById('editStatus').valueData Management Tools||Data Management Tools'active'
+Data Management Tools};
+
+Data Management ToolstryData Management Tools{
+Data Management ToolsconstData Management ToolsrespData Management Tools=Data Management ToolsawaitData Management Toolsfetch(`/api/farmers/${code}`,Data Management Tools{
+Data Management Toolsmethod:Data Management Tools'PUT',
+Data Management Toolsheaders:Data Management Tools{Data Management Tools'Content-Type':Data Management Tools'application/json'Data Management Tools},
+Data Management Toolsbody:Data Management ToolsJSON.stringify(payload)
+Data Management Tools});
+Data Management ToolsconstData Management ToolsjData Management Tools=Data Management ToolsawaitData Management Toolsresp.json();
+Data Management ToolsifData Management Tools(resp.okData Management Tools&&Data Management Toolsj.success)Data Management Tools{
+Data Management ToolsshowMsg('FarmerData Management ToolsupdatedData Management Toolssuccessfully',Data Management Tools'success');
+Data Management ToolscloseEditModal();
+Data Management ToolsawaitData Management ToolsloadFarmers();
+Data Management Tools}Data Management ToolselseData Management Tools{
+Data Management ToolsshowMsg('UpdateData Management Toolsfailed:Data Management Tools'Data Management Tools+Data Management Tools(j.messageData Management Tools||Data Management Tools''),Data Management Tools'error');
+Data Management Tools}
+Data Management Tools}Data Management ToolscatchData Management Tools(err)Data Management Tools{
+Data Management ToolsshowMsg('ErrorData Management ToolsupdatingData Management Toolsfarmer',Data Management Tools'error');
+Data Management Tools}
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsopenDeleteModal(code)Data Management Tools{
+Data Management ToolsdeleteTargetData Management Tools=Data Management Toolscode;
+Data Management Toolsdocument.getElementById('deleteCode').textContentData Management Tools=Data Management Toolscode;
+Data Management Toolsdocument.getElementById('deleteModal').classList.add('show');
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolscloseDeleteModal()Data Management Tools{Data Management ToolsdeleteTargetData Management Tools=Data Management Toolsnull;Data Management Toolsdocument.getElementById('deleteModal').classList.remove('show');Data Management Tools}
+
+Data Management ToolsasyncData Management ToolsfunctionData Management ToolsconfirmDelete()Data Management Tools{
+Data Management ToolsifData Management Tools(!deleteTarget)Data Management Toolsreturn;
+Data Management ToolstryData Management Tools{
+Data Management ToolsconstData Management ToolsrespData Management Tools=Data Management ToolsawaitData Management Toolsfetch(`/api/farmers/${deleteTarget}`,Data Management Tools{Data Management Toolsmethod:Data Management Tools'DELETE'Data Management Tools});
+Data Management ToolsconstData Management ToolsjData Management Tools=Data Management ToolsawaitData Management Toolsresp.json();
+Data Management ToolsifData Management Tools(resp.okData Management Tools&&Data Management Toolsj.success)Data Management Tools{
+Data Management ToolsshowMsg(`FarmerData Management Tools${deleteTarget}Data Management Toolsdeleted`,Data Management Tools'success');
+Data Management ToolscloseDeleteModal();
+Data Management ToolsawaitData Management ToolsloadFarmers();
+Data Management Tools}Data Management ToolselseData Management Tools{
+Data Management ToolsshowMsg('DeleteData Management Toolsfailed:Data Management Tools'Data Management Tools+Data Management Tools(j.messageData Management Tools||Data Management Tools''),Data Management Tools'error');
+Data Management Tools}
+Data Management Tools}Data Management ToolscatchData Management Tools(err)Data Management Tools{
+Data Management ToolsshowMsg('ErrorData Management ToolsdeletingData Management Toolsfarmer',Data Management Tools'error');
+Data Management Tools}
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsexportCSV()Data Management Tools{
+Data Management ToolsifData Management Tools(!filteredFarmers.length)Data Management ToolsreturnData Management ToolsshowMsg('NoData Management ToolsdataData Management ToolstoData Management Toolsexport',Data Management Tools'error');
+Data Management ToolsconstData Management ToolsheadersData Management Tools=Data Management Tools['Code','Name','Phone','Type','Center','Area','NID','Address','Bank','BankData Management ToolsAccount','SWIFT','ExpectedData Management ToolsQty','Maximum'];
+Data Management ToolsconstData Management ToolsrowsData Management Tools=Data Management ToolsfilteredFarmers.map(fData Management Tools=>Data Management Tools[
+Data Management Toolsf.codeData Management Tools||Data Management Tools'',Data Management Toolsf.nameData Management Tools||Data Management Tools'',Data Management Toolsf.phoneData Management Tools||Data Management Tools'',Data Management Toolsf.typeData Management Tools||Data Management Tools'',Data Management Toolsf.centerData Management Tools||Data Management Tools'',Data Management Toolsf.areaData Management Tools||Data Management Tools'',Data Management Toolsf.nidData Management Tools||Data Management Tools'',Data Management Toolsf.addressData Management Tools||Data Management Tools'',Data Management Toolsf.bankData Management Tools||Data Management Tools'',Data Management Toolsf.bank_accData Management Tools||Data Management Tools'',Data Management Toolsf.bank_swiftData Management Tools||Data Management Tools'',Data Management Toolsf.expected_qtyData Management Tools||Data Management Tools'',Data Management Toolsf.maximumData Management Tools||Data Management Tools''
+Data Management Tools]);
+Data Management ToolsletData Management ToolscsvData Management Tools=Data Management Toolsheaders.join(',')Data Management Tools+Data Management Tools'\n';
+Data Management Toolsrows.forEach(rData Management Tools=>Data Management Tools{Data Management ToolscsvData Management Tools+=Data Management Toolsr.map(vData Management Tools=>Data Management Tools'"'Data Management Tools+Data Management ToolsString(v).replace(/"/g,Data Management Tools'""')Data Management Tools+Data Management Tools'"').join(',')Data Management Tools+Data Management Tools'\n';Data Management Tools});
+Data Management ToolsconstData Management ToolsblobData Management Tools=Data Management ToolsnewData Management ToolsBlob([csv],Data Management Tools{Data Management Toolstype:Data Management Tools'text/csv'Data Management Tools});
+Data Management ToolsconstData Management ToolsurlData Management Tools=Data Management ToolsURL.createObjectURL(blob);
+Data Management ToolsconstData Management ToolsaData Management Tools=Data Management Toolsdocument.createElement('a');
+Data Management Toolsa.hrefData Management Tools=Data Management Toolsurl;
+Data Management Toolsa.downloadData Management Tools=Data Management Tools`farmers_${newData Management ToolsDate().toISOString().slice(0,10)}.csv`;
+Data Management Toolsdocument.body.appendChild(a);
+Data Management Toolsa.click();
+Data Management Toolsdocument.body.removeChild(a);
+Data Management ToolsURL.revokeObjectURL(url);
+Data Management Tools}
+
+Data Management Tools//Data Management Tools=====Data Management ToolsBACKUPData Management ToolsFUNCTIONSData Management Tools=====
+Data Management ToolsfunctionData Management ToolscreateBackup()Data Management Tools{
+Data Management ToolsifData Management Tools(!allFarmers.length)Data Management ToolsreturnData Management ToolsshowMsg('No farmers loaded to backup',Data Management Tools'error');
+Data Management Tools
+Data Management ToolsconstData Management ToolsbackupData Management Tools=Data Management Tools{
+Data Management Toolstimestamp:Data Management ToolsnewData Management ToolsDate().toISOString(),
+Data Management Toolsversion:Data Management Tools'1.0',
+Data Management ToolstotalRecords:Data Management ToolsallFarmers.length,
+Data Management Toolsdata:Data Management ToolsallFarmers
+Data Management Tools};
+Data Management Tools
+Data Management ToolsconstData Management ToolsblobData Management Tools=Data Management ToolsnewData Management ToolsBlob([JSON.stringify(backup,Data Management Toolsnull,Data Management Tools2)],Data Management Tools{Data Management Toolstype:Data Management Tools'application/json'Data Management Tools});
+Data Management ToolsconstData Management ToolsurlData Management Tools=Data Management ToolsURL.createObjectURL(blob);
+Data Management ToolsconstData Management ToolsaData Management Tools=Data Management Toolsdocument.createElement('a');
+Data Management Toolsa.hrefData Management Tools=Data Management Toolsurl;
+Data Management Toolsa.downloadData Management Tools=Data Management Tools`farmers_backup_${newData Management ToolsDate().toISOString().slice(0,10)}_${newData Management ToolsDate().toTimeString().slice(0,5).replace(':','-')}.json`;
+Data Management Toolsdocument.body.appendChild(a);
+Data Management Toolsa.click();
+Data Management Toolsdocument.body.removeChild(a);
+Data Management ToolsURL.revokeObjectURL(url);
+Data Management Tools
+Data Management Tools//Data Management ToolsSaveData Management ToolstoData Management ToolslocalStorageData Management ToolsasData Management Toolswell
+Data Management ToolsconstData Management ToolsbackupsData Management Tools=Data Management ToolsJSON.parse(localStorage.getItem('farmersBackups')Data Management Tools||Data Management Tools'[]');
+Data Management Toolsbackups.unshift({Data Management Toolsdate:Data Management Toolsbackup.timestamp,Data Management Toolsrecords:Data Management ToolsallFarmers.lengthData Management Tools});
+Data Management ToolsifData Management Tools(backups.lengthData Management Tools>Data Management Tools10)Data Management Toolsbackups.pop();Data Management Tools//Data Management ToolsKeepData Management ToolsonlyData Management ToolslastData Management Tools10
+Data Management ToolslocalStorage.setItem('farmersBackups',Data Management ToolsJSON.stringify(backups));
+Data Management Tools
+Data Management ToolsshowMsg(`✅ Backup created (${allFarmers.length} records)`,Data Management Tools'success');
+Data Management ToolsrenderBackupHistory();
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsrenderBackupHistory()Data Management Tools{
+Data Management ToolsconstData Management ToolscontainerData Management Tools=Data Management Toolsdocument.getElementById('backupHistory');
+Data Management ToolsifData Management Tools(!container)Data Management Toolsreturn;
+Data Management Tools
+Data Management ToolsconstData Management ToolsbackupsData Management Tools=Data Management ToolsJSON.parse(localStorage.getItem('farmersBackups')Data Management Tools||Data Management Tools'[]');
+Data Management ToolsifData Management Tools(!backups.length)Data Management Tools{
+Data Management Toolscontainer.innerHTMLData Management Tools=Data Management Tools'<divData Management Toolsstyle="text-align:center;Data Management Toolspadding:20px;Data Management Toolscolor:#9ca3af;">No backups saved</div>';
+Data Management Toolsreturn;
+Data Management Tools}
+Data Management Tools
+Data Management Toolscontainer.innerHTMLData Management Tools=Data Management Toolsbackups.map((b,Data Management Toolsi)Data Management Tools=>Data Management Tools`
+Data Management Tools<divData Management Toolsclass="backup-item">
+Data Management Tools<span>📁Data Management Tools${newData Management ToolsDate(b.date).toLocaleDateString('en-CA')}Data Management Tools-Data Management Tools${newData Management ToolsDate(b.date).toLocaleTimeString('en-US',Data Management Tools{hour:'2-digit',Data Management Toolsminute:'2-digit'})}</span>
+Data Management Tools<spanData Management Toolsstyle="color:#6b7280;">${b.records} records</span>
+Data Management Tools</div>
+Data Management Tools`).join('');
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsrestoreBackup()Data Management Tools{
+Data Management ToolsconstData Management ToolsinputData Management Tools=Data Management Toolsdocument.createElement('input');
+Data Management Toolsinput.typeData Management Tools=Data Management Tools'file';
+Data Management Toolsinput.acceptData Management Tools=Data Management Tools'.json';
+Data Management Toolsinput.onchangeData Management Tools=Data Management ToolsasyncData Management Tools(e)Data Management Tools=>Data Management Tools{
+Data Management ToolsconstData Management ToolsfileData Management Tools=Data Management Toolse.target.files[0];
+Data Management ToolsifData Management Tools(!file)Data Management Toolsreturn;
+Data Management Tools
+Data Management ToolstryData Management Tools{
+Data Management ToolsconstData Management ToolstextData Management Tools=Data Management ToolsawaitData Management Toolsfile.text();
+Data Management ToolsconstData Management ToolsbackupData Management Tools=Data Management ToolsJSON.parse(text);
+Data Management Tools
+Data Management ToolsifData Management Tools(!backup.dataData Management Tools||Data Management Tools!Array.isArray(backup.data))Data Management Tools{
+Data Management ToolsreturnData Management ToolsshowMsg('Invalid backup file',Data Management Tools'error');
+Data Management Tools}
+Data Management Tools
+Data Management ToolsifData Management Tools(!confirm(`Restore ${backup.data.length} records?\nThis will overwrite current data!`))Data Management Toolsreturn;
+Data Management Tools
+Data Management Tools//Data Management ToolsSendData Management ToolstoData Management Toolsserver
+Data Management ToolsconstData Management ToolsrespData Management Tools=Data Management ToolsawaitData Management Toolsfetch('/api/farmers/restore',Data Management Tools{
+Data Management Toolsmethod:Data Management Tools'POST',
+Data Management Toolsheaders:Data Management Tools{Data Management Tools'Content-Type':Data Management Tools'application/json'Data Management Tools},
+Data Management Toolsbody:Data Management ToolsJSON.stringify({Data Management Toolsfarmers:Data Management Toolsbackup.dataData Management Tools})
+Data Management Tools});
+Data Management Tools
+Data Management ToolsifData Management Tools(resp.ok)Data Management Tools{
+Data Management ToolsshowMsg(`✅ Restored ${backup.data.length} records`,Data Management Tools'success');
+Data Management ToolsawaitData Management ToolsloadFarmers();
+Data Management Tools}Data Management ToolselseData Management Tools{
+Data Management ToolsshowMsg('Failed to restore backup',Data Management Tools'error');
+Data Management Tools}
+Data Management Tools}Data Management ToolscatchData Management Tools(err)Data Management Tools{
+Data Management ToolsshowMsg('Error restoring backup',Data Management Tools'error');
+Data Management Tools}
+Data Management Tools};
+Data Management Toolsinput.click();
+Data Management Tools}
+
+Data Management Tools//Data Management Tools=====Data Management ToolsMERGEData Management ToolsDUPLICATESData Management ToolsFUNCTIONSData Management Tools=====
+Data Management ToolsletData Management ToolsduplicateGroupsData Management Tools=Data Management Tools[];
+Data Management ToolsletData Management ToolsselectedForMergeData Management Tools=Data Management Tools{};
+
+Data Management ToolsfunctionData Management ToolsfindDuplicates()Data Management Tools{
+Data Management ToolsduplicateGroupsData Management Tools=Data Management Tools[];
+Data Management ToolsselectedForMergeData Management Tools=Data Management Tools{};
+Data Management Tools
+Data Management Tools//Data Management ToolsFindData Management ToolsbyData Management ToolsnameData Management Toolssimilarity
+Data Management ToolsconstData Management ToolsnameGroupsData Management Tools=Data Management Tools{};
+Data Management ToolsallFarmers.forEach(fData Management Tools=>Data Management Tools{
+Data Management ToolsconstData Management ToolsnormNameData Management Tools=Data Management Tools(f.nameData Management Tools||Data Management Tools'').trim().toLowerCase();
+Data Management ToolsifData Management Tools(normName)Data Management Tools{
+Data Management ToolsifData Management Tools(!nameGroups[normName])Data Management ToolsnameGroups[normName]Data Management Tools=Data Management Tools[];
+Data Management ToolsnameGroups[normName].push(f);
+Data Management Tools}
+Data Management Tools});
+Data Management Tools
+Data Management Tools//Data Management ToolsFindData Management ToolsbyData Management ToolsNID
+Data Management ToolsconstData Management ToolsnidGroupsData Management Tools=Data Management Tools{};
+Data Management ToolsallFarmers.forEach(fData Management Tools=>Data Management Tools{
+Data Management ToolsconstData Management ToolsnidData Management Tools=Data Management Tools(f.nidData Management Tools||Data Management Tools'').trim();
+Data Management ToolsifData Management Tools(nidData Management Tools&&Data Management Toolsnid.lengthData Management Tools>Data Management Tools5)Data Management Tools{
+Data Management ToolsifData Management Tools(!nidGroups[nid])Data Management ToolsnidGroups[nid]Data Management Tools=Data Management Tools[];
+Data Management ToolsnidGroups[nid].push(f);
+Data Management Tools}
+Data Management Tools});
+Data Management Tools
+Data Management Tools//Data Management ToolsFindData Management ToolsbyData Management ToolsbankData Management Toolsaccount
+Data Management ToolsconstData Management ToolsbankGroupsData Management Tools=Data Management Tools{};
+Data Management ToolsallFarmers.forEach(fData Management Tools=>Data Management Tools{
+Data Management ToolsconstData Management ToolsaccData Management Tools=Data Management Tools(f.bank_accData Management Tools||Data Management Tools'').trim();
+Data Management ToolsifData Management Tools(accData Management Tools&&Data Management Toolsacc.lengthData Management Tools>Data Management Tools5)Data Management Tools{
+Data Management ToolsifData Management Tools(!bankGroups[acc])Data Management ToolsbankGroups[acc]Data Management Tools=Data Management Tools[];
+Data Management ToolsbankGroups[acc].push(f);
+Data Management Tools}
+Data Management Tools});
+Data Management Tools
+Data Management Tools//Data Management ToolsCollectData Management Toolsduplicates
+Data Management ToolsconstData Management ToolsseenData Management Tools=Data Management ToolsnewData Management ToolsSet();
+Data Management Tools
+Data Management ToolsObject.entries(nameGroups).forEach(([key,Data Management Toolsfarmers])Data Management Tools=>Data Management Tools{
+Data Management ToolsifData Management Tools(farmers.lengthData Management Tools>Data Management Tools1)Data Management Tools{
+Data Management ToolsconstData Management ToolscodesData Management Tools=Data Management Toolsfarmers.map(fData Management Tools=>Data Management Toolsf.code).sort().join(',');
+Data Management ToolsifData Management Tools(!seen.has(codes))Data Management Tools{
+Data Management Toolsseen.add(codes);
+Data Management ToolsduplicateGroups.push({Data Management Toolstype:Data Management Tools'name',Data Management Toolskey,Data Management ToolsfarmersData Management Tools});
+Data Management Tools}
+Data Management Tools}
+Data Management Tools});
+Data Management Tools
+Data Management ToolsObject.entries(nidGroups).forEach(([key,Data Management Toolsfarmers])Data Management Tools=>Data Management Tools{
+Data Management ToolsifData Management Tools(farmers.lengthData Management Tools>Data Management Tools1)Data Management Tools{
+Data Management ToolsconstData Management ToolscodesData Management Tools=Data Management Toolsfarmers.map(fData Management Tools=>Data Management Toolsf.code).sort().join(',');
+Data Management ToolsifData Management Tools(!seen.has(codes))Data Management Tools{
+Data Management Toolsseen.add(codes);
+Data Management ToolsduplicateGroups.push({Data Management Toolstype:Data Management Tools'nid',Data Management Toolskey,Data Management ToolsfarmersData Management Tools});
+Data Management Tools}
+Data Management Tools}
+Data Management Tools});
+Data Management Tools
+Data Management ToolsObject.entries(bankGroups).forEach(([key,Data Management Toolsfarmers])Data Management Tools=>Data Management Tools{
+Data Management ToolsifData Management Tools(farmers.lengthData Management Tools>Data Management Tools1)Data Management Tools{
+Data Management ToolsconstData Management ToolscodesData Management Tools=Data Management Toolsfarmers.map(fData Management Tools=>Data Management Toolsf.code).sort().join(',');
+Data Management ToolsifData Management Tools(!seen.has(codes))Data Management Tools{
+Data Management Toolsseen.add(codes);
+Data Management ToolsduplicateGroups.push({Data Management Toolstype:Data Management Tools'bank',Data Management Toolskey,Data Management ToolsfarmersData Management Tools});
+Data Management Tools}
+Data Management Tools}
+Data Management Tools});
+Data Management Tools
+Data Management ToolsrenderDuplicates();
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsrenderDuplicates()Data Management Tools{
+Data Management ToolsconstData Management ToolscontainerData Management Tools=Data Management Toolsdocument.getElementById('duplicatesList');
+Data Management ToolsifData Management Tools(!container)Data Management Toolsreturn;
+Data Management Tools
+Data Management ToolsifData Management Tools(!duplicateGroups.length)Data Management Tools{
+Data Management Toolscontainer.innerHTMLData Management Tools=Data Management Tools'<divData Management Toolsstyle="text-align:center;Data Management Toolspadding:30px;Data Management Toolscolor:#10b981;Data Management Toolsfont-weight:700;">✅ No duplicates found!</div>';
+Data Management Toolsreturn;
+Data Management Tools}
+Data Management Tools
+Data Management ToolsconstData Management ToolstypeLabelsData Management Tools=Data Management Tools{Data Management Toolsname:Data Management Tools'👤 Name match',Data Management Toolsnid:Data Management Tools'🪪 ID match',Data Management Toolsbank:Data Management Tools'🏦 Bank match'Data Management Tools};
+Data Management Tools
+Data Management Toolscontainer.innerHTMLData Management Tools=Data Management ToolsduplicateGroups.map((group,Data Management Toolsgi)Data Management Tools=>Data Management Tools`
+Data Management Tools<divData Management Toolsclass="duplicate-group">
+Data Management Tools<h4>${typeLabels[group.type]}:Data Management Tools${group.key}</h4>
+Data Management Tools${group.farmers.map((f,Data Management Toolsfi)Data Management Tools=>Data Management Tools`
+Data Management Tools<divData Management Toolsclass="duplicate-itemData Management Tools${selectedForMerge[gi]Data Management Tools===Data Management ToolsfiData Management Tools?Data Management Tools'selected'Data Management Tools:Data Management Tools''}"Data Management Toolsonclick="selectForMerge(${gi},Data Management Tools${fi})">
+Data Management Tools<div>
+Data Management Tools<strong>${f.code}</strong>Data Management Tools-Data Management Tools${f.nameData Management Tools||Data Management Tools'Name'}
+Data Management Tools<spanData Management Toolsstyle="color:#6b7280;Data Management Toolsmargin-right:8px;">${f.centerData Management Tools||Data Management Tools''}Data Management Tools|Data Management Tools${f.typeData Management Tools||Data Management Tools''}</span>
+Data Management Tools</div>
+Data Management Tools<divData Management Toolsstyle="display:flex;Data Management Toolsgap:6px;">
+Data Management Tools<buttonData Management Toolsclass="btnData Management Toolsbtn-smallData Management Toolsbtn-ghost"Data Management Toolsonclick="event.stopPropagation();Data Management ToolsviewDetails('${f.code}')">View</button>
+Data Management Tools${selectedForMerge[gi]Data Management Tools!==Data Management ToolsfiData Management Tools?Data Management Tools`<buttonData Management Toolsclass="btnData Management Toolsbtn-smallData Management Toolsbtn-danger"Data Management Toolsonclick="event.stopPropagation();Data Management ToolsdeleteDuplicate('${f.code}',Data Management Tools${gi})">Delete</button>`Data Management Tools:Data Management Tools'<spanData Management Toolsstyle="color:#10b981;Data Management Toolsfont-weight:700;">✓ Selected</span>'}
+Data Management Tools</div>
+Data Management Tools</div>
+Data Management Tools`).join('')}
+Data Management Tools</div>
+Data Management Tools`).join('');
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsselectForMerge(groupIndex,Data Management ToolsfarmerIndex)Data Management Tools{
+Data Management ToolsselectedForMerge[groupIndex]Data Management Tools=Data Management ToolsfarmerIndex;
+Data Management ToolsrenderDuplicates();
+Data Management Tools}
+
+Data Management ToolsasyncData Management ToolsfunctionData Management ToolsdeleteDuplicate(code,Data Management ToolsgroupIndex)Data Management Tools{
+Data Management ToolsifData Management Tools(!confirm(`Delete record ${code}?`))Data Management Toolsreturn;
+Data Management Tools
+Data Management ToolstryData Management Tools{
+Data Management ToolsconstData Management ToolsrespData Management Tools=Data Management ToolsawaitData Management Toolsfetch(`/api/farmers/${code}`,Data Management Tools{Data Management Toolsmethod:Data Management Tools'DELETE'Data Management Tools});
+Data Management ToolsifData Management Tools(resp.ok)Data Management Tools{
+Data Management ToolsshowMsg(`Deleted record ${code}`,Data Management Tools'success');
+Data Management ToolsawaitData Management ToolsloadFarmers();
+Data Management ToolsfindDuplicates();
+Data Management Tools}Data Management ToolselseData Management Tools{
+Data Management ToolsshowMsg('Failed to delete record',Data Management Tools'error');
+Data Management Tools}
+Data Management Tools}Data Management ToolscatchData Management Tools(err)Data Management Tools{
+Data Management ToolsshowMsg('Error deleting record',Data Management Tools'error');
+Data Management Tools}
+Data Management Tools}
+
+Data Management ToolsfunctionData Management ToolsshowMsg(text,Data Management Toolstype)Data Management Tools{
+Data Management ToolsconstData Management ToolscontainerData Management Tools=Data Management Toolsdocument.getElementById('msgContainer');
+Data Management Toolscontainer.innerHTMLData Management Tools=Data Management Tools`<divData Management Toolsclass="msgData Management Tools${type}"Data Management Toolsstyle="padding:12px;Data Management Toolsborder-radius:10px;Data Management Toolsmargin:12pxData Management Tools0;Data Management Toolsfont-weight:700;Data Management Toolstext-align:center;Data Management Tools${typeData Management Tools===Data Management Tools'success'Data Management Tools?Data Management Tools'background:#dcfce7;Data Management Toolscolor:#166534;Data Management Toolsborder:1pxData Management ToolssolidData Management Tools#bbf7d0;'Data Management Tools:Data Management Tools'background:#fee2e2;Data Management Toolscolor:#991b1b;Data Management Toolsborder:1pxData Management ToolssolidData Management Tools#fecaca;'}">${text}</div>`;
+Data Management ToolssetTimeout(()Data Management Tools=>Data Management Tools{Data Management Toolscontainer.innerHTMLData Management Tools=Data Management Tools'';Data Management Tools},Data Management Tools2800);
+Data Management Tools}
+
+Data Management Toolsdocument.getElementById('typeFilter').addEventListener('change',Data Management ToolsapplyFilters);
+Data Management Toolsdocument.getElementById('centerFilter').addEventListener('change',Data Management ToolsapplyFilters);
+Data Management Toolsdocument.getElementById('searchInput').addEventListener('input',Data Management ToolsapplyFilters);
+Data Management Toolsdocument.getElementById('editBankSelect').addEventListener('change',Data Management ToolsupdateEditBankDisplay);
+
+Data Management Toolswindow.addEventListener('click',Data Management Tools(e)Data Management Tools=>Data Management Tools{
+Data Management ToolsifData Management Tools(e.target.idData Management Tools===Data Management Tools'detailModal')Data Management ToolscloseDetailModal();
+Data Management ToolsifData Management Tools(e.target.idData Management Tools===Data Management Tools'deleteModal')Data Management ToolscloseDeleteModal();
+Data Management ToolsifData Management Tools(e.target.idData Management Tools===Data Management Tools'editModal')Data Management ToolscloseEditModal();
+Data Management Tools});
+
+Data Management ToolsloadFarmers();
+Data Management Tools</script>
+</body>
+</html>
+
+
